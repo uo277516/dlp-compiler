@@ -10,6 +10,11 @@ interface ASTNode {
 
 interface Statement
 
+class Write {
+    expressions: Expression
+
+}
+
 class If {
     condition: Expression
     ifBody: List<Statement>
@@ -19,8 +24,11 @@ class If {
 
 ASTNode <|-- Statement
 Statement <|.. If
+Statement <|.. Write
+
 
 If o-- "1" Expression
+Write o-- "1" Expression
 If o-- "0..n" Statement
 
 

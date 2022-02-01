@@ -10,6 +10,7 @@ interface ASTNode {
 
 interface Expression
 
+
 class IntLiteral {
     value: int
 }
