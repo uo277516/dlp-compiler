@@ -11,8 +11,11 @@ interface ASTNode {
 interface Statement
 
 class Write {
-    expressions: Expression
+    expressions: List<Expression>
+}
 
+class Read {
+    expressions: List<Expression>
 }
 
 class If {
@@ -21,15 +24,32 @@ class If {
     elseBody: List<Statement>
 }
 
+class Return {
+    expression: Expression
+}
+
+class While {
+    condition: Expression
+    whileBody: List<Statement>
+}
+
 
 ASTNode <|-- Statement
 Statement <|.. If
 Statement <|.. Write
+Statement <|.. Return
+Statement <|.. While
 
 
 If o-- "1" Expression
-Write o-- "1" Expression
 If o-- "0..n" Statement
 
+While o-- "1" Expression
+While o-- "0..n" Statement
+
+Write o-- "0..n" Expression
+Read o-- "0..n" Expression
+
+Return o-- "1" Expression
 
 @enduml

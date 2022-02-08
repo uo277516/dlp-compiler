@@ -11,8 +11,25 @@ interface Type
 
 ASTNode <|-- Type
 
-class IntType
+interface SimpleType
+interface ComplexType
 
-Type <|.. IntType
+class Array
+class Struct
+
+class IntType
+class RealType
+class CharType
+
+Type <|.. SimpleType
+Type <|.. ComplexType
+
+ComplexType <|.. Array
+ComplexType <|.. Struct
+
+SimpleType <|.. IntType
+SimpleType <|.. RealType
+SimpleType <|.. CharType
+
 
 @enduml

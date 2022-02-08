@@ -1,0 +1,197 @@
+@startuml
+
+skinparam style strictuml
+skinparam monochrome true
+
+' ----- EXPRESIONES -----
+
+interface ASTNode {
+    getLine(): int
+    getColumn(): int
+}
+
+interface Expression
+
+
+class IntLiteral {
+    value: int
+}
+
+class RealLiteral {
+    value: double
+}
+
+class charLiteral {
+    value: char
+}
+
+class Variable {
+    name: String
+}
+
+interface Operator
+
+interface OperatorNoAssociative
+interface OperatorRightAssociative
+interface OperatorLeftAssociative
+
+
+ASTNode <|-- Expression
+Expression <|.. IntLiteral
+Expression <|.. RealLiteral
+Expression <|.. charLiteral
+Expression <|.. Operator
+Expression <|.. Variable
+
+Operator <|.. OperatorNoAssociative
+Operator <|.. OperatorRightAssociative
+Operator <|.. OperatorLeftAssociative
+
+OperatorNoAssociative o-- "0..1" Expression
+OperatorRightAssociative o-- "0..2" Expression
+OperatorLeftAssociative o-- "0..2" Expression
+
+
+class Brackets
+class Dot
+class Cast
+class UnaryMinus
+class Not
+interface Arithmetic
+interface Boolean
+class Equals
+
+OperatorNoAssociative <|.. Brackets
+OperatorNoAssociative <|.. Cast
+OperatorNoAssociative <|.. UnaryMinus
+OperatorNoAssociative <|.. Not
+
+OperatorLeftAssociative <|.. Dot
+OperatorLeftAssociative <|.. Arithmetic
+OperatorLeftAssociative <|.. Boolean
+
+OperatorRightAssociative <|.. Equals
+
+
+
+' ----- PROGRAM -----
+
+interface Statement
+interface Expression
+interface Definitions
+interface VarDef
+interface FunDef
+interface Type
+
+
+class Program {
+    statements:List<Statement>
+
+}
+
+ASTNode <|.. Program
+Program  o-- "0..n" Definitions
+Program o-- "0..n" Statement
+ASTNode <|-- Expression
+ASTNode <|-- Definitions
+ASTNode <|-- Statement
+
+Definitions <|.. VarDef
+Definitions <|.. FunDef
+FunDef o-- "0..n" VarDef
+VarDef o-- "1" Type
+
+
+' ----- STATEMENTS -----
+
+interface Statement
+
+class Write {
+    expressions: List<Expression>
+}
+
+class Read {
+    expressions: List<Expression>
+}
+
+class If {
+    condition: Expression
+    ifBody: List<Statement>
+    elseBody: List<Statement>
+}
+
+class Return {
+    expression: Expression
+}
+
+class While {
+    condition: Expression
+    whileBody: List<Statement>
+}
+
+
+ASTNode <|-- Statement
+Statement <|.. If
+Statement <|.. Write
+Statement <|.. Return
+Statement <|.. While
+
+
+If o-- "1" Expression
+If o-- "0..n" Statement
+
+While o-- "1" Expression
+While o-- "0..n" Statement
+
+Write o-- "0..n" Expression
+Read o-- "0..n" Expression
+
+Return o-- "1" Expression
+
+
+
+' ----- TYPES -----
+
+interface Type
+
+ASTNode <|-- Type
+
+interface SimpleType
+interface ComplexType
+
+class Array
+class Struct
+
+class IntType
+class RealType
+class CharType
+
+Type <|.. SimpleType
+Type <|.. ComplexType
+
+ComplexType <|.. Array
+ComplexType <|.. Struct
+
+SimpleType <|.. IntType
+SimpleType <|.. RealType
+SimpleType <|.. CharType
+
+class Comment
+{
+    comment: String
+}
+
+ASTNode <|-- Comment
+
+
+' ------ ASSIGMENT ----
+
+class Assignment {
+    left: Expression
+    right: Expression
+}
+
+Statement <|.. Assignment
+Assignment o-- "2" Expression
+
+@enduml

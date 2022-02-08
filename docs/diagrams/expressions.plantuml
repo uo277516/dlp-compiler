@@ -15,7 +15,34 @@ class IntLiteral {
     value: int
 }
 
+class RealLiteral {
+    value: double
+}
+
+class charLiteral {
+    value: char
+}
+
+interface Operator
+
+interface OperatorNoAssociative
+interface OperatorRightAssociative
+interface OperatorLeftAssociative
+
+
 ASTNode <|-- Expression
 Expression <|.. IntLiteral
+Expression <|.. RealLiteral
+Expression <|.. charLiteral
+Expression <|.. Operator
+
+Operator <|.. OperatorNoAssociative
+Operator <|.. OperatorRightAssociative
+Operator <|.. OperatorLeftAssociative
+
+OperatorNoAssociative o-- "0..1" Expression
+OperatorRightAssociative o-- "0..2" Expression
+OperatorLeftAssociative o-- "0..2" Expression
+
 
 @enduml
