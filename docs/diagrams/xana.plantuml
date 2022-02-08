@@ -29,48 +29,48 @@ class Variable {
     name: String
 }
 
-interface Operator
+class Invocation {
+    name: Variable
+    arg: List<Expression>
+}
 
-interface OperatorNoAssociative
-interface OperatorRightAssociative
-interface OperatorLeftAssociative
+Invocation o-- "0..n" Expression
+
+
+Expression <|-- Invocation
+Statement <|-- Invocation
+
 
 
 ASTNode <|-- Expression
 Expression <|.. IntLiteral
 Expression <|.. RealLiteral
 Expression <|.. charLiteral
-Expression <|.. Operator
 Expression <|.. Variable
 
-Operator <|.. OperatorNoAssociative
-Operator <|.. OperatorRightAssociative
-Operator <|.. OperatorLeftAssociative
-
-OperatorNoAssociative o-- "0..1" Expression
-OperatorRightAssociative o-- "0..2" Expression
-OperatorLeftAssociative o-- "0..2" Expression
 
 
-class Brackets
-class Dot
+
+class FileAccess {
+    field: String
+    expression: Expression
+}
 class Cast
 class UnaryMinus
-class Not
+class UnaryNot
 interface Arithmetic
-interface Boolean
-class Equals
+interface Logical
+interface Comparator
 
-OperatorNoAssociative <|.. Brackets
-OperatorNoAssociative <|.. Cast
-OperatorNoAssociative <|.. UnaryMinus
-OperatorNoAssociative <|.. Not
+Expression <|.. Cast
+Expression <|.. UnaryMinus
+Expression <|.. UnaryNot
 
-OperatorLeftAssociative <|.. Dot
-OperatorLeftAssociative <|.. Arithmetic
-OperatorLeftAssociative <|.. Boolean
+Expression <|.. FileAccess
+Expression <|.. Arithmetic
+Expression <|.. Logical
 
-OperatorRightAssociative <|.. Equals
+Expression <|.. Comparator
 
 
 
@@ -79,19 +79,34 @@ OperatorRightAssociative <|.. Equals
 interface Statement
 interface Expression
 interface Definitions
-interface VarDef
-interface FunDef
+class VarDef
+class FunDef {
+    body:List<Statement>
+    varDefs:List<VarDef>
+    name: String
+    type: FunType
+}
+
+class FuncType {
+    params:List<VarDef>
+    returnType: Type
+}
+
+
+FunDef o-- "0..n" Statement
+FuncType <|.. Type
+
 interface Type
 
 
+
 class Program {
-    statements:List<Statement>
+    definitions:List<Definitions>
 
 }
 
 ASTNode <|.. Program
 Program  o-- "0..n" Definitions
-Program o-- "0..n" Statement
 ASTNode <|-- Expression
 ASTNode <|-- Definitions
 ASTNode <|-- Statement
@@ -107,11 +122,11 @@ VarDef o-- "1" Type
 interface Statement
 
 class Write {
-    expressions: List<Expression>
+    expression: Expression
 }
 
 class Read {
-    expressions: List<Expression>
+    expression: Expression
 }
 
 class If {
@@ -156,8 +171,7 @@ interface Type
 
 ASTNode <|-- Type
 
-interface SimpleType
-interface ComplexType
+
 
 class Array
 class Struct
@@ -166,22 +180,14 @@ class IntType
 class RealType
 class CharType
 
-Type <|.. SimpleType
-Type <|.. ComplexType
+Type <|.. Array
+Type <|.. Struct
 
-ComplexType <|.. Array
-ComplexType <|.. Struct
+Type <|.. IntType
+Type <|.. RealType
+Type <|.. CharType
 
-SimpleType <|.. IntType
-SimpleType <|.. RealType
-SimpleType <|.. CharType
 
-class Comment
-{
-    comment: String
-}
-
-ASTNode <|-- Comment
 
 
 ' ------ ASSIGMENT ----
@@ -194,4 +200,15 @@ class Assignment {
 Statement <|.. Assignment
 Assignment o-- "2" Expression
 
+
+
+' ---- ACCESS---
+
+Expression <|.. ArrayAccess
+
+class ArrayAccess {
+    index: Expression
+    array: Expression
+
+}
 @enduml
