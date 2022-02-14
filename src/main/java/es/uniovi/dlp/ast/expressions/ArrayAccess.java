@@ -1,8 +1,9 @@
 package es.uniovi.dlp.ast.expressions;
 
-public class CharLiteral implements Expression{
+public class ArrayAccess implements Expression{
 
-    private char value;
+    private Expression index;
+    private Expression array;
 
     @Override
     public int getLine() {

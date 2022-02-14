@@ -10,7 +10,6 @@ interface ASTNode {
 
 interface Expression
 
-
 class IntLiteral {
     value: int
 }
@@ -23,26 +22,124 @@ class charLiteral {
     value: char
 }
 
-interface Operator
+class Variable {
+    name: String
+}
 
-interface OperatorNoAssociative
-interface OperatorRightAssociative
-interface OperatorLeftAssociative
+class Invocation {
+    name: Variable
+    arg: List<Expression>
+}
+
+class ArrayAccess {
+    index: Expression
+    array: Expression
+
+}
+
+
+class Multiply {
+}
+
+class DivideBy {}
+
+class Percent{}
+
+class Plus{}
+
+class Minus{}
+
+class GreaterThat{}
+
+class LessThat{}
+
+class GreaterOrEqualsThat{}
+
+class LessOrEqualsThat{}
+
+class DistinctThat{}
+
+class EqualsTo{}
+
+class FileAccess {
+    field: String
+    expression: Expression
+}
+
+class And
+
+class Or
+
+class Cast{
+    typeToCast: Type
+    expression: Expression
+}
+
+class UnaryMinus {
+    expression: Expression
+}
+
+class UnaryNot {
+    expression: Expression
+}
+
+class Arithmetic {
+    operator: String
+    right: Expression
+    left: Expression
+}
+class Logical {
+
+    right: Expression
+    left: Expression
+
+}
+
+class Comparator {
+    right: Expression
+    left: Expression
+}
+
+
+Invocation o-- "0..n" Expression
+
+
+Expression <|.. Invocation
+
 
 
 ASTNode <|-- Expression
 Expression <|.. IntLiteral
 Expression <|.. RealLiteral
 Expression <|.. charLiteral
-Expression <|.. Operator
+Expression <|.. Variable
+Expression <|.. Cast
+Expression <|.. UnaryMinus
+Expression <|.. UnaryNot
 
-Operator <|.. OperatorNoAssociative
-Operator <|.. OperatorRightAssociative
-Operator <|.. OperatorLeftAssociative
+Expression <|.. FileAccess
+Expression <|.. Arithmetic
+Expression <|.. Logical
 
-OperatorNoAssociative o-- "0..1" Expression
-OperatorRightAssociative o-- "0..2" Expression
-OperatorLeftAssociative o-- "0..2" Expression
+Expression <|.. Comparator
 
+Expression <|.. ArrayAccess
+
+Arithmetic <|.. Plus
+Arithmetic <|.. Multiply
+Arithmetic <|.. DivideBy
+Arithmetic <|.. Percent
+Arithmetic <|.. Minus
+
+
+Logical <|.. And
+Logical <|.. Or
+
+Comparator <|.. GreaterThat
+Comparator <|.. GreaterOrEqualsThat
+Comparator <|.. LessOrEqualsThat
+Comparator <|.. LessThat
+Comparator <|.. EqualsTo
+Comparator <|.. DistinctThat
 
 @enduml

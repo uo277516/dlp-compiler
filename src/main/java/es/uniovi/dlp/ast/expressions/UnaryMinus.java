@@ -1,6 +1,8 @@
-package es.uniovi.dlp.ast.types;
+package es.uniovi.dlp.ast.expressions;
 
-public class RealType implements Type{
+public class UnaryMinus implements Expression {
+    private Expression expression;
+
     @Override
     public int getLine() {
         return 0;

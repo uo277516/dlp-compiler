@@ -1,8 +1,10 @@
 package es.uniovi.dlp.ast.expressions;
 
-public class CharLiteral implements Expression{
+import es.uniovi.dlp.ast.types.Type;
 
-    private char value;
+public class Cast implements Expression {
+    private Type typeToCast;
+    private Expression expression;
 
     @Override
     public int getLine() {
