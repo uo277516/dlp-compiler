@@ -1,6 +1,16 @@
 package es.uniovi.dlp.ast.expressions;
 
-public class Variable {
+public class Variable implements Expression{
 
     private String name;
+
+    @Override
+    public int getLine() {
+        return 0;
+    }
+
+    @Override
+    public int getColumn() {
+        return 0;
+    }
 }

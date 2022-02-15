@@ -1,12 +1,11 @@
-package es.uniovi.dlp.ast.statements;
+package es.uniovi.dlp.ast.expressions;
 
 import es.uniovi.dlp.ast.expressions.Expression;
 
-import java.util.List;
+public class FileAccess implements Expression {
 
-public class While implements Statemment {
-    private Expression condition;
-    private List<Statemment> whileBody;
+    private String field;
+    private Expression expression;
 
     @Override
     public int getLine() {

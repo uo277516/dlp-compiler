@@ -9,28 +9,46 @@ interface ASTNode {
 }
 
 interface Statement
-interface Expression
 interface Definitions
-interface VarDef
-interface FunDef
+class VarDef {
+    variable: Variable
+    type: Type
+}
+
+class FunDef {
+    body:List<Statement>
+    varDefs:List<VarDef>
+    name: String
+    type: FunType
+}
+
+class FuncType {
+    params:List<VarDef>
+    returnType: Type
+}
+
+
+FunDef o-- "0..n" Statement
+FuncType <|.. Type
+
 interface Type
 
 
+
 class Program {
-    statements:List<Statement>
+    definitions:List<Definitions>
 
 }
 
 ASTNode <|.. Program
 Program  o-- "0..n" Definitions
-Program o-- "0..n" Statement
-ASTNode <|-- Expression
 ASTNode <|-- Definitions
-ASTNode <|-- Statement
 
 Definitions <|.. VarDef
 Definitions <|.. FunDef
 FunDef o-- "0..n" VarDef
 VarDef o-- "1" Type
+
+
 
 @enduml

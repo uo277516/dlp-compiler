@@ -1,12 +1,12 @@
-package es.uniovi.dlp.ast.statements;
+package es.uniovi.dlp.ast.expressions.arithmetics;
 
 import es.uniovi.dlp.ast.expressions.Expression;
 
-import java.util.List;
+public class Arithmetic implements Expression {
 
-public class While implements Statemment {
-    private Expression condition;
-    private List<Statemment> whileBody;
+    private String operator;
+    private Expression left;
+    private Expression right;
 
     @Override
     public int getLine() {
@@ -18,3 +18,4 @@ public class While implements Statemment {
         return 0;
     }
 }
+

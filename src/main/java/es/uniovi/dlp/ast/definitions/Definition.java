@@ -1,4 +1,6 @@
 package es.uniovi.dlp.ast.definitions;
 
-public interface Definition {
+import es.uniovi.dlp.ast.ASTNode;
+
+public interface Definition extends ASTNode {
 }

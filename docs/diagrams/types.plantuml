@@ -11,9 +11,6 @@ interface Type
 
 ASTNode <|-- Type
 
-interface SimpleType
-interface ComplexType
-
 class Array
 class Struct
 
@@ -21,15 +18,20 @@ class IntType
 class RealType
 class CharType
 
-Type <|.. SimpleType
-Type <|.. ComplexType
+class FuncType {
+    params:List<VarDef>
+    returnType: Type
+}
 
-ComplexType <|.. Array
-ComplexType <|.. Struct
 
-SimpleType <|.. IntType
-SimpleType <|.. RealType
-SimpleType <|.. CharType
+FuncType <|.. Type
+
+Type <|.. Array
+Type <|.. Struct
+
+Type <|.. IntType
+Type <|.. RealType
+Type <|.. CharType
 
 
 @enduml

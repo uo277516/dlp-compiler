@@ -1,17 +1,56 @@
-@startuml
-
+@startuml Program
 skinparam style strictuml
 skinparam monochrome true
 
-' ----- EXPRESIONES -----
+' ---- PROGRAM ----
 
 interface ASTNode {
     getLine(): int
     getColumn(): int
 }
 
-interface Expression
+interface Statement
+interface Definitions
+class VarDef {
+    variable: Variable
+    type: Type
+}
 
+class FunDef {
+    body:List<Statement>
+    varDefs:List<VarDef>
+    name: String
+    type: FunType
+}
+
+
+
+
+FunDef o-- "0..n" Statement
+
+interface Type
+
+
+
+class Program {
+    definitions:List<Definitions>
+
+}
+
+ASTNode <|.. Program
+Program  o-- "0..n" Definitions
+ASTNode <|-- Definitions
+
+Definitions <|.. VarDef
+Definitions <|.. FunDef
+FunDef o-- "0..n" VarDef
+VarDef o-- "1" Type
+
+
+
+' ---- EXPRESSIONS
+
+interface Expression
 
 class IntLiteral {
     value: int
@@ -34,11 +73,80 @@ class Invocation {
     arg: List<Expression>
 }
 
+class ArrayAccess {
+    index: Expression
+    array: Expression
+
+}
+
+
+class Multiply {
+}
+
+class DivideBy {}
+
+class Percent{}
+
+class Plus{}
+
+class Minus{}
+
+class GreaterThat{}
+
+class LessThat{}
+
+class GreaterOrEqualsThat{}
+
+class LessOrEqualsThat{}
+
+class DistinctThat{}
+
+class EqualsTo{}
+
+class FileAccess {
+    field: String
+    expression: Expression
+}
+
+class And
+
+class Or
+
+class Cast{
+    typeToCast: Type
+    expression: Expression
+}
+
+class UnaryMinus {
+    expression: Expression
+}
+
+class UnaryNot {
+    expression: Expression
+}
+
+class Arithmetic {
+    operator: String
+    right: Expression
+    left: Expression
+}
+class Logical {
+
+    right: Expression
+    left: Expression
+
+}
+
+class Comparator {
+    right: Expression
+    left: Expression
+}
+
+
 Invocation o-- "0..n" Expression
 
 
-Expression <|-- Invocation
-Statement <|-- Invocation
+Expression <|.. Invocation
 
 
 
@@ -47,21 +155,6 @@ Expression <|.. IntLiteral
 Expression <|.. RealLiteral
 Expression <|.. charLiteral
 Expression <|.. Variable
-
-
-
-
-class FileAccess {
-    field: String
-    expression: Expression
-}
-class Cast
-class UnaryMinus
-class UnaryNot
-interface Arithmetic
-interface Logical
-interface Comparator
-
 Expression <|.. Cast
 Expression <|.. UnaryMinus
 Expression <|.. UnaryNot
@@ -72,52 +165,28 @@ Expression <|.. Logical
 
 Expression <|.. Comparator
 
+Expression <|.. ArrayAccess
+
+Arithmetic <|.. Plus
+Arithmetic <|.. Multiply
+Arithmetic <|.. DivideBy
+Arithmetic <|.. Percent
+Arithmetic <|.. Minus
 
 
-' ----- PROGRAM -----
+Logical <|.. And
+Logical <|.. Or
 
-interface Statement
-interface Expression
-interface Definitions
-class VarDef
-class FunDef {
-    body:List<Statement>
-    varDefs:List<VarDef>
-    name: String
-    type: FunType
-}
-
-class FuncType {
-    params:List<VarDef>
-    returnType: Type
-}
-
-
-FunDef o-- "0..n" Statement
-FuncType <|.. Type
-
-interface Type
+Comparator <|.. GreaterThat
+Comparator <|.. GreaterOrEqualsThat
+Comparator <|.. LessOrEqualsThat
+Comparator <|.. LessThat
+Comparator <|.. EqualsTo
+Comparator <|.. DistinctThat
 
 
 
-class Program {
-    definitions:List<Definitions>
-
-}
-
-ASTNode <|.. Program
-Program  o-- "0..n" Definitions
-ASTNode <|-- Expression
-ASTNode <|-- Definitions
-ASTNode <|-- Statement
-
-Definitions <|.. VarDef
-Definitions <|.. FunDef
-FunDef o-- "0..n" VarDef
-VarDef o-- "1" Type
-
-
-' ----- STATEMENTS -----
+' ---- STATEMENTS
 
 interface Statement
 
@@ -144,12 +213,20 @@ class While {
     whileBody: List<Statement>
 }
 
+class Assignment {
+    left: Expression
+    right: Expression
+}
+
+
+
 
 ASTNode <|-- Statement
 Statement <|.. If
 Statement <|.. Write
 Statement <|.. Return
 Statement <|.. While
+Statement <|.. Read
 
 
 If o-- "1" Expression
@@ -164,51 +241,41 @@ Read o-- "0..n" Expression
 Return o-- "1" Expression
 
 
+Statement <|.. Assignment
+Assignment o-- "2" Expression
 
-' ----- TYPES -----
+
+
+' ----- TYPES
 
 interface Type
 
 ASTNode <|-- Type
 
-
-
-class Array
-class Struct
+class ArrayType
+class StructType
 
 class IntType
 class RealType
 class CharType
 
-Type <|.. Array
-Type <|.. Struct
+class FuncType {
+    params:List<VarDef>
+    returnType: Type
+}
+
+
+FuncType <|.. Type
+
+Type <|.. ArrayType
+Type <|.. StructType
 
 Type <|.. IntType
 Type <|.. RealType
 Type <|.. CharType
 
 
-
-
-' ------ ASSIGMENT ----
-
-class Assignment {
-    left: Expression
-    right: Expression
-}
-
-Statement <|.. Assignment
-Assignment o-- "2" Expression
-
-
-
-' ---- ACCESS---
-
-Expression <|.. ArrayAccess
-
-class ArrayAccess {
-    index: Expression
-    array: Expression
-
-}
 @enduml
+
+
+

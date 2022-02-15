@@ -6,4 +6,13 @@ public class Return implements Statemment {
 
     private Expression expression;
 
+    @Override
+    public int getLine() {
+        return 0;
+    }
+
+    @Override
+    public int getColumn() {
+        return 0;
+    }
 }

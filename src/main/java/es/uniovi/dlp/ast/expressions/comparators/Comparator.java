@@ -1,12 +1,10 @@
-package es.uniovi.dlp.ast.statements;
+package es.uniovi.dlp.ast.expressions.comparators;
 
 import es.uniovi.dlp.ast.expressions.Expression;
 
-import java.util.List;
-
-public class While implements Statemment {
-    private Expression condition;
-    private List<Statemment> whileBody;
+public class Comparator implements Expression {
+    private Expression left;
+    private Expression right;
 
     @Override
     public int getLine() {
