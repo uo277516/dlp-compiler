@@ -38,37 +38,14 @@ class ArrayAccess {
 }
 
 
-class Multiply {
-}
 
-class DivideBy {}
-
-class Percent{}
-
-class Plus{}
-
-class Minus{}
-
-class GreaterThat{}
-
-class LessThat{}
-
-class GreaterOrEqualsThat{}
-
-class LessOrEqualsThat{}
-
-class DistinctThat{}
-
-class EqualsTo{}
 
 class FileAccess {
     field: String
     expression: Expression
 }
 
-class And
 
-class Or
 
 class Cast{
     typeToCast: Type
@@ -125,21 +102,6 @@ Expression <|.. Comparator
 
 Expression <|.. ArrayAccess
 
-Arithmetic <|.. Plus
-Arithmetic <|.. Multiply
-Arithmetic <|.. DivideBy
-Arithmetic <|.. Percent
-Arithmetic <|.. Minus
 
-
-Logical <|.. And
-Logical <|.. Or
-
-Comparator <|.. GreaterThat
-Comparator <|.. GreaterOrEqualsThat
-Comparator <|.. LessOrEqualsThat
-Comparator <|.. LessThat
-Comparator <|.. EqualsTo
-Comparator <|.. DistinctThat
 
 @enduml

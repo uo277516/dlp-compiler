@@ -19,9 +19,9 @@ public class XanaParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		INT_CONSTANT=1;
+		INT_CONSTANT=1, REAL_CONSTANT=2, ID=3;
 	public static final String[] tokenNames = {
-		"<INVALID>", "INT_CONSTANT"
+		"<INVALID>", "INT_CONSTANT", "REAL_CONSTANT", "ID"
 	};
 	public static final int
 		RULE_program = 0;
@@ -49,7 +49,9 @@ public class XanaParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 	public static class ProgramContext extends ParserRuleContext {
+		public TerminalNode ID() { return getToken(XanaParser.ID, 0); }
 		public TerminalNode INT_CONSTANT() { return getToken(XanaParser.INT_CONSTANT, 0); }
+		public TerminalNode REAL_CONSTANT() { return getToken(XanaParser.REAL_CONSTANT, 0); }
 		public ProgramContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -59,10 +61,16 @@ public class XanaParser extends Parser {
 	public final ProgramContext program() throws RecognitionException {
 		ProgramContext _localctx = new ProgramContext(_ctx, getState());
 		enterRule(_localctx, 0, RULE_program);
+		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(2); match(INT_CONSTANT);
+			setState(2);
+			_la = _input.LA(1);
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << INT_CONSTANT) | (1L << REAL_CONSTANT) | (1L << ID))) != 0)) ) {
+			_errHandler.recoverInline(this);
+			}
+			consume();
 			}
 		}
 		catch (RecognitionException re) {
@@ -77,8 +85,8 @@ public class XanaParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\3\7\4\2\t\2\3\2\3"+
-		"\2\3\2\2\2\3\2\2\2\5\2\4\3\2\2\2\4\5\7\3\2\2\5\3\3\2\2\2\2";
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\5\7\4\2\t\2\3\2\3"+
+		"\2\3\2\2\2\3\2\2\3\3\2\3\5\5\2\4\3\2\2\2\4\5\t\2\2\2\5\3\3\2\2\2\2";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

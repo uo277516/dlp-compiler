@@ -29,7 +29,7 @@ class FuncType {
 
 
 FunDef o-- "0..n" Statement
-FuncType <|.. Type
+Type <|.. FuncType
 
 interface Type
 

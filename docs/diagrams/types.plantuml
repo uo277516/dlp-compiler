@@ -23,8 +23,7 @@ class FuncType {
     returnType: Type
 }
 
-
-FuncType <|.. Type
+Type <|.. FuncType
 
 Type <|.. Array
 Type <|.. Struct
