@@ -19,9 +19,11 @@ public class XanaParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		INT_CONSTANT=1, REAL_CONSTANT=2, ID=3;
+		INT_CONSTANT=1, ID=2, REAL_CONSTANT=3, ONELINE_COMMENT=4, LINES_COMMENT=5, 
+		CHAR_CONSTANT=6;
 	public static final String[] tokenNames = {
-		"<INVALID>", "INT_CONSTANT", "REAL_CONSTANT", "ID"
+		"<INVALID>", "INT_CONSTANT", "ID", "REAL_CONSTANT", "ONELINE_COMMENT", 
+		"LINES_COMMENT", "CHAR_CONSTANT"
 	};
 	public static final int
 		RULE_program = 0;
@@ -50,8 +52,11 @@ public class XanaParser extends Parser {
 	}
 	public static class ProgramContext extends ParserRuleContext {
 		public TerminalNode ID() { return getToken(XanaParser.ID, 0); }
+		public TerminalNode LINES_COMMENT() { return getToken(XanaParser.LINES_COMMENT, 0); }
 		public TerminalNode INT_CONSTANT() { return getToken(XanaParser.INT_CONSTANT, 0); }
 		public TerminalNode REAL_CONSTANT() { return getToken(XanaParser.REAL_CONSTANT, 0); }
+		public TerminalNode ONELINE_COMMENT() { return getToken(XanaParser.ONELINE_COMMENT, 0); }
+		public TerminalNode CHAR_CONSTANT() { return getToken(XanaParser.CHAR_CONSTANT, 0); }
 		public ProgramContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -67,7 +72,7 @@ public class XanaParser extends Parser {
 			{
 			setState(2);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << INT_CONSTANT) | (1L << REAL_CONSTANT) | (1L << ID))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << INT_CONSTANT) | (1L << ID) | (1L << REAL_CONSTANT) | (1L << ONELINE_COMMENT) | (1L << LINES_COMMENT) | (1L << CHAR_CONSTANT))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();
@@ -85,8 +90,8 @@ public class XanaParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\5\7\4\2\t\2\3\2\3"+
-		"\2\3\2\2\2\3\2\2\3\3\2\3\5\5\2\4\3\2\2\2\4\5\t\2\2\2\5\3\3\2\2\2\2";
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\b\7\4\2\t\2\3\2\3"+
+		"\2\3\2\2\2\3\2\2\3\3\2\3\b\5\2\4\3\2\2\2\4\5\t\2\2\2\5\3\3\2\2\2\2";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

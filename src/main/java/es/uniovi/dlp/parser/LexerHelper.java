@@ -11,6 +11,8 @@ public class LexerHelper {
     }
 
     public static double lexemeToReal(String lexeme) {
+        double number = 0;
+
         return -1;
     }
 
