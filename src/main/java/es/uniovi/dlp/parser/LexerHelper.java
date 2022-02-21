@@ -11,13 +11,33 @@ public class LexerHelper {
     }
 
     public static double lexemeToReal(String lexeme) {
-        double number = 0;
-
-        return -1;
+        return Double.parseDouble(lexeme);
     }
 
     public static char lexemeToChar(String lexeme) {
-        return Character.MIN_VALUE;
+        char c = Character.MIN_VALUE;
+        try {
+            c = numberFormat(lexeme);
+        } catch(NumberFormatException e) {
+            c = stringFormat(lexeme);
+        }
+        return c;
+    }
+
+    private static char numberFormat(String str) {
+        int value = Integer.parseInt(str.substring(2, str.length() - 1));
+        return (char) value;
+    }
+
+    private static char stringFormat(String str) {
+        if ("'\\n'".equals(str)) {
+            return '\n';
+        }
+        if ("'\\t'".equals(str)) {
+            return '\t';
+        } else {
+            return str.charAt(1);
+        }
     }
 
 }

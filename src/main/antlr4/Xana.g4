@@ -13,18 +13,18 @@ program: INT_CONSTANT |
             CHAR_CONSTANT
        ;
 
-INT_CONSTANT: '0'|[1-9]+DIGIT*
+INT_CONSTANT: '0'|[1-9]DIGIT*
             ;
 
 ID: (LETTER|'_')(ID_BODY)*
     ;
 
-REAL_CONSTANT: REAL_CONSTANT_DECIMAL
+REAL_CONSTANT:  REAL_CONSTANT_DECIMAL
                 |
                REAL_CONSTANT_EXP
             ;
 
-ONELINE_COMMENT: ('#') .* -> skip
+ONELINE_COMMENT: '#' .* ('\n'|EOF) -> skip
         ;
 
 LINES_COMMENT : ('"""') .* ('"""')
@@ -56,18 +56,15 @@ fragment
 ID_BODY : (LETTER|DIGIT|'_')
          ;
 
-fragment
-WS : [ \t\n\r] -> skip
-    ;
 
 
 fragment
-REAL_CONSTANT_DECIMAL: (DIGITS+'.'DIGITS*)|(DIGITS*'.'DIGITS+)
+REAL_CONSTANT_DECIMAL: (INT_CONSTANT'.'INT_CONSTANT)|('.'INT_CONSTANT)|(INT_CONSTANT'.')
             ;
 fragment
-REAL_CONSTANT_EXP: ((REAL_CONSTANT_DECIMAL'E'[+-]DIGITS)
+REAL_CONSTANT_EXP: ((REAL_CONSTANT_DECIMAL'E'[+-]EXPOS)
                                        |
-                   ((DIGITS|REAL_CONSTANT_DECIMAL)'e'DIGITS))
+                   ((DIGITS|REAL_CONSTANT_DECIMAL)'e'EXPOS))
               ;
 
 fragment
@@ -77,6 +74,10 @@ DIGIT: [0-9]
 fragment
 DIGITS: [0-9]+
        ;
+
+fragment
+EXPOS : [1-9][0-9]*
+    ;
 
 fragment
 LETTER: [a-zA-Z]
