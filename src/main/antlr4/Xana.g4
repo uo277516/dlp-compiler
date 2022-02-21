@@ -13,6 +13,8 @@ program: INT_CONSTANT |
             CHAR_CONSTANT
        ;
 
+BASURA : [ \t\r\n]+ -> skip;
+
 INT_CONSTANT: '0'|[1-9]DIGIT*
             ;
 
@@ -24,13 +26,13 @@ REAL_CONSTANT:  REAL_CONSTANT_DECIMAL
                REAL_CONSTANT_EXP
             ;
 
-ONELINE_COMMENT: '#' .* ('\n'|EOF) -> skip
+ONELINE_COMMENT: '#' .*? ('\n'|EOF) -> skip
         ;
 
-LINES_COMMENT : ('"""') .* ('"""')
+LINES_COMMENT : ('"""') .*? ('"""') -> skip
     ;
 
-CHAR_CONSTANT : '\'' (LETTER|ASCI|CHAR_ESPECIAL) '\''
+CHAR_CONSTANT : '\'' (.|ASCI|CHAR_ESPECIAL) '\''
         ;
 
 
@@ -48,7 +50,7 @@ ASCI_2 : ([1][0-9][0-9])|([2][0-5][0-5])
 
 
 fragment
-CHAR_ESPECIAL : '\t' | '\n'
+CHAR_ESPECIAL : '\\''t' | '\\''n'
         ;
 
 
