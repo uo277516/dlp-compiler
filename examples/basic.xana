@@ -67,5 +67,3 @@ def main() do
 
   suma(1, 2.2) # Invocacion como sentencia
 end
-
-

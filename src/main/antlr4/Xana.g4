@@ -8,16 +8,16 @@ package es.uniovi.dlp.parser;
 
 
 //que pueda ser combinación de ambos
-program: varDef
-    |funDef
+program: (varDef |funDef)* funMain
        ;
+
+
 
 //-----funciones---
 
 
 //para la main crear una regla aparte que para las definiciones
 //de funciones
-
 funDef: 'def' ID '(' parameterList ')' '::' returnType 'do'
             funBody
           'end'
@@ -32,52 +32,8 @@ funMain: 'def' 'main' '(' ')' 'do' funBody 'end'
     ;
 
 
-funBody: varDef+ statement+ 'return' expression
+funBody: (varDef|statement)*
     ;
-
-
-//--expresiones
-expression: INT_CONSTANT  //mirar ast
-    | REAL_CONSTANT
-    | CHAR_CONSTANT
-    | ID
-    | invocation
-    | arrayAcess
-    | fileAcces
-    | cast
-    | unaryMinus
-    | unaryNot
-    | arithmetic
-    | logical
-    | comparator
-    ;
-
-comparator: ' ';
-
-logical: ' ';
-
-arithmetic: ' ';
-
-unaryNot: ' ';
-
-unaryMinus: ' ';
-
-cast: ' ';
-
-fileAcces: ' ';
-
-arrayAcess: ' ';
-
-invocation: ' ';
-
-
-//statements
-statement: 'a'
-    ;
-
-
-
-
 
 //parámetros de la lista
 parameterList: param? (','param)*
@@ -88,11 +44,72 @@ param: ID '::' type
 
 
 
+//--expresiones
+expression: INT_CONSTANT  //mirar ast
+    | REAL_CONSTANT
+    | CHAR_CONSTANT
+    | ID
+    | expression '(' listExpressions ')' //invocacion
+    | expression '[' expression ']' //array access
+    | expression '.' expression //funcion access
+    | expression 'as' simple_type //cast
+    | '!' expression //unary minus
+    | '-' expression //unary minus
+    | expression operatorMultiply expression //multiplicar
+    | expression operatorArithmetic expression //arithmetic
+    | expression('<'|'>'|'<='|'>='|'!='|'==')expression
+    | expression operatorLogical expression
+    | '(' expression ')'
+    ;
+
+operatorLogical: '&&'
+                 | '||'
+                 ;
+
+operatorArithmetic: '+'
+                    | '-'
+                    ;
+
+operatorMultiply: | '/'
+                  | '*'
+                  | '%'
+    ;
+
+listExpressions: expression? (',' expression)*
+    ;
+
+
+
+
+
+//statements
+statement: 'puts' expression (','expression)*  //read
+        | 'in' expression (','expression)*  //read
+        | expression '=' expression //asignacion
+        | 'if' expression+ 'do'
+             (expression|statement)*
+          ('else'(expression|statement)*)?
+        'end'
+        | 'while' expression+ 'do'
+           (expression|statement)*
+        'end'
+        | 'return' expression
+        | expression '(' listExpressions ')' //invocacion por statement
+    ;
+
+
+
+
+
+
+
+
+
 
 
 //-------variables--------
 
-varDef: ID (','ID)* '::' type '\\''n'
+varDef: ID (','ID)* '::' type
     ;
 
 type: simple_type
@@ -113,11 +130,12 @@ array: '[' INT_CONSTANT '::' type ']'
     ;
 
 
-struct: 'defstruct' 'do' recordFields+ 'end'
+struct: 'defstruct' 'do' recordFields* 'end'
     ;
 
 //para el cuerpo del struct
-recordFields: ID (','ID)* '::' type '\\''n'
+recordFields: ID (','ID)* '::' type
+
     ;
 
 
