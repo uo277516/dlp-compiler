@@ -2,14 +2,20 @@ package es.uniovi.dlp.ast.types;
 
 public class CharType implements Type {
 
+    private int line;
+    private int column;
+    public CharType(int line, int column) {
+        this.line=line;
+        this.column=column;
+    }
 
     @Override
     public int getLine() {
-        return 0;
+        return line;
     }
 
     @Override
     public int getColumn() {
-        return 0;
+        return column;
     }
 }

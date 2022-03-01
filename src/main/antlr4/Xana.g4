@@ -8,6 +8,9 @@ import es.uniovi.dlp.ast.expressions.*;
 import es.uniovi.dlp.ast.definitions.*;
 import es.uniovi.dlp.ast.statements.*;
 import es.uniovi.dlp.ast.types.*;
+import es.uniovi.dlp.ast.AbstractASTNode;
+import es.uniovi.dlp.ast.ASTNode;
+import es.uniovi.dlp.ast.Program;
 }
 
 
@@ -15,7 +18,7 @@ import es.uniovi.dlp.ast.types.*;
 program returns [Program ast]
     : (varDefs+=varDef | funDefs+=funDef)* funMain {
         List<VarDef> varDefs = new ArrayList<>();
-        List<FuncDef> funcDefs = new ArrayList<>();
+        List<FunDef> funcDefs = new ArrayList<>();
 
         for(var def: $varDefs) {
             varDefs.add(def.ast);
@@ -24,7 +27,7 @@ program returns [Program ast]
             funcDefs.add(def.ast);
         }
 
-        funDefs.add(funMain.ast);
+        funDefs.add($funMain.ast);
 
         $ast = new Program(varDefs, funDefs, $start.getLine(), $start.getCharPositionInLine() + 1);
       }
@@ -38,24 +41,33 @@ program returns [Program ast]
 //para la main crear una regla aparte que para las definiciones
 //de funciones
 funDef returns [FunDef ast]
-    : 'def' ID '(' parameterList ')' '::' returnType 'do'
-            funBody
-          'end' {$ast = new FunDef($funBody.ast, $parameterList.ast, $ID, $returnType.ast);}
+    : 'def' id=ID '(' parameterList ')' '::' returnType 'do'
+            (varDefs+=varDef|statements+=statement)* //cuerpo
+          'end' {
+            List<VarDef> varDefs = new ArrayList<>();
+            List<Statemment> sts = new ArrayList<>();
+            for (var vardef: $varDefs) {
+                varDefs.add(vardef.ast);
+            }
+            for (var s: $statements) {
+                sts.add(s.ast);
+            }
+            $ast = new FunDef(varDefs, sts, $id.text, $returnType.ast);
+          }
     ;
 
 returnType returns [Type ast]
-    : simple_type   {$ast = new Type($start.getLine(), $start.getCharPositionInLine() + 1); }
-    | 'void'        {$ast = new Type($start.getLine(), $start.getCharPositionInLine() + 1); }
+    : simple_type   {$ast = $simple_type.ast; }
+    | 'void'        {$ast = new VoidType($start.getLine(), $start.getCharPositionInLine() + 1); }
     ;
 
 
-funMain
-    : 'def' 'main' '(' ')' 'do' funBody 'end'
+funMain returns [FunMain ast]
+    : 'def' 'main' '(' ')' 'do' (varDef|statement)* 'end'
     ;
 
 
-funBody: (varDef|statement)*
-    ;
+//funBody: (varDef|statement)*;
 
 //parámetros de la lista
 parameterList: param? (','param)*
@@ -142,9 +154,10 @@ complex_type: array
     | struct
     ;
 
-simple_type: 'int'
-    | 'double'
-    | 'char'
+simple_type returns [Type ast]
+    : 'int'    { $ast = new IntType($start.getLine(), $start.getCharPositionInLine() + 1); }
+    | 'double' { $ast = new RealType($start.getLine(), $start.getCharPositionInLine() + 1); }
+    | 'char'   { $ast = new CharType($start.getLine(), $start.getCharPositionInLine() + 1); }
     ;
 
 

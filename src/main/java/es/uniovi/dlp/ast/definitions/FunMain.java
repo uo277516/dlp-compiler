@@ -1,6 +1,6 @@
 package es.uniovi.dlp.ast.definitions;
 
-public class FuncMain extends FuncDef {
+public class FunMain extends FunDef {
     @Override
     public int getLine() {
         return 0;

@@ -1,13 +1,20 @@
 package es.uniovi.dlp.ast.types;
 
 public class IntType implements Type{
+    private int line;
+    private int column;
+    public IntType(int line, int column) {
+        this.line=line;
+        this.column=column;
+    }
+
     @Override
     public int getLine() {
-        return 0;
+        return line;
     }
 
     @Override
     public int getColumn() {
-        return 0;
+        return column;
     }
 }

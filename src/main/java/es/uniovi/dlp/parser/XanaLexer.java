@@ -2,6 +2,14 @@
 
 package es.uniovi.dlp.parser;
 
+import es.uniovi.dlp.ast.expressions.*;
+import es.uniovi.dlp.ast.definitions.*;
+import es.uniovi.dlp.ast.statements.*;
+import es.uniovi.dlp.ast.types.*;
+import es.uniovi.dlp.ast.AbstractASTNode;
+import es.uniovi.dlp.ast.ASTNode;
+import es.uniovi.dlp.ast.Program;
+
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;

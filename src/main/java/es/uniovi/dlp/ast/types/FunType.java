@@ -4,7 +4,7 @@ import es.uniovi.dlp.ast.definitions.VarDef;
 
 import java.util.List;
 
-public class FuncType implements Type{
+public class FunType implements Type{
 
     private List<VarDef> params;
     private Type returnType;
