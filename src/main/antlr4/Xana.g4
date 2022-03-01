@@ -3,13 +3,32 @@ grammar Xana;
 
 @header {
 package es.uniovi.dlp.parser;
+
+import es.uniovi.dlp.ast.expressions.*;
+import es.uniovi.dlp.ast.definitions.*;
+import es.uniovi.dlp.ast.statements.*;
+import es.uniovi.dlp.ast.types.*;
 }
 
 
 
-//que pueda ser combinación de ambos
-program: (varDef |funDef)* funMain
-       ;
+program returns [Program ast]
+    : (varDefs+=varDef | funDefs+=funDef)* funMain {
+        List<VarDef> varDefs = new ArrayList<>();
+        List<FuncDef> funcDefs = new ArrayList<>();
+
+        for(var def: $varDefs) {
+            varDefs.add(def.ast);
+        }
+        for(var def: $funDefs) {
+            funcDefs.add(def.ast);
+        }
+
+        funDefs.add(funMain.ast);
+
+        $ast = new Program(varDefs, funDefs, $start.getLine(), $start.getCharPositionInLine() + 1);
+      }
+    ;
 
 
 
@@ -18,17 +37,20 @@ program: (varDef |funDef)* funMain
 
 //para la main crear una regla aparte que para las definiciones
 //de funciones
-funDef: 'def' ID '(' parameterList ')' '::' returnType 'do'
+funDef returns [FunDef ast]
+    : 'def' ID '(' parameterList ')' '::' returnType 'do'
             funBody
-          'end'
-        ;
+          'end' {$ast = new FunDef($funBody.ast, $parameterList.ast, $ID, $returnType.ast);}
+    ;
 
-returnType: simple_type
-    | 'void'
+returnType returns [Type ast]
+    : simple_type   {$ast = new Type($start.getLine(), $start.getCharPositionInLine() + 1); }
+    | 'void'        {$ast = new Type($start.getLine(), $start.getCharPositionInLine() + 1); }
     ;
 
 
-funMain: 'def' 'main' '(' ')' 'do' funBody 'end'
+funMain
+    : 'def' 'main' '(' ')' 'do' funBody 'end'
     ;
 
 
@@ -86,14 +108,14 @@ listExpressions: expression? (',' expression)*
 statement: 'puts' expression (','expression)*  //read
         | 'in' expression (','expression)*  //read
         | expression '=' expression //asignacion
-        | 'if' expression+ 'do'
+        | 'if' expression+ 'do'   //if
              (expression|statement)*
           ('else'(expression|statement)*)?
         'end'
-        | 'while' expression+ 'do'
+        | 'while' expression+ 'do'  //while
            (expression|statement)*
         'end'
-        | 'return' expression
+        | 'return' expression  //return
         | expression '(' listExpressions ')' //invocacion por statement
     ;
 

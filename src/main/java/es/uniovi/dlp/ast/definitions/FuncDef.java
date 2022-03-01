@@ -9,7 +9,7 @@ import java.util.List;
 public class FuncDef implements Definition {
 
     private List<Statemment> body;
-    private List<VarDef> varDefs;
+    private List<VarDef> parameters;
     private String name;
     private FuncType type;
 
