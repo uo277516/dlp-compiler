@@ -6,14 +6,23 @@ import java.util.List;
 
 public class Write implements Statemment {
     private List<Expression> expressions;
+    private int line;
+    private int column;
+
+    public Write (int line, int column, List<Expression> expressions)
+    {
+        this.line=line;
+        this.column=column;
+        this.expressions=expressions;
+    }
 
     @Override
     public int getLine() {
-        return 0;
+        return line;
     }
 
     @Override
     public int getColumn() {
-        return 0;
+        return column;
     }
 }

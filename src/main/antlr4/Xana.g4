@@ -16,18 +16,17 @@ import es.uniovi.dlp.ast.Program;
 
 
 program returns [Program ast]
-    : (varDefs+=varDef | funDefs+=funDef)* funMain {
+    : (v+=varDef | funDefs+=funDef)* funMain {
+        List<FunDef> funDefs = new ArrayList<>();
         List<VarDef> varDefs = new ArrayList<>();
-        List<FunDef> funcDefs = new ArrayList<>();
 
-        for(var def: $varDefs) {
-            varDefs.add(def.ast);
+        for (var varDef1: $v) {
+            for (var varDef2: varDef1.ast) {
+                varDefs.add(varDef2);
+            }
         }
-        for(var def: $funDefs) {
-            funcDefs.add(def.ast);
-        }
-
-        funDefs.add($funMain.ast);
+        if ($funMain.ast!=null)
+            funDefs.add($funMain.ast);
 
         $ast = new Program(varDefs, funDefs, $start.getLine(), $start.getCharPositionInLine() + 1);
       }
@@ -42,17 +41,23 @@ program returns [Program ast]
 //de funciones
 funDef returns [FunDef ast]
     : 'def' id=ID '(' parameterList ')' '::' returnType 'do'
-            (varDefs+=varDef|statements+=statement)* //cuerpo
+            (v+=varDef|statements+=statement)* //cuerpo
           'end' {
-            List<VarDef> varDefs = new ArrayList<>();
             List<Statemment> sts = new ArrayList<>();
-            for (var vardef: $varDefs) {
-                varDefs.add(vardef.ast);
+            List<VarDef> varDefs = new ArrayList<>();
+
+            for (var varDef1: $v) {
+                 for (var varDef2: varDef1.ast) {
+                      varDefs.add(varDef2);
+                 }
             }
+
             for (var s: $statements) {
                 sts.add(s.ast);
             }
-            $ast = new FunDef(varDefs, sts, $id.text, $returnType.ast);
+            $ast = new FunDef(varDefs, sts, $id.text, $returnType.ast,
+                       $start.getLine(), $start.getCharPositionInLine() + 1);
+
           }
     ;
 
@@ -63,7 +68,23 @@ returnType returns [Type ast]
 
 
 funMain returns [FunMain ast]
-    : 'def' 'main' '(' ')' 'do' (varDef|statement)* 'end'
+    : 'def' 'main' '(' ')' 'do' (v+=varDef|sts+=statement)* 'end'
+    {
+                List<Statemment> sts = new ArrayList<>();
+                List<VarDef> varDefs = new ArrayList<>();
+                for (var s: $sts) {
+                    sts.add(s.ast);
+                }
+                for (var varDef1: $v) {
+                     for (var varDef2: varDef1.ast) {
+                        varDefs.add(varDef2);
+                     }
+                }
+                $ast = new FunMain(varDefs, sts, null, null,
+                       $start.getLine(), $start.getCharPositionInLine() + 1);
+
+
+              }
     ;
 
 
@@ -79,7 +100,8 @@ param: ID '::' type
 
 
 //--expresiones
-expression: INT_CONSTANT  //mirar ast
+expression returns [Expression ast]
+    : INT_CONSTANT  //mirar ast
     | REAL_CONSTANT
     | CHAR_CONSTANT
     | ID
@@ -117,7 +139,15 @@ listExpressions: expression? (',' expression)*
 
 
 //statements
-statement: 'puts' expression (','expression)*  //read
+statement returns [Statemment ast]
+        : 'puts' exps+=expression (','exps+=expression)*  //write
+            {
+                List<Expression> expressions = new ArrayList<>();
+                for (var e: $exps) {
+                    expressions.add(e.ast);
+                }
+                $ast = new Write($start.getLine(), $start.getCharPositionInLine() + 1, expressions);
+            }
         | 'in' expression (','expression)*  //read
         | expression '=' expression //asignacion
         | 'if' expression+ 'do'   //if
@@ -143,15 +173,22 @@ statement: 'puts' expression (','expression)*  //read
 
 //-------variables--------
 
-varDef: ID (','ID)* '::' type
+varDef returns [List<VarDef> ast = new ArrayList<>()]
+    : ids+=ID (','ids+=ID)* '::' type {
+        for(var id : $ids) {
+            $ast.add(new VarDef(id.getLine(), id.getCharPositionInLine() + 1, id.getText(), $type.ast));
+        }
+    }
     ;
 
-type: simple_type
-    | complex_type
+type returns [Type ast]
+    : simple_type { $ast = $simple_type.ast; }
+    | complex_type { $ast = $complex_type.ast; }
         ;
 
-complex_type: array
-    | struct
+complex_type returns [Type ast]
+    : array    { $ast = $array.ast; }
+    | struct   { $ast = $struct.ast; }
     ;
 
 simple_type returns [Type ast]
@@ -161,16 +198,34 @@ simple_type returns [Type ast]
     ;
 
 
-array: '[' INT_CONSTANT '::' type ']'
+array returns [Type ast]
+    : '[' INT_CONSTANT '::' type ']' {
+        $ast = new ArrayType($start.getLine(), $start.getCharPositionInLine() + 1, $type.ast);
+        }
     ;
 
 
-struct: 'defstruct' 'do' recordFields* 'end'
+struct returns [Type ast]
+    : 'defstruct' 'do' r+=recordFields* 'end' {
+                    List<VarDef> varDefs = new ArrayList<>();
+
+                            for (var varDef1: $r) {
+                                for (var varDef2: varDef1.ast) {
+                                    varDefs.add(varDef2);
+                                }
+                            }
+                    $ast = new StructType ($start.getLine(), $start.getCharPositionInLine() + 1, varDefs);
+                }
     ;
 
 //para el cuerpo del struct
-recordFields: ID (','ID)* '::' type
-
+recordFields returns [List<VarDef> ast = new ArrayList<>()]
+    : ids+=ID (','ids+=ID)* '::' type
+    {
+        for(var id : $ids) {
+            $ast.add(new VarDef(id.getLine(), id.getCharPositionInLine() + 1, id.getText(), $type.ast));
+        }
+    }
     ;
 
 

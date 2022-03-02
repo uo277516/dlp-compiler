@@ -1,21 +1,14 @@
-package es.uniovi.dlp.ast.definitions;
+package es.uniovi.dlp.ast.types;
 
-import es.uniovi.dlp.ast.types.Type;
-
-public class VarDef implements Definition {
-
-    private String id;
-    private Type type;
-
+public class ArrayType implements Type {
     private int line;
     private int column;
+    private Type type;
 
-    public VarDef ( int line, int column ,
-                    String id, Type type)
+    public ArrayType (int line, int column, Type type)
     {
         this.line=line;
         this.column=column;
-        this.id=id;
         this.type=type;
     }
 
@@ -28,4 +21,6 @@ public class VarDef implements Definition {
     public int getColumn() {
         return column;
     }
+
+
 }

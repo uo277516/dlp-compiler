@@ -9,15 +9,23 @@ import java.util.List;
 public class Program implements ASTNode {
     private List<FunDef> funDefs;
     private List<VarDef> vardefs;
-    private FunMain main;
+    private int line;
+    private int column;
+
+    public Program( List<VarDef> vardefs,List<FunDef> funDefs, int line, int column) {
+        this.funDefs = funDefs;
+        this.vardefs = vardefs;
+        this.line = line;
+        this.column = column;
+    }
 
     @Override
     public int getLine() {
-        return 0;
+        return line;
     }
 
     @Override
     public int getColumn() {
-        return 0;
+        return column;
     }
 }
