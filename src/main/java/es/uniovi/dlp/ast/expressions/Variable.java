@@ -1,16 +1,16 @@
 package es.uniovi.dlp.ast.expressions;
 
-public class UnaryNot implements Expression {
-    private Expression expression;
+public class Variable implements Expression {
     private int line;
     private int column;
+    private String var;
 
-    public UnaryNot(int line, int column, Expression e)
-    {
+    public Variable (int line, int column, String var) {
         this.line=line;
         this.column=column;
-        this.expression=e;
+        this.var=var;
     }
+
     @Override
     public int getLine() {
         return line;
@@ -20,4 +20,7 @@ public class UnaryNot implements Expression {
     public int getColumn() {
         return column;
     }
+
+
+
 }

@@ -101,34 +101,81 @@ param: ID '::' type
 
 //--expresiones
 expression returns [Expression ast]
-    : INT_CONSTANT  //mirar ast
-    | REAL_CONSTANT
-    | CHAR_CONSTANT
-    | ID
-    | expression '(' listExpressions ')' //invocacion
-    | expression '[' expression ']' //array access
-    | expression '.' expression //funcion access
-    | expression 'as' simple_type //cast
-    | '!' expression //unary minus
-    | '-' expression //unary minus
-    | expression operatorMultiply expression //multiplicar
-    | expression operatorArithmetic expression //arithmetic
-    | expression('<'|'>'|'<='|'>='|'!='|'==')expression
-    | expression operatorLogical expression
+    : i=INT_CONSTANT
+        {$ast = new IntLiteral($start.getLine(), $start.getCharPositionInLine() + 1, LexerHelper.lexemeToInt($i.text)); }
+    | r=REAL_CONSTANT
+         {$ast = new RealLiteral($start.getLine(), $start.getCharPositionInLine() + 1, LexerHelper.lexemeToReal($r.text)); }
+    | c=CHAR_CONSTANT
+         {$ast = new CharLiteral($start.getLine(), $start.getCharPositionInLine() + 1, LexerHelper.lexemeToChar($c.text)); }
+    | id=ID
+         {$ast = new Variable($start.getLine(), $start.getCharPositionInLine() + 1, $id.text); }
+    | e=expression '(' listExpressions ')' //invocacion
+         {
+         $ast = new Invocation($start.getLine(), $start.getCharPositionInLine() + 1,
+                             $e.ast, $listExpressions.ast);
+         }
+    | a=expression '[' index=expression ']' //array access
+        {
+         $ast = new ArrayAccess($start.getLine(), $start.getCharPositionInLine() + 1,
+            $a.ast, $index.ast);
+        }
+    | e1=expression '.' e2=expression //funcion access
+        {
+        $ast = new FileAccess($e1.ast, $e2.ast, $start.getLine(), $start.getCharPositionInLine() + 1);
+        }
+    | e=expression 'as' s=simple_type //cast
+        {
+        $ast = new Cast($start.getLine(), $start.getCharPositionInLine() + 1,
+            $e.ast, $s.ast);
+        }
+    | '!' e=expression //unary not
+        {
+        $ast = new UnaryNot($start.getLine(), $start.getCharPositionInLine() + 1, $e.ast);
+        }
+    | '-' e=expression //unary minus
+         {
+         $ast = new UnaryMinus($start.getLine(), $start.getCharPositionInLine() + 1, $e.ast);
+         }
+    | e1=expression op=operatorMultiply e2=expression //multiplicar
+        {
+        $ast = new ArithmeticMultiply($e1.ast, $op.ast, $e2.ast,
+            $start.getLine(), $start.getCharPositionInLine() + 1);
+        }
+    | e1=expression op1=operatorArithmetic e2=expression //arithmetic
+        {
+        $ast = new Arithmetic($e1.ast, $op1.ast, $e2.ast,
+             $start.getLine(), $start.getCharPositionInLine() + 1);
+        }
+    | e1=expression op2=('<'|'>'|'<='|'>='|'!='|'==') e2=expression
+        {
+        $ast = new Comparator($e1.ast, $op2.text, $e2.ast,
+                     $start.getLine(), $start.getCharPositionInLine() + 1);
+        }
+    | e1=expression op3=operatorLogical e2=expression
+        {
+        $ast = new Logical($e1.ast, $op3.ast, $e2.ast,
+                     $start.getLine(), $start.getCharPositionInLine() + 1);
+        }
     | '(' expression ')'
+        {
+        $ast = $expression.ast;
+        }
     ;
 
-operatorLogical: '&&'
-                 | '||'
+operatorLogical returns [String ast]
+                 : a='&&' {$ast = $a.text;}
+                 | o='||'   {$ast = $o.text;}
                  ;
 
-operatorArithmetic: '+'
-                    | '-'
+operatorArithmetic returns [String ast]
+                    : m='+'  {$ast = $m.text;}
+                    | mi='-' {$ast = $mi.text;}
                     ;
 
-operatorMultiply: | '/'
-                  | '*'
-                  | '%'
+operatorMultiply returns [String ast]
+                  : | d='/' {$ast = $d.text;}
+                  | m='*'   {$ast = $m.text;}
+                  | p='%'   {$ast = $p.text;}
     ;
 
 listExpressions returns [List<Expression> ast = new ArrayList<>()]
