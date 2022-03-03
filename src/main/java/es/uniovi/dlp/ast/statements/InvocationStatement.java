@@ -4,19 +4,18 @@ import es.uniovi.dlp.ast.expressions.Expression;
 
 import java.util.List;
 
-public class While implements Statemment {
-    private List<Expression> condiciones;
-    private List<Expression> exps;
-    private List<Statemment> sts;
+public class InvocationStatement implements Statemment {
+
     private int line;
     private int column;
+    private Expression expression;
+    private List<Expression> params;
 
-    public While(List<Expression> condiciones, List<Expression> exps, List<Statemment> sts, int line, int column) {
-        this.condiciones = condiciones;
-        this.exps = exps;
-        this.sts = sts;
+    public InvocationStatement(int line, int column, Expression expression, List<Expression> params) {
         this.line = line;
         this.column = column;
+        this.expression = expression;
+        this.params = params;
     }
 
     @Override

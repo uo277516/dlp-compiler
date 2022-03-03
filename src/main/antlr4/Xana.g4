@@ -131,7 +131,14 @@ operatorMultiply: | '/'
                   | '%'
     ;
 
-listExpressions: expression? (',' expression)*
+listExpressions returns [List<Expression> ast = new ArrayList<>()]
+    : exps+=expression? (',' exps+=expression)*
+        {
+            for (var e: $exps)
+            {
+                $ast.add(e.ast);
+            }
+        }
     ;
 
 
@@ -148,17 +155,61 @@ statement returns [Statemment ast]
                 }
                 $ast = new Write($start.getLine(), $start.getCharPositionInLine() + 1, expressions);
             }
-        | 'in' expression (','expression)*  //read
-        | expression '=' expression //asignacion
-        | 'if' expression+ 'do'   //if
-             (expression|statement)*
-          ('else'(expression|statement)*)?
+        | 'in' exps+=expression (','exps+=expression)*  //read
+            {
+                List<Expression> expressions = new ArrayList<>();
+                for (var e: $exps) {
+                    expressions.add(e.ast);
+                }
+                $ast = new Read($start.getLine(), $start.getCharPositionInLine() + 1, expressions);
+            }
+        | e1=expression '=' e2=expression //asignacion
+            {
+                $ast = new Assigment($start.getLine(), $start.getCharPositionInLine() + 1, $e1.ast, $e2.ast);
+            }
+        | 'if' condiciones+=expression+ 'do'   //if
+             (ifExps+=expression|ifSts+=statement)*
+          ('else'(elseExps+=expression|elseSts+=statement)*)?
         'end'
-        | 'while' expression+ 'do'  //while
-           (expression|statement)*
+            {
+                List<Expression> condiciones = new ArrayList<>();
+                List<Expression> ifExps = new ArrayList<>();
+                List<Statemment> ifSts= new ArrayList<>();
+                List<Expression> elseExps= new ArrayList<>();
+                List<Statemment> elseSts= new ArrayList<>();
+
+                for (var c: $condiciones) {condiciones.add(c.ast);}
+                for (var c: $ifExps) {ifExps.add(c.ast);}
+                for (var c: $ifSts) {ifSts.add(c.ast);}
+                for (var c: $elseExps) {elseExps.add(c.ast);}
+                for (var c: $elseSts) {elseSts.add(c.ast);}
+
+                $ast = new IfElse(condiciones, ifExps, ifSts, elseExps, elseSts, $start.getLine(), $start.getCharPositionInLine() + 1);
+            }
+        | 'while' condiciones+=expression+ 'do'  //while
+           (exps+=expression|sts+=statement)*
+            {
+                List<Expression> condiciones = new ArrayList<>();
+                List<Expression> exps = new ArrayList<>();
+                List<Statemment> sts= new ArrayList<>();
+
+                for (var c: $condiciones) {condiciones.add(c.ast);}
+                for (var c: $exps) {exps.add(c.ast);}
+                for (var c: $sts) {sts.add(c.ast);}
+
+                $ast = new While(condiciones, exps, sts, $start.getLine(), $start.getCharPositionInLine() + 1);
+            }
         'end'
         | 'return' expression  //return
+            {
+                $ast = new Return($expression.ast, $start.getLine(), $start.getCharPositionInLine() + 1);
+            }
         | expression '(' listExpressions ')' //invocacion por statement
+            {
+
+                $ast = new InvocationStatement($start.getLine(), $start.getCharPositionInLine() + 1,
+                    $expression.ast, $listExpressions.ast);
+            }
     ;
 
 

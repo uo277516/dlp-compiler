@@ -7,13 +7,23 @@ public class Assigment implements Statemment {
     private Expression left;
     private Expression right;
 
+    private int line;
+    private int column;
+
+    public Assigment( int line, int column,Expression left, Expression right) {
+        this.left = left;
+        this.right = right;
+        this.line = line;
+        this.column = column;
+    }
+
     @Override
     public int getLine() {
-        return 0;
+        return line;
     }
 
     @Override
     public int getColumn() {
-        return 0;
+        return column;
     }
 }
