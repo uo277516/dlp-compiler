@@ -145,14 +145,14 @@ expression returns [Expression ast]
          {
          $ast = new UnaryMinus($start.getLine(), $start.getCharPositionInLine() + 1, $e.ast);
          }
-    | e1=expression op=operatorMultiply e2=expression //multiplicar
+    | e1=expression op=('*'|'/'|'%') e2=expression //multiplicar
         {
-        $ast = new ArithmeticMultiply($e1.ast, $op.ast, $e2.ast,
+        $ast = new ArithmeticMultiply($e1.ast, $op.text, $e2.ast,
             $start.getLine(), $start.getCharPositionInLine() + 1);
         }
-    | e1=expression op1=operatorArithmetic e2=expression //arithmetic
+    | e1=expression op1=('+'|'-') e2=expression //arithmetic
         {
-        $ast = new Arithmetic($e1.ast, $op1.ast, $e2.ast,
+        $ast = new Arithmetic($e1.ast, $op1.text, $e2.ast,
              $start.getLine(), $start.getCharPositionInLine() + 1);
         }
     | e1=expression op2=('<'|'>'|'<='|'>='|'!='|'==') e2=expression
@@ -160,9 +160,9 @@ expression returns [Expression ast]
         $ast = new Comparator($e1.ast, $op2.text, $e2.ast,
                      $start.getLine(), $start.getCharPositionInLine() + 1);
         }
-    | e1=expression op3=operatorLogical e2=expression
+    | e1=expression op3=('&&'|'||') e2=expression
         {
-        $ast = new Logical($e1.ast, $op3.ast, $e2.ast,
+        $ast = new Logical($e1.ast, $op3.text, $e2.ast,
                      $start.getLine(), $start.getCharPositionInLine() + 1);
         }
     | '(' expression ')'
@@ -171,21 +171,7 @@ expression returns [Expression ast]
         }
     ;
 
-operatorLogical returns [String ast]
-                 : a='&&' {$ast = $a.text;}
-                 | o='||'   {$ast = $o.text;}
-                 ;
 
-operatorArithmetic returns [String ast]
-                    : m='+'  {$ast = $m.text;}
-                    | mi='-' {$ast = $mi.text;}
-                    ;
-
-operatorMultiply returns [String ast]
-                  : | d='/' {$ast = $d.text;}
-                  | m='*'   {$ast = $m.text;}
-                  | p='%'   {$ast = $p.text;}
-    ;
 
 listExpressions returns [List<Expression> ast = new ArrayList<>()]
     : exps+=expression? (',' exps+=expression)*
