@@ -55,7 +55,7 @@ funDef returns [FunDef ast]
             for (var s: $statements) {
                 sts.add(s.ast);
             }
-            $ast = new FunDef(varDefs, sts, $id.text, $returnType.ast,
+            $ast = new FunDef(varDefs, sts, $id.text, new FunType($parameterList.ast, $returnType.ast, $start.getLine(), $start.getCharPositionInLine() + 1),
                        $start.getLine(), $start.getCharPositionInLine() + 1);
 
           }
@@ -67,7 +67,7 @@ returnType returns [Type ast]
     ;
 
 
-funMain returns [FunMain ast]
+funMain returns [FunDef ast]
     : 'def' 'main' '(' ')' 'do' (v+=varDef|sts+=statement)* 'end'
     {
                 List<Statemment> sts = new ArrayList<>();
@@ -80,9 +80,10 @@ funMain returns [FunMain ast]
                         varDefs.add(varDef2);
                      }
                 }
-                $ast = new FunMain(varDefs, sts, null, null,
-                       $start.getLine(), $start.getCharPositionInLine() + 1);
 
+                VoidType tipo = new VoidType($start.getLine(), $start.getCharPositionInLine() + 1);
+                FunType ft = new FunType(new ArrayList<VarDef>(), tipo, $start.getLine(), $start.getCharPositionInLine() + 1);
+                $ast = new FunDef(varDefs, sts, "main", ft, $start.getLine(), $start.getCharPositionInLine() + 1);
 
               }
     ;
@@ -91,10 +92,18 @@ funMain returns [FunMain ast]
 //funBody: (varDef|statement)*;
 
 //parámetros de la lista
-parameterList: param? (','param)*
+parameterList returns [List<VarDef> ast = new ArrayList<>()]
+    : params+=param? (','params+=param)*
+    {
+        for(var p: $params)
+        {
+            $ast.add(p.ast);
+        }
+    }
     ;
 
-param: ID '::' type
+param returns [VarDef ast]
+    : id=ID '::' t=type {$ast = new VarDef($start.getLine(), $start.getCharPositionInLine() + 1, $id.text, $t.ast);}
     ;
 
 
@@ -305,7 +314,7 @@ array returns [Type ast]
 
 struct returns [Type ast]
     : 'defstruct' 'do' r+=recordFields* 'end' {
-                    List<VarDef> varDefs = new ArrayList<>();
+                    List<RecordField> varDefs = new ArrayList<>();
 
                             for (var varDef1: $r) {
                                 for (var varDef2: varDef1.ast) {
@@ -317,11 +326,11 @@ struct returns [Type ast]
     ;
 
 //para el cuerpo del struct
-recordFields returns [List<VarDef> ast = new ArrayList<>()]
+recordFields returns [List<RecordField> ast = new ArrayList<>()]
     : ids+=ID (','ids+=ID)* '::' type
     {
         for(var id : $ids) {
-            $ast.add(new VarDef(id.getLine(), id.getCharPositionInLine() + 1, id.getText(), $type.ast));
+            $ast.add(new RecordField(id.getLine(), id.getCharPositionInLine() + 1, id.getText(), $type.ast));
         }
     }
     ;

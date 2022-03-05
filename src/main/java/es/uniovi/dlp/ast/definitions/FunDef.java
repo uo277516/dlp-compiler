@@ -12,7 +12,7 @@ public class FunDef implements Definition {
     private String id;
     private Type type;
     private List<Statemment> body;
-    private List<VarDef> parameters;
+    private List<VarDef> localVars;
     private int line;
     private int column;
 
@@ -29,7 +29,7 @@ public class FunDef implements Definition {
     public FunDef(  List<VarDef> parameters, List<Statemment> body, String id, Type type,
                    int line,  int column) {
         this.body=body;
-        this.parameters=parameters;
+        this.localVars=parameters;
         this.id=id;
         this.type=type;
         this.line=line;

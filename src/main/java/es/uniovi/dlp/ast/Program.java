@@ -1,7 +1,6 @@
 package es.uniovi.dlp.ast;
 
 import es.uniovi.dlp.ast.definitions.FunDef;
-import es.uniovi.dlp.ast.definitions.FunMain;
 import es.uniovi.dlp.ast.definitions.VarDef;
 
 import java.util.List;
