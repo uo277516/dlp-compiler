@@ -2,28 +2,34 @@ package es.uniovi.dlp.ast.expressions;
 
 import es.uniovi.dlp.ast.expressions.Expression;
 
-public class FileAccess implements Expression {
+public class FileAccess extends AbstractExpression{
 
     private Expression field;
     private Expression expression;
-    private int line;
-    private int column;
+
+    public Expression getField() {
+        return field;
+    }
+
+    public void setField(Expression field) {
+        this.field = field;
+    }
+
+    public Expression getExpression() {
+        return expression;
+    }
+
+    public void setExpression(Expression expression) {
+        this.expression = expression;
+    }
 
     public FileAccess(Expression field, Expression expression, int line, int column) {
+        super(line, column);
         this.field = field;
         this.expression = expression;
-        this.line = line;
-        this.column = column;
+
     }
 
-    @Override
-    public int getLine() {
-        return line;
-    }
 
-    @Override
-    public int getColumn() {
-        return column;
-    }
 
 }

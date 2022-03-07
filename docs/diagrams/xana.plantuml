@@ -1,56 +1,24 @@
-@startuml Program
+@startuml Expressions
 skinparam style strictuml
 skinparam monochrome true
 
-' ---- PROGRAM ----
 
 interface ASTNode {
     getLine(): int
     getColumn(): int
 }
 
-interface Statement
-interface Definitions
-class VarDef {
-    variable: Variable
-    type: Type
-}
 
-class FunDef {
-    body:List<Statement>
-    varDefs:List<VarDef>
-    name: String
-    type: FunType
-}
-
-
-
-
-FunDef o-- "0..n" Statement
-
-interface Type
-
-
-
-class Program {
-    definitions:List<Definitions>
-
-}
-
-ASTNode <|.. Program
-Program  o-- "0..n" Definitions
-ASTNode <|-- Definitions
-
-Definitions <|.. VarDef
-Definitions <|.. FunDef
-FunDef o-- "0..n" VarDef
-VarDef o-- "1" Type
-
-
-
-' ---- EXPRESSIONS
 
 interface Expression
+
+class AbstractExpression {
+    line: int
+    column: int
+}
+
+Expression <|-- AbstractExpression
+ASTNode <|--  Expression
 
 class IntLiteral {
     value: int
@@ -70,7 +38,7 @@ class Variable {
 
 class Invocation {
     name: Variable
-    arg: List<Expression>
+    params: List<Expression>
 }
 
 class ArrayAccess {
@@ -80,37 +48,14 @@ class ArrayAccess {
 }
 
 
-class Multiply {
-}
 
-class DivideBy {}
-
-class Percent{}
-
-class Plus{}
-
-class Minus{}
-
-class GreaterThat{}
-
-class LessThat{}
-
-class GreaterOrEqualsThat{}
-
-class LessOrEqualsThat{}
-
-class DistinctThat{}
-
-class EqualsTo{}
 
 class FileAccess {
     field: String
     expression: Expression
 }
 
-class And
 
-class Or
 
 class Cast{
     typeToCast: Type
@@ -130,8 +75,15 @@ class Arithmetic {
     right: Expression
     left: Expression
 }
-class Logical {
 
+class ArithmeticMultiply {
+    operator: String
+    right: Expression
+    left: Expression
+}
+
+class Logical {
+    operator: String
     right: Expression
     left: Expression
 
@@ -140,68 +92,121 @@ class Logical {
 class Comparator {
     right: Expression
     left: Expression
+    operator: String
 }
 
 
-Invocation o-- "0..n" Expression
+Invocation o-- "0..n" AbstractExpression
+ArrayAccess o-- "2" AbstractExpression
+FileAccess o-- "1" AbstractExpression
+Cast o-- "1" AbstractExpression
+UnaryMinus o-- "1" AbstractExpression
+UnaryNot o-- "1" AbstractExpression
+Arithmetic o-- "2" AbstractExpression
+ArithmeticMultiply o-- "2" AbstractExpression
+Logical o-- "2" AbstractExpression
+Comparator o-- "2" AbstractExpression
 
-
-Expression <|.. Invocation
-
-
-
-ASTNode <|-- Expression
-Expression <|.. IntLiteral
-Expression <|.. RealLiteral
-Expression <|.. charLiteral
-Expression <|.. Variable
-Expression <|.. Cast
-Expression <|.. UnaryMinus
-Expression <|.. UnaryNot
-
-Expression <|.. FileAccess
-Expression <|.. Arithmetic
-Expression <|.. Logical
-
-Expression <|.. Comparator
-
-Expression <|.. ArrayAccess
-
-Arithmetic <|.. Plus
-Arithmetic <|.. Multiply
-Arithmetic <|.. DivideBy
-Arithmetic <|.. Percent
-Arithmetic <|.. Minus
-
-
-Logical <|.. And
-Logical <|.. Or
-
-Comparator <|.. GreaterThat
-Comparator <|.. GreaterOrEqualsThat
-Comparator <|.. LessOrEqualsThat
-Comparator <|.. LessThat
-Comparator <|.. EqualsTo
-Comparator <|.. DistinctThat
+AbstractExpression <|-- Invocation
 
 
 
-' ---- STATEMENTS
+AbstractExpression <|-- IntLiteral
+AbstractExpression <|-- RealLiteral
+AbstractExpression <|-- charLiteral
+AbstractExpression <|-- Variable
+AbstractExpression <|-- Cast
+AbstractExpression <|-- UnaryMinus
+AbstractExpression <|-- UnaryNot
+
+AbstractExpression <|-- FileAccess
+AbstractExpression <|-- Arithmetic
+AbstractExpression <|-- Logical
+
+AbstractExpression <|-- Comparator
+
+AbstractExpression <|-- ArrayAccess
+AbstractExpression <|-- ArithmeticMultiply
+
+
+
+
+
+
+class AbstractDefinition {
+    line: int
+    column: int
+}
+
+
+interface Statement
+interface Definition
+
+Definition <|.. AbstractDefinition
+
+class VarDef {
+    variable: Variable
+    type: Type
+}
+
+class FunDef {
+    body:List<Statement>
+    localVars:List<VarDef>
+    name: String
+    type: FunType
+}
+
+class FuncType {
+    params:List<VarDef>
+    returnType: Type
+}
+
+
+FunDef o-- "0..n" Statement
+Type <|.. FuncType
+
+interface Type
+
+
+
+class Program {
+    funDefs: List<Definitions>
+    varDefs: List<VarDef>
+    line: int
+    column: int
+}
+
+ASTNode <|.. Program
+Program  o-- "0..n" Definition
+ASTNode <|-- Definition
+
+AbstractDefinition <|-- VarDef
+AbstractDefinition <|-- FunDef
+FunDef o-- "0..n" VarDef
+VarDef o-- "1" Type
+
+
+
+
+
+
 
 interface Statement
 
 class Write {
-    expression: Expression
+    expression: List<Expression>
 }
 
 class Read {
-    expression: Expression
+    expression: List<Expression>
 }
 
 class If {
-    condition: Expression
-    ifBody: List<Statement>
-    elseBody: List<Statement>
+     condiciones: List<Expression>
+        ifExps: List<Expression>
+        ifSts: List<Statemment>
+        elseExps: List<Expression>
+        elseSts: List<Statemment>
 }
 
 class Return {
@@ -210,7 +215,13 @@ class Return {
 
 class While {
     condition: Expression
-    whileBody: List<Statement>
+    whileSts: List<Statement>
+    whileExps: List<Expression>
+}
+
+class AbstractStatement {
+    line: int
+    column: int
 }
 
 class Assignment {
@@ -219,21 +230,22 @@ class Assignment {
 }
 
 
+Statement <|.. AbstractStatement
 
 
 ASTNode <|-- Statement
-Statement <|.. If
-Statement <|.. Write
-Statement <|.. Return
-Statement <|.. While
-Statement <|.. Read
+AbstractStatement <|.. If
+AbstractStatement <|.. Write
+AbstractStatement <|.. Return
+AbstractStatement <|.. While
+AbstractStatement <|.. Read
 
 
-If o-- "1" Expression
-If o-- "0..n" Statement
+If o-- "0..n" Expression
+If o-- "0..n" AbstractStatement
 
-While o-- "1" Expression
-While o-- "0..n" Statement
+While o-- "0..n" Expression
+While o-- "0..n" AbstractStatement
 
 Write o-- "0..n" Expression
 Read o-- "0..n" Expression
@@ -241,41 +253,50 @@ Read o-- "0..n" Expression
 Return o-- "1" Expression
 
 
-Statement <|.. Assignment
+AbstractStatement <|.. Assignment
 Assignment o-- "2" Expression
 
 
 
-' ----- TYPES
 
 interface Type
 
-ASTNode <|-- Type
+class AbstractType {
+    line: int
+    column: int
+}
 
-class ArrayType
-class StructType
+ASTNode <|.. Type
+
+ArrayType o-- "1" AbstractType
+StructType o-- "0..n" RecordField
+
+class ArrayType {
+    type: Type
+}
+class StructType {
+    defs: List<RecordField>
+}
 
 class IntType
 class RealType
 class CharType
-
+class VoidType
 class FuncType {
     params:List<VarDef>
     returnType: Type
 }
 
+Type <|-- AbstractType
 
-FuncType <|.. Type
+AbstractType <|-- ArrayType
+AbstractType <|-- StructType
+AbstractType <|-- FuncType
 
-Type <|.. ArrayType
-Type <|.. StructType
-
-Type <|.. IntType
-Type <|.. RealType
-Type <|.. CharType
+AbstractType <|-- IntType
+AbstractType <|-- RealType
+AbstractType <|-- CharType
+AbstractType <|-- VoidType
 
 
 @enduml
-
-
-

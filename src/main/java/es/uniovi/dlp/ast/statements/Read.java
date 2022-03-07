@@ -4,25 +4,20 @@ import es.uniovi.dlp.ast.expressions.Expression;
 
 import java.util.List;
 
-public class Read  implements Statemment {
+public class Read  extends AbstractStatemment {
     private List<Expression> expressions;
-    private int line;
-    private int column;
 
     public Read (int line, int column, List<Expression> expressions)
     {
-        this.line=line;
-        this.column=column;
+        super(line, column);
         this.expressions=expressions;
     }
 
-    @Override
-    public int getLine() {
-        return line;
+    public List<Expression> getExpressions() {
+        return expressions;
     }
 
-    @Override
-    public int getColumn() {
-        return column;
+    public void setExpressions(List<Expression> expressions) {
+        this.expressions = expressions;
     }
 }

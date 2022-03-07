@@ -1,28 +1,20 @@
 package es.uniovi.dlp.ast.expressions;
 
-public class IntLiteral implements Expression {
+public class IntLiteral extends AbstractExpression {
 
     private int value;
-    private int line;
-    private int column;
 
     public IntLiteral(int line, int column, int value)
     {
-        this.line=line;
-        this.column=column;
+        super(line, column);
         this.value=value;
     }
 
-    @Override
-    public int getLine() {
-        return line;
+    public int getValue() {
+        return value;
     }
 
-    @Override
-    public int getColumn() {
-        return column;
+    public void setValue(int value) {
+        this.value = value;
     }
-
-
-
 }

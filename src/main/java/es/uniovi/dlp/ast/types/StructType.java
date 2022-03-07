@@ -6,25 +6,19 @@ import es.uniovi.dlp.ast.definitions.VarDef;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StructType implements Type{
-    private int line;
-    private int column;
+public class StructType extends AbstractType{
     private List<RecordField> defs;
 
     public StructType (int line, int column, List<RecordField> defs) {
-        this.line=line;
-        this.column=column;
+        super(line, column);
         this.defs=defs;
     }
 
-
-    @Override
-    public int getLine() {
-        return line;
+    public List<RecordField> getDefs() {
+        return defs;
     }
 
-    @Override
-    public int getColumn() {
-        return column;
+    public void setDefs(List<RecordField> defs) {
+        this.defs = defs;
     }
 }

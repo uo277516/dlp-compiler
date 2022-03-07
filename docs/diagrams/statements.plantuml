@@ -12,17 +12,19 @@ interface ASTNode {
 interface Statement
 
 class Write {
-    expression: Expression
+    expression: List<Expression>
 }
 
 class Read {
-    expression: Expression
+    expression: List<Expression>
 }
 
 class If {
-    condition: Expression
-    ifBody: List<Statement>
-    elseBody: List<Statement>
+     condiciones: List<Expression>
+        ifExps: List<Expression>
+        ifSts: List<Statemment>
+        elseExps: List<Expression>
+        elseSts: List<Statemment>
 }
 
 class Return {
@@ -31,7 +33,13 @@ class Return {
 
 class While {
     condition: Expression
-    whileBody: List<Statement>
+    whileSts: List<Statement>
+    whileExps: List<Expression>
+}
+
+class AbstractStatement {
+    line: int
+    column: int
 }
 
 class Assignment {
@@ -40,21 +48,22 @@ class Assignment {
 }
 
 
+Statement <|.. AbstractStatement
 
 
 ASTNode <|-- Statement
-Statement <|.. If
-Statement <|.. Write
-Statement <|.. Return
-Statement <|.. While
-Statement <|.. Read
+AbstractStatement <|.. If
+AbstractStatement <|.. Write
+AbstractStatement <|.. Return
+AbstractStatement <|.. While
+AbstractStatement <|.. Read
 
 
-If o-- "1" Expression
-If o-- "0..n" Statement
+If o-- "0..n" Expression
+If o-- "0..n" AbstractStatement
 
-While o-- "1" Expression
-While o-- "0..n" Statement
+While o-- "0..n" Expression
+While o-- "0..n" AbstractStatement
 
 Write o-- "0..n" Expression
 Read o-- "0..n" Expression
@@ -62,7 +71,7 @@ Read o-- "0..n" Expression
 Return o-- "1" Expression
 
 
-Statement <|.. Assignment
+AbstractStatement <|.. Assignment
 Assignment o-- "2" Expression
 
 

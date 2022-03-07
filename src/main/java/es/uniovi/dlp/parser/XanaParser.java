@@ -1326,7 +1326,7 @@ public class XanaParser extends Parser {
 				match(T__2);
 
 
-				                ((StatementContext)_localctx).ast =  new InvocationStatement(_localctx.start.getLine(), _localctx.start.getCharPositionInLine() + 1,
+				                ((StatementContext)_localctx).ast =  new Invocation(_localctx.start.getLine(), _localctx.start.getCharPositionInLine() + 1,
 				                    ((StatementContext)_localctx).expression.ast, ((StatementContext)_localctx).listExpressions.ast);
 				            
 				}

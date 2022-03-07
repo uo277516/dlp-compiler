@@ -8,8 +8,17 @@ interface ASTNode {
     getColumn(): int
 }
 
+class AbstractDefinition {
+    line: int
+    column: int
+}
+
+
 interface Statement
-interface Definitions
+interface Definition
+
+Definition <|.. AbstractDefinition
+
 class VarDef {
     variable: Variable
     type: Type
@@ -17,7 +26,7 @@ class VarDef {
 
 class FunDef {
     body:List<Statement>
-    varDefs:List<VarDef>
+    localVars:List<VarDef>
     name: String
     type: FunType
 }
@@ -36,16 +45,18 @@ interface Type
 
 
 class Program {
-    definitions:List<Definitions>
-
+    funDefs: List<Definitions>
+    varDefs: List<VarDef>
+    line: int
+    column: int
 }
 
 ASTNode <|.. Program
-Program  o-- "0..n" Definitions
-ASTNode <|-- Definitions
+Program  o-- "0..n" Definition
+ASTNode <|-- Definition
 
-Definitions <|.. VarDef
-Definitions <|.. FunDef
+AbstractDefinition <|-- VarDef
+AbstractDefinition <|-- FunDef
 FunDef o-- "0..n" VarDef
 VarDef o-- "1" Type
 

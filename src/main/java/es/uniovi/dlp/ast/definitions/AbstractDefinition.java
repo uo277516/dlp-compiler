@@ -1,7 +1,7 @@
 package es.uniovi.dlp.ast.definitions;
 
 
-public class AbstractDefinition implements Definition {
+public abstract class AbstractDefinition implements Definition {
     private int line;
     private int column;
 

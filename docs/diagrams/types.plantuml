@@ -9,28 +9,42 @@ interface ASTNode {
 
 interface Type
 
-ASTNode <|-- Type
+class AbstractType {
+    line: int
+    column: int
+}
 
-class Array
-class Struct
+ASTNode <|.. Type
+
+ArrayType o-- "1" AbstractType
+StructType o-- "0..n" RecordField
+
+class ArrayType {
+    type: Type
+}
+class StructType {
+    defs: List<RecordField>
+}
 
 class IntType
 class RealType
 class CharType
-
+class VoidType
 class FuncType {
     params:List<VarDef>
     returnType: Type
 }
 
-Type <|.. FuncType
+Type <|-- AbstractType
 
-Type <|.. Array
-Type <|.. Struct
+AbstractType <|-- ArrayType
+AbstractType <|-- StructType
+AbstractType <|-- FuncType
 
-Type <|.. IntType
-Type <|.. RealType
-Type <|.. CharType
+AbstractType <|-- IntType
+AbstractType <|-- RealType
+AbstractType <|-- CharType
+AbstractType <|-- VoidType
 
 
 @enduml

@@ -1,30 +1,31 @@
 package es.uniovi.dlp.ast.expressions;
 
-public class ArrayAccess implements Expression{
+public class ArrayAccess extends AbstractExpression{
 
     private Expression index;
     private Expression array;
-    private int line;
-    private int column;
 
     public ArrayAccess(int line, int column, Expression index, Expression array)
     {
-        this.line=line;
-        this.column=column;
+        super(line, column);
         this.index=index;
         this.array=array;
     }
 
-    @Override
-    public int getLine() {
-        return line;
+
+    public Expression getIndex() {
+        return index;
     }
 
-    @Override
-    public int getColumn() {
-        return column;
+    public void setIndex(Expression index) {
+        this.index = index;
     }
 
+    public Expression getArray() {
+        return array;
+    }
 
-
+    public void setArray(Expression array) {
+        this.array = array;
+    }
 }

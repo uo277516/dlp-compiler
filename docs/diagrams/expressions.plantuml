@@ -10,6 +10,14 @@ interface ASTNode {
 
 interface Expression
 
+class AbstractExpression {
+    line: int
+    column: int
+}
+
+Expression <|-- AbstractExpression
+ASTNode <|--  Expression
+
 class IntLiteral {
     value: int
 }
@@ -28,7 +36,7 @@ class Variable {
 
 class Invocation {
     name: Variable
-    arg: List<Expression>
+    params: List<Expression>
 }
 
 class ArrayAccess {
@@ -65,8 +73,15 @@ class Arithmetic {
     right: Expression
     left: Expression
 }
-class Logical {
 
+class ArithmeticMultiply {
+    operator: String
+    right: Expression
+    left: Expression
+}
+
+class Logical {
+    operator: String
     right: Expression
     left: Expression
 
@@ -75,33 +90,41 @@ class Logical {
 class Comparator {
     right: Expression
     left: Expression
+    operator: String
 }
 
 
-Invocation o-- "0..n" Expression
+Invocation o-- "0..n" AbstractExpression
+ArrayAccess o-- "2" AbstractExpression
+FileAccess o-- "1" AbstractExpression
+Cast o-- "1" AbstractExpression
+UnaryMinus o-- "1" AbstractExpression
+UnaryNot o-- "1" AbstractExpression
+Arithmetic o-- "2" AbstractExpression
+ArithmeticMultiply o-- "2" AbstractExpression
+Logical o-- "2" AbstractExpression
+Comparator o-- "2" AbstractExpression
+
+AbstractExpression <|-- Invocation
 
 
-Expression <|.. Invocation
 
+AbstractExpression <|-- IntLiteral
+AbstractExpression <|-- RealLiteral
+AbstractExpression <|-- charLiteral
+AbstractExpression <|-- Variable
+AbstractExpression <|-- Cast
+AbstractExpression <|-- UnaryMinus
+AbstractExpression <|-- UnaryNot
 
+AbstractExpression <|-- FileAccess
+AbstractExpression <|-- Arithmetic
+AbstractExpression <|-- Logical
 
-ASTNode <|-- Expression
-Expression <|.. IntLiteral
-Expression <|.. RealLiteral
-Expression <|.. charLiteral
-Expression <|.. Variable
-Expression <|.. Cast
-Expression <|.. UnaryMinus
-Expression <|.. UnaryNot
+AbstractExpression <|-- Comparator
 
-Expression <|.. FileAccess
-Expression <|.. Arithmetic
-Expression <|.. Logical
-
-Expression <|.. Comparator
-
-Expression <|.. ArrayAccess
-
+AbstractExpression <|-- ArrayAccess
+AbstractExpression <|-- ArithmeticMultiply
 
 
 @enduml

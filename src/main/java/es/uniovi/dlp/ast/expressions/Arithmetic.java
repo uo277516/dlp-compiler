@@ -2,32 +2,43 @@ package es.uniovi.dlp.ast.expressions;
 
 import es.uniovi.dlp.ast.expressions.Expression;
 
-public class Arithmetic implements Expression {
+public class Arithmetic extends AbstractExpression {
 
 
     private Expression left;
     private String operator;
 
     public Arithmetic(Expression left, String operator, Expression right, int line, int column) {
+        super(line, column);
         this.left = left;
         this.operator = operator;
         this.right = right;
-        this.line = line;
-        this.column = column;
     }
 
     private Expression right;
-    private int line;
-    private int column;
 
-    @Override
-    public int getLine() {
-        return line;
+    public Expression getLeft() {
+        return left;
     }
 
-    @Override
-    public int getColumn() {
-        return column;
+    public void setLeft(Expression left) {
+        this.left = left;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+
+    public Expression getRight() {
+        return right;
+    }
+
+    public void setRight(Expression right) {
+        this.right = right;
     }
 }
 

@@ -1,23 +1,19 @@
 package es.uniovi.dlp.ast.expressions;
 
-public class UnaryMinus implements Expression {
+public class UnaryMinus extends AbstractExpression {
     private Expression expression;
-    private int line;
-    private int column;
 
     public UnaryMinus(int line, int column, Expression e)
     {
-        this.line=line;
-        this.column=column;
+        super(line, column);
         this.expression=e;
     }
-    @Override
-    public int getLine() {
-        return line;
+
+    public Expression getExpression() {
+        return expression;
     }
 
-    @Override
-    public int getColumn() {
-        return column;
+    public void setExpression(Expression expression) {
+        this.expression = expression;
     }
 }

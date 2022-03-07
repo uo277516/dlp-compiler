@@ -4,25 +4,16 @@ import es.uniovi.dlp.ast.expressions.Expression;
 
 import java.util.List;
 
-public class Write implements Statemment {
+public class Write extends AbstractStatemment {
     private List<Expression> expressions;
-    private int line;
-    private int column;
 
     public Write (int line, int column, List<Expression> expressions)
     {
-        this.line=line;
-        this.column=column;
+        super(line,column);
         this.expressions=expressions;
     }
 
-    @Override
-    public int getLine() {
-        return line;
-    }
-
-    @Override
-    public int getColumn() {
-        return column;
+    public void setExpressions(List<Expression> expressions) {
+        this.expressions = expressions;
     }
 }

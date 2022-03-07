@@ -1,26 +1,20 @@
 package es.uniovi.dlp.ast.types;
 
-public class ArrayType implements Type {
-    private int line;
-    private int column;
+public class ArrayType extends AbstractType {
     private Type type;
 
     public ArrayType (int line, int column, Type type)
     {
-        this.line=line;
-        this.column=column;
+        super(line,column);
         this.type=type;
     }
 
-    @Override
-    public int getLine() {
-        return line;
+
+    public Type getType() {
+        return type;
     }
 
-    @Override
-    public int getColumn() {
-        return column;
+    public void setType(Type type) {
+        this.type = type;
     }
-
-
 }

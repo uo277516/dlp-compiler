@@ -249,7 +249,7 @@ statement returns [Statemment ast]
         | expression '(' listExpressions ')' //invocacion por statement
             {
 
-                $ast = new InvocationStatement($start.getLine(), $start.getCharPositionInLine() + 1,
+                $ast = new Invocation($start.getLine(), $start.getCharPositionInLine() + 1,
                     $expression.ast, $listExpressions.ast);
             }
     ;

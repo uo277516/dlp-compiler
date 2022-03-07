@@ -1,25 +1,21 @@
 package es.uniovi.dlp.ast.expressions;
 
-public class CharLiteral implements Expression{
+public class CharLiteral extends AbstractExpression{
 
     private char value;
-    private int line;
-    private int column;
+
+    public char getValue() {
+        return value;
+    }
+
+    public void setValue(char value) {
+        this.value = value;
+    }
 
     public CharLiteral(int line, int column, char value)
     {
-        this.line=line;
-        this.column=column;
+        super(line, column);
         this.value=value;
     }
 
-    @Override
-    public int getLine() {
-        return line;
-    }
-
-    @Override
-    public int getColumn() {
-        return column;
-    }
 }

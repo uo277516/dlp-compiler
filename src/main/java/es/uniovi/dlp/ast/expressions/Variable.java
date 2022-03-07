@@ -1,24 +1,11 @@
 package es.uniovi.dlp.ast.expressions;
 
-public class Variable implements Expression {
-    private int line;
-    private int column;
+public class Variable extends AbstractExpression {
     private String var;
 
     public Variable (int line, int column, String var) {
-        this.line=line;
-        this.column=column;
+        super(line, column);
         this.var=var;
-    }
-
-    @Override
-    public int getLine() {
-        return line;
-    }
-
-    @Override
-    public int getColumn() {
-        return column;
     }
 
 

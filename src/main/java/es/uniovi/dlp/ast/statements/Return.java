@@ -2,25 +2,22 @@ package es.uniovi.dlp.ast.statements;
 
 import es.uniovi.dlp.ast.expressions.Expression;
 
-public class Return implements Statemment {
+public class Return extends AbstractStatemment {
 
     private Expression expression;
-    private int line;
-    private int column;
 
-    @Override
-    public int getLine() {
-        return line;
-    }
 
-    @Override
-    public int getColumn() {
-        return column;
-    }
 
     public Return(Expression expression, int line, int column) {
+        super(line,column);
         this.expression = expression;
-        this.line = line;
-        this.column = column;
+    }
+
+    public Expression getExpression() {
+        return expression;
+    }
+
+    public void setExpression(Expression expression) {
+        this.expression = expression;
     }
 }
