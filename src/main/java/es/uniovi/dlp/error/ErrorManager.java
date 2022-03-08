@@ -9,7 +9,10 @@ public class ErrorManager {
 
     private final List<Error> errors = new ArrayList<>();
 
-    private ErrorManager() {}
+    //constructor privado
+    private ErrorManager() {
+
+    }
 
     public static ErrorManager getInstance() {
         return instance;

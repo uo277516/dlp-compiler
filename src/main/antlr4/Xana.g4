@@ -58,7 +58,9 @@ funDef returns [FunDef ast]
             }
 
             for (var s: $statements) {
-                sts.add(s.ast);
+                for (var s2: s.ast) {
+                    sts.add(s2);
+                }
             }
             $ast = new FunDef(varDefs, sts, $id.text, new FunType($parameterList.ast, $returnType.ast, $start.getLine(), $start.getCharPositionInLine() + 1),
                        $start.getLine(), $start.getCharPositionInLine() + 1);
@@ -78,7 +80,9 @@ funMain returns [FunDef ast]
                 List<Statemment> sts = new ArrayList<>();
                 List<VarDef> varDefs = new ArrayList<>();
                 for (var s: $sts) {
-                    sts.add(s.ast);
+                     for (var s2: s.ast) {
+                          sts.add(s2);
+                     }
                 }
                 for (var varDef1: $v) {
                      for (var varDef2: varDef1.ast) {
@@ -133,9 +137,9 @@ expression returns [Expression ast]
          $ast = new ArrayAccess($start.getLine(), $start.getCharPositionInLine() + 1,
             $a.ast, $index.ast);
         }
-    | e1=expression '.' e2=expression //funcion access
+    | e1=expression '.' id=ID //funcion access
         {
-        $ast = new FileAccess($e1.ast, $e2.ast, $start.getLine(), $start.getCharPositionInLine() + 1);
+        $ast = new FileAccess($e1.ast, $id.text, $start.getLine(), $start.getCharPositionInLine() + 1);
         }
     | e=expression 'as' s=simple_type //cast
         {
@@ -193,69 +197,75 @@ listExpressions returns [List<Expression> ast = new ArrayList<>()]
 
 
 //statements
-statement returns [Statemment ast]
+statement returns [List<Statemment> ast = new ArrayList<>()]
         : 'puts' exps+=expression (','exps+=expression)*  //write
             {
-                List<Expression> expressions = new ArrayList<>();
+
                 for (var e: $exps) {
-                    expressions.add(e.ast);
+                    $ast.add(new Write($start.getLine(), $start.getCharPositionInLine() + 1, e.ast));
                 }
-                $ast = new Write($start.getLine(), $start.getCharPositionInLine() + 1, expressions);
+
             }
         | 'in' exps+=expression (','exps+=expression)*  //read
             {
-                List<Expression> expressions = new ArrayList<>();
+
                 for (var e: $exps) {
-                    expressions.add(e.ast);
+                   $ast.add(new Read($start.getLine(), $start.getCharPositionInLine() + 1, e.ast));
                 }
-                $ast = new Read($start.getLine(), $start.getCharPositionInLine() + 1, expressions);
+
             }
         | e1=expression '=' e2=expression //asignacion
             {
-                $ast = new Assigment($start.getLine(), $start.getCharPositionInLine() + 1, $e1.ast, $e2.ast);
+                $ast.add(new Assigment($start.getLine(), $start.getCharPositionInLine() + 1, $e1.ast, $e2.ast));
             }
         | 'if' condiciones+=expression+ 'do'   //if
-             (ifExps+=expression|ifSts+=statement)*
-          ('else'(elseExps+=expression|elseSts+=statement)*)?
+             (ifSts+=statement)*
+          ('else'(elseSts+=statement)*)?
         'end'
             {
                 List<Expression> condiciones = new ArrayList<>();
-                List<Expression> ifExps = new ArrayList<>();
                 List<Statemment> ifSts= new ArrayList<>();
-                List<Expression> elseExps= new ArrayList<>();
                 List<Statemment> elseSts= new ArrayList<>();
 
                 for (var c: $condiciones) {condiciones.add(c.ast);}
-                for (var c: $ifExps) {ifExps.add(c.ast);}
-                for (var c: $ifSts) {ifSts.add(c.ast);}
-                for (var c: $elseExps) {elseExps.add(c.ast);}
-                for (var c: $elseSts) {elseSts.add(c.ast);}
+                for (var s: $ifSts) {
+                                for (var s2: s.ast) {
+                                    ifSts.add(s2);
+                                }
+                            }
+                for (var s: $elseSts) {
+                                for (var s2: s.ast) {
+                                    elseSts.add(s2);
+                                }
+                            }
 
-                $ast = new IfElse(condiciones, ifExps, ifSts, elseExps, elseSts, $start.getLine(), $start.getCharPositionInLine() + 1);
+                $ast.add(new IfElse(condiciones, ifSts, elseSts, $start.getLine(), $start.getCharPositionInLine() + 1));
             }
         | 'while' condiciones+=expression+ 'do'  //while
-           (exps+=expression|sts+=statement)*
+           (sts+=statement)*
             {
                 List<Expression> condiciones = new ArrayList<>();
-                List<Expression> exps = new ArrayList<>();
                 List<Statemment> sts= new ArrayList<>();
 
                 for (var c: $condiciones) {condiciones.add(c.ast);}
-                for (var c: $exps) {exps.add(c.ast);}
-                for (var c: $sts) {sts.add(c.ast);}
+                for (var s: $sts) {
+                                for (var s2: s.ast) {
+                                    sts.add(s2);
+                                }
+                            }
 
-                $ast = new While(condiciones, exps, sts, $start.getLine(), $start.getCharPositionInLine() + 1);
+                $ast.add(new While(condiciones, sts, $start.getLine(), $start.getCharPositionInLine() + 1));
             }
         'end'
         | 'return' expression  //return
             {
-                $ast = new Return($expression.ast, $start.getLine(), $start.getCharPositionInLine() + 1);
+                $ast.add(new Return($expression.ast, $start.getLine(), $start.getCharPositionInLine() + 1));
             }
         | expression '(' listExpressions ')' //invocacion por statement
             {
 
-                $ast = new Invocation($start.getLine(), $start.getCharPositionInLine() + 1,
-                    $expression.ast, $listExpressions.ast);
+                $ast.add(new Invocation($start.getLine(), $start.getCharPositionInLine() + 1,
+                    $expression.ast, $listExpressions.ast));
             }
     ;
 
@@ -297,8 +307,8 @@ simple_type returns [Type ast]
 
 
 array returns [Type ast]
-    : '[' INT_CONSTANT '::' type ']' {
-        $ast = new ArrayType($start.getLine(), $start.getCharPositionInLine() + 1, $type.ast);
+    : '[' i=INT_CONSTANT '::' type ']' {
+        $ast = new ArrayType($start.getLine(), $start.getCharPositionInLine() + 1, $type.ast, LexerHelper.lexemeToInt($i.text) );
         }
     ;
 

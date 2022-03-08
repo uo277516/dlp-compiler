@@ -5,19 +5,12 @@ import es.uniovi.dlp.ast.expressions.Expression;
 import java.util.List;
 
 public class Read  extends AbstractStatemment {
-    private List<Expression> expressions;
+    private Expression expression;
 
-    public Read (int line, int column, List<Expression> expressions)
+    public Read (int line, int column, Expression expression)
     {
         super(line, column);
-        this.expressions=expressions;
+        this.expression=expression;
     }
 
-    public List<Expression> getExpressions() {
-        return expressions;
-    }
-
-    public void setExpressions(List<Expression> expressions) {
-        this.expressions = expressions;
-    }
 }

@@ -194,11 +194,11 @@ VarDef o-- "1" Type
 interface Statement
 
 class Write {
-    expression: List<Expression>
+    expression: Expression
 }
 
 class Read {
-    expression: List<Expression>
+    expression: Expression
 }
 
 class If {

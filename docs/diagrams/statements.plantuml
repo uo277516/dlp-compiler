@@ -12,18 +12,23 @@ interface ASTNode {
 interface Statement
 
 class Write {
-    expression: List<Expression>
+    expression: Expression
 }
 
 class Read {
-    expression: List<Expression>
+    expression: Expression
 }
+
+class Invocation {
+    name: Variable
+    params: List<Expression>
+}
+
+Statement <|.. Invocation
 
 class If {
      condiciones: List<Expression>
-        ifExps: List<Expression>
         ifSts: List<Statemment>
-        elseExps: List<Expression>
         elseSts: List<Statemment>
 }
 
@@ -34,7 +39,6 @@ class Return {
 class While {
     condition: Expression
     whileSts: List<Statement>
-    whileExps: List<Expression>
 }
 
 class AbstractStatement {
