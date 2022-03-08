@@ -196,6 +196,11 @@ public class XanaParser extends Parser {
 			                varDefs.add(varDef2);
 			            }
 			        }
+
+			        for (var fundef: ((ProgramContext)_localctx).funDefs) {
+			            funDefs.add(fundef.ast);
+			        }
+
 			        if (((ProgramContext)_localctx).funMain.ast!=null)
 			            funDefs.add(((ProgramContext)_localctx).funMain.ast);
 

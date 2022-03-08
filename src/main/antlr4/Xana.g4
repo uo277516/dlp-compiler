@@ -25,6 +25,11 @@ program returns [Program ast]
                 varDefs.add(varDef2);
             }
         }
+
+        for (var fundef: $funDefs) {
+            funDefs.add(fundef.ast);
+        }
+
         if ($funMain.ast!=null)
             funDefs.add($funMain.ast);
 
