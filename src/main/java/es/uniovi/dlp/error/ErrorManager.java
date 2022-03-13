@@ -24,10 +24,11 @@ public class ErrorManager {
 
 
     public List<Error> getErrors() {
-        return new ArrayList<>();
+        return errors;
     }
 
     public boolean hasErrors() {
-        return false;
+        if (errors.isEmpty()) return false;
+        return true;
     }
 }

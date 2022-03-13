@@ -9,6 +9,8 @@ import es.uniovi.dlp.ast.types.*;
 import es.uniovi.dlp.ast.AbstractASTNode;
 import es.uniovi.dlp.ast.ASTNode;
 import es.uniovi.dlp.ast.Program;
+import es.uniovi.dlp.error.Error;
+import es.uniovi.dlp.error.ErrorReason;
 
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
