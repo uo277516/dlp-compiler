@@ -1,5 +1,7 @@
 package es.uniovi.dlp.ast.expressions;
 
+import es.uniovi.dlp.visitor.AbstractVisitor;
+
 public class ArrayAccess extends AbstractExpression{
 
     private Expression index;
@@ -27,5 +29,10 @@ public class ArrayAccess extends AbstractExpression{
 
     public void setArray(Expression array) {
         this.array = array;
+    }
+
+    @Override
+    public <ReturnType, ParamType> ReturnType accept(AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
+        return visitor.visit(this,param);
     }
 }

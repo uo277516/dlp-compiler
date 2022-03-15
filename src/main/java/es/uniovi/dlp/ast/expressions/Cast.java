@@ -1,6 +1,7 @@
 package es.uniovi.dlp.ast.expressions;
 
 import es.uniovi.dlp.ast.types.Type;
+import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class Cast extends AbstractExpression {
     private Type typeToCast;
@@ -27,5 +28,10 @@ public class Cast extends AbstractExpression {
 
     public void setExpression(Expression expression) {
         this.expression = expression;
+    }
+
+    @Override
+    public <ReturnType, ParamType> ReturnType accept(AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
+        return visitor.visit(this,param);
     }
 }

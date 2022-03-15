@@ -1,6 +1,7 @@
 package es.uniovi.dlp.ast.expressions;
 
 import es.uniovi.dlp.ast.expressions.Expression;
+import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class FileAccess extends AbstractExpression{
 
@@ -25,5 +26,8 @@ public class FileAccess extends AbstractExpression{
     }
 
 
-
+    @Override
+    public <ReturnType, ParamType> ReturnType accept(AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
+        return visitor.visit(this,param);
+    }
 }

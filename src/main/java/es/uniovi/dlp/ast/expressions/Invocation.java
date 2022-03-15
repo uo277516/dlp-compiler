@@ -1,6 +1,7 @@
 package es.uniovi.dlp.ast.expressions;
 
 import es.uniovi.dlp.ast.statements.Statemment;
+import es.uniovi.dlp.visitor.AbstractVisitor;
 
 import java.util.List;
 
@@ -29,5 +30,10 @@ public class Invocation extends AbstractExpression implements Statemment {
 
     public void setParams(List<Expression> params) {
         this.params = params;
+    }
+
+    @Override
+    public <ReturnType, ParamType> ReturnType accept(AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
+        return visitor.visit(this,param);
     }
 }

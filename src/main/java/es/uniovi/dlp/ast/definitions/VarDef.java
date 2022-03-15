@@ -1,6 +1,7 @@
 package es.uniovi.dlp.ast.definitions;
 
 import es.uniovi.dlp.ast.types.Type;
+import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class VarDef extends AbstractDefinition {
 
@@ -30,5 +31,10 @@ public class VarDef extends AbstractDefinition {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    @Override
+    public <ReturnType, ParamType> ReturnType accept(AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
+        return visitor.visit(this,param);
     }
 }

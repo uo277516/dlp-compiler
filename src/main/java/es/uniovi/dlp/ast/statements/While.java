@@ -1,6 +1,7 @@
 package es.uniovi.dlp.ast.statements;
 
 import es.uniovi.dlp.ast.expressions.Expression;
+import es.uniovi.dlp.visitor.AbstractVisitor;
 
 import java.util.List;
 
@@ -31,5 +32,10 @@ public class While extends AbstractStatemment {
 
     public void setSts(List<Statemment> sts) {
         this.sts = sts;
+    }
+
+    @Override
+    public <ReturnType, ParamType> ReturnType accept(AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
+        return visitor.visit(this,param);
     }
 }

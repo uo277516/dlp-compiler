@@ -3,6 +3,7 @@ package es.uniovi.dlp.ast.definitions;
 import es.uniovi.dlp.ast.statements.Statemment;
 import es.uniovi.dlp.ast.types.FunType;
 import es.uniovi.dlp.ast.types.Type;
+import es.uniovi.dlp.visitor.AbstractVisitor;
 
 import java.util.List;
 
@@ -56,4 +57,8 @@ public class FunDef extends AbstractDefinition {
         this.type=type;
     }
 
+    @Override
+    public <ReturnType, ParamType> ReturnType accept(AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
+        return visitor.visit(this,param);
+    }
 }

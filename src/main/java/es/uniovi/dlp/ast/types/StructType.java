@@ -2,6 +2,7 @@ package es.uniovi.dlp.ast.types;
 
 import es.uniovi.dlp.ast.definitions.RecordField;
 import es.uniovi.dlp.ast.definitions.VarDef;
+import es.uniovi.dlp.visitor.AbstractVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,5 +21,10 @@ public class StructType extends AbstractType{
 
     public void setDefs(List<RecordField> defs) {
         this.defs = defs;
+    }
+
+    @Override
+    public <ReturnType, ParamType> ReturnType accept(AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
+        return visitor.visit(this,param);
     }
 }

@@ -1718,7 +1718,6 @@ public class XanaParser extends Parser {
 			        for(var id : ((RecordFieldsContext)_localctx).ids) {
 			            RecordField rf = new RecordField(id.getLine(), id.getCharPositionInLine() + 1, id.getText(), ((RecordFieldsContext)_localctx).type.ast);
 			            for(var v: _localctx.ast) {
-			            System.out.println("QQQ");
 			                if (v.getId().equals(rf.getId())) {
 			                    Error e = new Error(_localctx.start.getLine(), _localctx.start.getCharPositionInLine() + 1, ErrorReason.FIELD_ALREADY_DECLARED);
 			                }
