@@ -10,7 +10,8 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
 
     //aqui identificar en las statements dnde necesito value y si no error
     //override d las exprsiones q nece4sitan lvlaue
-
+    //creo que son tods menos ls literalees
+    //value es que se le puede asignqar un valor!!!
 
     @Override
     public Type visit(Arithmetic arithmetic, Type param) {
