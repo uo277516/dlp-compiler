@@ -7,6 +7,7 @@ import es.uniovi.dlp.error.Error;
 import es.uniovi.dlp.error.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,8 +16,19 @@ public class StructType extends AbstractType{
 
     public StructType (int line, int column, List<RecordField> defs) {
         super(line, column);
-
+        checkDuplicatedRecords(defs);
         this.defs=defs;
+    }
+
+    public void checkDuplicatedRecords(List<RecordField> defs) {
+        HashSet<String> set = new HashSet<>();
+        for (var def: defs) {
+            System.out.println(def.getId());
+            if (!set.add(def.getId())) {
+                Error e = new Error(def.getLine(), def.getColumn(), ErrorReason.FIELD_ALREADY_DECLARED);
+                ErrorManager.getInstance().addError(e);
+            }
+        }
     }
 
     public List<RecordField> getDefs() {
