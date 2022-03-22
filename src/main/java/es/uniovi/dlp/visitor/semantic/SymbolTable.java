@@ -28,6 +28,7 @@ public class SymbolTable {
 
 
     //no tiene q devolver la primera q encuentra
+    //recorrer al revés
     public Definition find(String id) {
         for (var map: table) {
             for (var key: map.keySet()) {
