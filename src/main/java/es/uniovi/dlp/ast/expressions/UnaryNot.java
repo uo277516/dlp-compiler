@@ -9,6 +9,7 @@ public class UnaryNot extends AbstractExpression{
     public UnaryNot(int line, int column, Expression e)
     {
         super(line, column);
+        super.setLvalue(true);
         this.expression=e;
     }
 

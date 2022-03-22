@@ -10,6 +10,7 @@ public class ArrayAccess extends AbstractExpression{
     public ArrayAccess(int line, int column, Expression index, Expression array)
     {
         super(line, column);
+        super.setLvalue(true);
         this.index=index;
         this.array=array;
     }

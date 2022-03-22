@@ -12,6 +12,7 @@ public class Invocation extends AbstractExpression implements Statemment {
 
     public Invocation(int line, int column, Expression expression, List<Expression> params) {
         super(line, column);
+        super.setLvalue(true);
         this.expression = expression;
         this.params = params;
     }

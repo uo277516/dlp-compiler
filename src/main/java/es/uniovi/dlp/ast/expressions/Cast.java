@@ -10,6 +10,7 @@ public class Cast extends AbstractExpression {
     public Cast(int line, int column, Expression e, Type t)
     {
         super(line, column);
+        super.setLvalue(true);
         this.expression=e;
         this.typeToCast=t;
     }

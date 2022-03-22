@@ -20,6 +20,7 @@ public class FileAccess extends AbstractExpression{
 
     public FileAccess(Expression field, String expression, int line, int column) {
         super(line, column);
+        super.setLvalue(true);
         this.field = field;
         this.expression = expression;
 

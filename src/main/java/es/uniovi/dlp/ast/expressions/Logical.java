@@ -9,6 +9,7 @@ public class Logical extends AbstractExpression {
 
     public Logical(Expression left, String operator, Expression right, int line, int column) {
         super(line, column);
+        super.setLvalue(true);
         this.left = left;
         this.operator = operator;
         this.right = right;

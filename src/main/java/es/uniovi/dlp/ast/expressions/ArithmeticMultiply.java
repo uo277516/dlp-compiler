@@ -10,6 +10,7 @@ public class ArithmeticMultiply extends AbstractExpression {
 
     public ArithmeticMultiply(Expression left, String operator, Expression right, int line, int column) {
         super(line, column);
+        super.setLvalue(true);
         this.left = left;
         this.operator = operator;
         this.right = right;

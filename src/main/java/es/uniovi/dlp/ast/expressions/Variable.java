@@ -7,6 +7,7 @@ public class Variable extends AbstractExpression {
 
     public Variable (int line, int column, String var) {
         super(line, column);
+        super.setLvalue(true);
         this.var=var;
     }
 
