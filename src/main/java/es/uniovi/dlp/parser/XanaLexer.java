@@ -11,6 +11,7 @@ import es.uniovi.dlp.ast.ASTNode;
 import es.uniovi.dlp.ast.Program;
 import es.uniovi.dlp.error.Error;
 import es.uniovi.dlp.error.ErrorReason;
+import es.uniovi.dlp.error.ErrorManager;
 
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;

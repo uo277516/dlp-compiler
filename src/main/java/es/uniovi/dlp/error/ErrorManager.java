@@ -31,4 +31,8 @@ public class ErrorManager {
         if (errors.isEmpty()) return false;
         return true;
     }
+
+    public void addError(Error e) {
+        errors.add(e);
+    }
 }

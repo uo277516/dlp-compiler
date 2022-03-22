@@ -4,6 +4,7 @@ package es.uniovi.dlp.ast.definitions;
 public abstract class AbstractDefinition implements Definition {
     private int line;
     private int column;
+    private int scope;
 
     public AbstractDefinition(int line, int column)
     {
@@ -19,5 +20,15 @@ public abstract class AbstractDefinition implements Definition {
     @Override
     public int getColumn() {
         return column;
+    }
+
+    @Override
+    public int getScope() {
+        return scope;
+    }
+
+    @Override
+    public void setScope(int scope) {
+        this.scope=scope;
     }
 }

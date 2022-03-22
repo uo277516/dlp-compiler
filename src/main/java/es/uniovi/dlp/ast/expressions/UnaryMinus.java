@@ -8,7 +8,7 @@ public class UnaryMinus extends AbstractExpression {
     public UnaryMinus(int line, int column, Expression e)
     {
         super(line, column);
-        super.setLvalue(true);
+        super.setLvalue(false);
         this.expression=e;
     }
 

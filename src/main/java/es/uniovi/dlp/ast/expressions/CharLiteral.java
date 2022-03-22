@@ -17,6 +17,7 @@ public class CharLiteral extends AbstractExpression{
     public CharLiteral(int line, int column, char value)
     {
         super(line, column);
+        super.setLValue(false);
         this.value=value;
     }
 

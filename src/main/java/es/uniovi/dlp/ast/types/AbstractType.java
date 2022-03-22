@@ -18,4 +18,6 @@ public abstract class AbstractType implements Type {
         this.line=line;
         this.column=column;
     }
+
+
 }

@@ -16,7 +16,7 @@ public class LvalueTest {
     void errorLvalueInRead() {
         runCompiler("examples/errors/lvalue/read.xana");
         assertFoundErrors(Arrays.asList(
-            new Error(4, 8, ErrorReason.LVALUE_REQUIRED)
+            new Error(4, 5, ErrorReason.LVALUE_REQUIRED)
         ));
     }
 

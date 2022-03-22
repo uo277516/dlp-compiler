@@ -11,6 +11,7 @@ import es.uniovi.dlp.ast.ASTNode;
 import es.uniovi.dlp.ast.Program;
 import es.uniovi.dlp.error.Error;
 import es.uniovi.dlp.error.ErrorReason;
+import es.uniovi.dlp.error.ErrorManager;
 
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -1718,11 +1719,13 @@ public class XanaParser extends Parser {
 			        for(var id : ((RecordFieldsContext)_localctx).ids) {
 			            RecordField rf = new RecordField(id.getLine(), id.getCharPositionInLine() + 1, id.getText(), ((RecordFieldsContext)_localctx).type.ast);
 			            for(var v: _localctx.ast) {
-			                if (v.getId().equals(rf.getId())) {
+			                if (v.getId().equals(id.getText()) {
 			                    Error e = new Error(_localctx.start.getLine(), _localctx.start.getCharPositionInLine() + 1, ErrorReason.FIELD_ALREADY_DECLARED);
+			                    ErrorManager.getInstance().addError(e);
 			                }
 			            }
 			            _localctx.ast.add(rf);
+
 			        }
 			    
 			}

@@ -15,7 +15,7 @@ public class IdentificationTest {
     void duplicatedRecordField() {
         runCompiler("examples/errors/identification/duplicated_record_field.xana");
         assertFoundErrors(Arrays.asList(
-                new Error(4, 5, ErrorReason.FIELD_ALREADY_DECLARED)
+                new Error(2, 5, ErrorReason.FIELD_ALREADY_DECLARED)
         ));
     }
 

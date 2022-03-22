@@ -13,6 +13,7 @@ import es.uniovi.dlp.ast.ASTNode;
 import es.uniovi.dlp.ast.Program;
 import es.uniovi.dlp.error.Error;
 import es.uniovi.dlp.error.ErrorReason;
+import es.uniovi.dlp.error.ErrorManager;
 }
 
 
@@ -335,11 +336,13 @@ recordFields returns [List<RecordField> ast = new ArrayList<>()]
         for(var id : $ids) {
             RecordField rf = new RecordField(id.getLine(), id.getCharPositionInLine() + 1, id.getText(), $type.ast);
             for(var v: $ast) {
-                if (v.getId().equals(rf.getId())) {
+                if (v.getId().equals(id.getText()) {
                     Error e = new Error($start.getLine(), $start.getCharPositionInLine() + 1, ErrorReason.FIELD_ALREADY_DECLARED);
+                    ErrorManager.getInstance().addError(e);
                 }
             }
             $ast.add(rf);
+
         }
     }
     ;

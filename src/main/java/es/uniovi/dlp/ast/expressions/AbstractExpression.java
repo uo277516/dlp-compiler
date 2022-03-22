@@ -37,4 +37,14 @@ public abstract class AbstractExpression implements Expression {
         this.line=line;
         this.column=column;
     }
+
+    @Override
+    public boolean getLValue() {
+        return lvalue;
+    }
+
+    @Override
+    public void setLValue(boolean lvalue) {
+        this.lvalue=lvalue;
+    }
 }

@@ -1,8 +1,12 @@
 package es.uniovi.dlp.visitor.semantic;
 
 
-import es.uniovi.dlp.ast.expressions.*;
+import es.uniovi.dlp.ast.statements.Assigment;
+import es.uniovi.dlp.ast.statements.Read;
 import es.uniovi.dlp.ast.types.Type;
+import es.uniovi.dlp.error.ErrorManager;
+import es.uniovi.dlp.error.ErrorReason;
+import es.uniovi.dlp.error.Error;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
@@ -13,61 +17,30 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
     //creo que son tods menos ls literalees
     //value es que se le puede asignqar un valor!!!!
 
+    //que cuando necesite un lvalue lo tenga
+    //lo necesitan asignacion y read
+
     @Override
-    public Type visit(Arithmetic arithmetic, Type param) {
-        return super.visit(arithmetic, param);
+    public Type visit(Assigment assigment, Type param) {
+        //recorro hijos y tengo q mirar q la parte de la isquierda tengan lvalue
+        //y si no tienen el error
+        super.visit(assigment, param);
+        if (!assigment.getLeft().getLValue()) {
+            Error e = new Error(assigment.getLine(), assigment.getColumn(), ErrorReason.LVALUE_REQUIRED);
+            ErrorManager.getInstance().addError(e);
+        }
+        return null;
     }
 
 
     @Override
-    public Type visit(ArithmeticMultiply arithmeticMultiply, Type param) {
-        return super.visit(arithmeticMultiply, param);
+    public Type visit(Read read, Type param) {
+        super.visit(read, param);
+        if (!read.getExpression().getLValue()) {
+            Error e = new Error(read.getLine(), read.getColumn(), ErrorReason.LVALUE_REQUIRED);
+            ErrorManager.getInstance().addError(e);
+        }
+        return null;
     }
-
-    @Override
-    public Type visit(ArrayAccess arrayAccess, Type param) {
-        return super.visit(arrayAccess, param);
-    }
-
-    @Override
-    public Type visit(Cast cast, Type param) {
-        return super.visit(cast, param);
-    }
-
-    @Override
-    public Type visit(Comparator comparator, Type param) {
-        return super.visit(comparator, param);
-    }
-
-    @Override
-    public Type visit(FileAccess fileAccess, Type param) {
-        return super.visit(fileAccess, param);
-    }
-
-    @Override
-    public Type visit(Invocation invocation, Type param) {
-        return super.visit(invocation, param);
-    }
-
-    @Override
-    public Type visit(Logical logical, Type param) {
-        return super.visit(logical, param);
-    }
-
-    @Override
-    public Type visit(UnaryMinus unaryMinus, Type param) {
-        return super.visit(unaryMinus, param);
-    }
-
-    @Override
-    public Type visit(UnaryNot unaryNot, Type param) {
-        return super.visit(unaryNot, param);
-    }
-
-    @Override
-    public Type visit(Variable variable, Type param) {
-        return super.visit(variable, param);
-    }
-
 
 }
