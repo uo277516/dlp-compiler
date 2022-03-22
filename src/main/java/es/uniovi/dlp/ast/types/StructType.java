@@ -3,6 +3,8 @@ package es.uniovi.dlp.ast.types;
 import es.uniovi.dlp.ast.definitions.RecordField;
 import es.uniovi.dlp.ast.definitions.VarDef;
 import es.uniovi.dlp.visitor.AbstractVisitor;
+import es.uniovi.dlp.error.Error;
+import es.uniovi.dlp.error.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,7 @@ public class StructType extends AbstractType{
 
     public StructType (int line, int column, List<RecordField> defs) {
         super(line, column);
+
         this.defs=defs;
     }
 

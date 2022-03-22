@@ -15,20 +15,38 @@ public class SymbolTable {
     }
 
     public void set() {
+        this.scope=1;
     }
 
     public void reset() {
+        this.scope=0;
     }
 
     public boolean insert(Definition definition) {
         return true;
     }
 
+
+    //no tiene q devolver la primera q encuentra
     public Definition find(String id) {
+        for (var map: table) {
+            for (var key: map.keySet()) {
+                if (key.equals(id)) {
+                    return map.get(key);
+                }
+            }
+        }
+
         return null;
     }
 
     public Definition findInCurrentScope(String id) {
+        for (var map: table) {
+            for (var key: map.keySet()) {
+
+            }
+        }
+
         return null;
     }
 }

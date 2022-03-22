@@ -335,12 +335,6 @@ recordFields returns [List<RecordField> ast = new ArrayList<>()]
     {
         for(var id : $ids) {
             RecordField rf = new RecordField(id.getLine(), id.getCharPositionInLine() + 1, id.getText(), $type.ast);
-            for(var v: $ast) {
-                if (v.getId().equals(id.getText()) {
-                    Error e = new Error($start.getLine(), $start.getCharPositionInLine() + 1, ErrorReason.FIELD_ALREADY_DECLARED);
-                    ErrorManager.getInstance().addError(e);
-                }
-            }
             $ast.add(rf);
 
         }
