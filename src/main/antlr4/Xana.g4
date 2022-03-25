@@ -20,8 +20,8 @@ import es.uniovi.dlp.error.ErrorManager;
 
 program returns [Program ast]
     : (v+=varDef | funDefs+=funDef)* funMain {
-        List<FunDef> funDefs = new ArrayList<>();
         List<VarDef> varDefs = new ArrayList<>();
+        List<FunDef> funDefs = new ArrayList<>();
 
         for (var varDef1: $v) {
             for (var varDef2: varDef1.ast) {
@@ -130,7 +130,7 @@ expression returns [Expression ast]
          {$ast = new CharLiteral($start.getLine(), $start.getCharPositionInLine() + 1, LexerHelper.lexemeToChar($c.text)); }
     | id=ID
          {$ast = new Variable($start.getLine(), $start.getCharPositionInLine() + 1, $id.text); }
-    | v=ID '(' listExpressions ')' //invocacion
+    | id=ID '(' listExpressions ')' //invocacion
          {
          $ast = new Invocation($start.getLine(), $start.getCharPositionInLine() + 1,
                              new Variable($start.getLine(), $start.getCharPositionInLine() + 1, $id.text),
@@ -272,13 +272,6 @@ statement returns [List<Statemment> ast = new ArrayList<>()]
                     new Variable($start.getLine(), $start.getCharPositionInLine() + 1, $id.text), $listExpressions.ast));
             }
     ;
-
-
-
-
-
-
-
 
 
 

@@ -191,8 +191,8 @@ public class XanaParser extends Parser {
 			setState(39);
 			((ProgramContext)_localctx).funMain = funMain();
 
-			        List<FunDef> funDefs = new ArrayList<>();
 			        List<VarDef> varDefs = new ArrayList<>();
+			        List<FunDef> funDefs = new ArrayList<>();
 
 			        for (var varDef1: ((ProgramContext)_localctx).v) {
 			            for (var varDef2: varDef1.ast) {
@@ -615,7 +615,6 @@ public class XanaParser extends Parser {
 		public Token r;
 		public Token c;
 		public Token id;
-		public Token v;
 		public ListExpressionsContext listExpressions;
 		public ExpressionContext expression;
 		public Token op;
@@ -697,7 +696,7 @@ public class XanaParser extends Parser {
 			case 5:
 				{
 				setState(108);
-				((ExpressionContext)_localctx).v = match(ID);
+				((ExpressionContext)_localctx).id = match(ID);
 				setState(109);
 				match(T__1);
 				setState(110);

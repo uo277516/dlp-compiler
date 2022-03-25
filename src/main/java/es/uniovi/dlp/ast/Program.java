@@ -9,14 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Program implements ASTNode {
-    private List<FunDef> funDefs;
-    private List<VarDef> vardefs;
+    private List<Definition> definitions = new ArrayList<>();
     private int line;
     private int column;
 
-    public Program( List<VarDef> vardefs,List<FunDef> funDefs, int line, int column) {
-        this.funDefs = funDefs;
-        this.vardefs = vardefs;
+    public Program(List<VarDef> vardefs, List<FunDef> funDefs, int line, int column) {
+        this.definitions.addAll(vardefs);
+        this.definitions.addAll(funDefs);
         this.line = line;
         this.column = column;
     }
@@ -37,9 +36,6 @@ public class Program implements ASTNode {
     }
 
     public List<Definition> getDefinitions() {
-        List<Definition> defs = new ArrayList<Definition>();
-        defs.addAll(funDefs);
-        defs.addAll(vardefs);
-        return defs;
+        return this.definitions;
     }
 }

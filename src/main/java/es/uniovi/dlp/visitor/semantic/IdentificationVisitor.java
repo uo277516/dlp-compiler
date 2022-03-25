@@ -38,7 +38,14 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type>  {
         //pongo el ambito de cada definicion de la funcion y la añado
         for (var definition: funDef.getLocalVars()) {
             definition.setScope(1);
-            symbolTable.insert(definition);
+            if (symbolTable.find(definition.getId()) == null) {
+                symbolTable.insert(definition);
+            } else {
+                if (symbolTable.find(definition.getId()).getScope() == definition.getScope()) {
+                    Error e = new Error(definition.getLine(), definition.getColumn(), ErrorReason.VARIABLE_ALREADY_DECLARED);
+                    ErrorManager.getInstance().addError(e);
+                }
+            }
         }
 
         //acepto los statements
