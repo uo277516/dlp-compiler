@@ -18,9 +18,14 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type>  {
 
     @Override
     public Type visit (FunDef funDef, Type param) {
+
+        if(!symbolTable.insert(funDef)) {
+            Error e = new Error(funDef.getLine(), funDef.getColumn(), ErrorReason.FUNCTION_ALREADY_DECLARED);
+            ErrorManager.getInstance().addError(e);
+        }
+
         symbolTable.set();  //pongo el scope a 1-> estoy en una funcion
 
-        System.out.println(symbolTable.insert(funDef));
 
         funDef.getType().accept(this, param);
 
@@ -46,22 +51,19 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type>  {
 
 
     @Override
-    public Type visit(VarDef varDef, Type param) {
-        varDef.getType().accept(this,param);
-        varDef.setScope(0);
-        if (symbolTable.findInCurrentScope(varDef.getId())==null) {
-            symbolTable.insert(varDef);
-        } else {
-            Error e = new Error(varDef.getLine(), varDef.getColumn(), ErrorReason.VARIABLE_ALREADY_DECLARED);
+    public Type visit(VarDef obj, Type param) {
+        if(!symbolTable.insert(obj)) {
+            Error e = new Error(obj.getLine(), obj.getColumn(), ErrorReason.VARIABLE_ALREADY_DECLARED);
             ErrorManager.getInstance().addError(e);
         }
-
+        obj.getType().accept(this, param);
         return null;
     }
 
 
     @Override
     public Type visit(Variable variable, Type param) {
+
         if (symbolTable.find(variable.getVar())==null) {
             Error e = new Error(variable.getLine(), variable.getColumn(), ErrorReason.VARIABLE_NOT_DECLARED);
             ErrorManager.getInstance().addError(e);
@@ -74,6 +76,7 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type>  {
     @Override
     public Type visit(Invocation invocation, Type param) {
         invocation.getParams().forEach(parameter -> parameter.accept(this, param));
+        System.out.println(symbolTable.find(invocation.getVariable().getVar()));
         if (symbolTable.find(invocation.getVariable().getVar())==null) {
             Error e = new Error(invocation.getLine(), invocation.getColumn(), ErrorReason.FUNCTION_NOT_DECLARED);
             ErrorManager.getInstance().addError(e);

@@ -1,9 +1,19 @@
 package es.uniovi.dlp.ast.expressions;
 
+import es.uniovi.dlp.ast.definitions.Definition;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class Variable extends AbstractExpression {
     private String var;
+    private Definition definition;
+
+    public Definition getDefinition() {
+        return definition;
+    }
+
+    public void setDefinition(Definition definition) {
+        this.definition = definition;
+    }
 
     public Variable (int line, int column, String var) {
         super(line, column);

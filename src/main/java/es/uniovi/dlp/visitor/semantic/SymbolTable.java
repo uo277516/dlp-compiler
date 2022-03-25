@@ -40,6 +40,7 @@ public class SymbolTable {
         if (!table.get(scope).containsKey(definition.getId())) {
             table.get(scope).put(definition.getId(), definition);
             definition.setScope(this.scope);
+            System.out.println(definition.getId());
             return true;
         }
         return false;
