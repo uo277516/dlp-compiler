@@ -6,23 +6,17 @@ import es.uniovi.dlp.visitor.AbstractVisitor;
 import java.util.List;
 
 public class While extends AbstractStatemment {
-    private List<Expression> condiciones;
+    private Expression condicion;
     private List<Statemment> sts;
-    public While(List<Expression> condiciones, List<Statemment> sts, int line, int column) {
+    public While(Expression condicion, List<Statemment> sts, int line, int column) {
         super(line, column);
-        this.condiciones = condiciones;
+        this.condicion = condicion;
         this.sts = sts;
     }
 
-    public List<Expression> getCondiciones() {
-        return condiciones;
+    public Expression getCondicion() {
+        return condicion;
     }
-
-    public void setCondiciones(List<Expression> condiciones) {
-        this.condiciones = condiciones;
-    }
-
-
 
 
 

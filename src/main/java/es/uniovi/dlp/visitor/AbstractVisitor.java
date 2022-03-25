@@ -144,7 +144,7 @@ public abstract class AbstractVisitor<ReturnType, ParamType> implements Visitor<
     @Override
     public ReturnType visit(IfElse ifElse, ParamType param) {
         ifElse.getElseSts().forEach(s -> s.accept(this, param));
-        ifElse.getCondiciones().forEach(c -> c.accept(this, param));
+        ifElse.getCondicion().accept(this,param);
         ifElse.getIfSts().forEach(s -> s.accept(this, param));
         return null;
     }
@@ -163,7 +163,7 @@ public abstract class AbstractVisitor<ReturnType, ParamType> implements Visitor<
 
     @Override
     public ReturnType visit(While wh, ParamType param) {
-        wh.getCondiciones().forEach(expression -> expression.accept(this, param));
+        wh.getCondicion().accept(this,param);
         wh.getSts().forEach(statement -> statement.accept(this, param));
         return null;
     }

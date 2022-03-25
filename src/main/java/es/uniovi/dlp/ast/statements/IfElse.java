@@ -6,13 +6,13 @@ import es.uniovi.dlp.visitor.AbstractVisitor;
 import java.util.List;
 
 public class IfElse extends AbstractStatemment {
-    private List<Expression> condiciones;
+    private Expression condicion;
     private List<Statemment> ifSts;
     private List<Statemment> elseSts;
 
-    public IfElse(List<Expression> condiciones, List<Statemment> ifSts, List<Statemment> elseSts, int line, int column) {
+    public IfElse(Expression condicion, List<Statemment> ifSts, List<Statemment> elseSts, int line, int column) {
         super(line, column);
-        this.condiciones = condiciones;
+        this.condicion = condicion;
 
         this.ifSts = ifSts;
 
@@ -20,8 +20,8 @@ public class IfElse extends AbstractStatemment {
     }
 
 
-    public List<Expression> getCondiciones() {
-        return condiciones;
+    public Expression getCondicion() {
+        return condicion;
     }
 
     public List<Statemment> getIfSts() {

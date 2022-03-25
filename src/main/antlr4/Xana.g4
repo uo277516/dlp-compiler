@@ -222,16 +222,14 @@ statement returns [List<Statemment> ast = new ArrayList<>()]
             {
                 $ast.add(new Assigment($start.getLine(), $start.getCharPositionInLine() + 1, $e1.ast, $e2.ast));
             }
-        | 'if' condiciones+=expression+ 'do'   //if
+        | 'if' expression 'do'   //if
              (ifSts+=statement)*
           ('else'(elseSts+=statement)*)?
         'end'
             {
-                List<Expression> condiciones = new ArrayList<>();
                 List<Statemment> ifSts= new ArrayList<>();
                 List<Statemment> elseSts= new ArrayList<>();
 
-                for (var c: $condiciones) {condiciones.add(c.ast);}
                 for (var s: $ifSts) {
                                 for (var s2: s.ast) {
                                     ifSts.add(s2);
@@ -243,22 +241,20 @@ statement returns [List<Statemment> ast = new ArrayList<>()]
                                 }
                             }
 
-                $ast.add(new IfElse(condiciones, ifSts, elseSts, $start.getLine(), $start.getCharPositionInLine() + 1));
+                $ast.add(new IfElse($expression.ast, ifSts, elseSts, $start.getLine(), $start.getCharPositionInLine() + 1));
             }
-        | 'while' condiciones+=expression+ 'do'  //while
+        | 'while' expression 'do'  //while
            (sts+=statement)*
             {
-                List<Expression> condiciones = new ArrayList<>();
                 List<Statemment> sts= new ArrayList<>();
 
-                for (var c: $condiciones) {condiciones.add(c.ast);}
                 for (var s: $sts) {
                                 for (var s2: s.ast) {
                                     sts.add(s2);
                                 }
                             }
 
-                $ast.add(new While(condiciones, sts, $start.getLine(), $start.getCharPositionInLine() + 1));
+                $ast.add(new While($expression.ast, sts, $start.getLine(), $start.getCharPositionInLine() + 1));
             }
         'end'
         | 'return' expression  //return
