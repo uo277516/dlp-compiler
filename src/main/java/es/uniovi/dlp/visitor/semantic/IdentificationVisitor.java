@@ -83,7 +83,6 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type>  {
     @Override
     public Type visit(Invocation invocation, Type param) {
         invocation.getParams().forEach(parameter -> parameter.accept(this, param));
-        System.out.println(symbolTable.find(invocation.getVariable().getVar()));
         if (symbolTable.find(invocation.getVariable().getVar())==null) {
             Error e = new Error(invocation.getLine(), invocation.getColumn(), ErrorReason.FUNCTION_NOT_DECLARED);
             ErrorManager.getInstance().addError(e);
