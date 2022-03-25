@@ -16,6 +16,7 @@ public class FunDef extends AbstractDefinition {
     private List<VarDef> localVars;
 
 
+    @Override
     public String getId() {
         return id;
     }
@@ -60,5 +61,15 @@ public class FunDef extends AbstractDefinition {
     @Override
     public <ReturnType, ParamType> ReturnType accept(AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
         return visitor.visit(this,param);
+    }
+
+    @Override
+    public String toString() {
+        return "FunDef{" +
+                "id='" + id + '\'' +
+                ", type=" + type +
+                ", body=" + body +
+                ", localVars=" + localVars +
+                '}';
     }
 }

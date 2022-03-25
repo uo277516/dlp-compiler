@@ -12,42 +12,50 @@ public class SymbolTable {
     private List<Map<String, Definition>> table;
 
     public SymbolTable() {
+        table = new ArrayList<>();
+        table.add(new HashMap<>());
+    }
+
+    @Override
+    public String toString() {
+        return "SymbolTable{" +
+                "scope=" + scope +
+                ", table=" + table +
+                '}';
     }
 
     public void set() {
         this.scope=1;
+        table.add(new HashMap<String, Definition>());
     }
 
     public void reset() {
-        this.scope=0;
+        if (table.size()>1) {
+            table.remove(1);
+            this.scope = 0;
+        }
     }
 
     public boolean insert(Definition definition) {
-        return true;
+        if (!table.get(scope).containsKey(definition.getId())) {
+            table.get(scope).put(definition.getId(), definition);
+            definition.setScope(this.scope);
+            return true;
+        }
+        return false;
     }
 
 
-    //no tiene q devolver la primera q encuentra
-    //recorrer al revés
+    //tiene que devolver la más "concreta"-> 1
     public Definition find(String id) {
-        for (var map: table) {
-            for (var key: map.keySet()) {
-                if (key.equals(id)) {
-                    return map.get(key);
-                }
-            }
-        }
-
-        return null;
+        if (table.get(scope).containsKey(id))
+            return table.get(scope).get(id);
+        else if (table.get(0).containsKey(id))
+            return table.get(0).get(id);
+        else return null;
     }
 
     public Definition findInCurrentScope(String id) {
-        for (var map: table) {
-            for (var key: map.keySet()) {
-
-            }
-        }
-
-        return null;
+        return table.get(scope).get(id);
     }
 }

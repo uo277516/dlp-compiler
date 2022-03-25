@@ -7,22 +7,22 @@ import java.util.List;
 
 public class Invocation extends AbstractExpression implements Statemment {
 
-    private Expression expression;
+    private Variable function;
     private List<Expression> params;
 
-    public Invocation(int line, int column, Expression expression, List<Expression> params) {
+    public Invocation(int line, int column, Variable function, List<Expression> params) {
         super(line, column);
         super.setLvalue(false);
-        this.expression = expression;
+        this.function = function;
         this.params = params;
     }
 
-    public Expression getExpression() {
-        return expression;
+    public Variable getVariable() {
+        return function;
     }
 
-    public void setExpression(Expression expression) {
-        this.expression = expression;
+    public void setVariable(Variable function) {
+        this.function = function;
     }
 
     public List<Expression> getParams() {

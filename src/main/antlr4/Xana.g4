@@ -130,10 +130,11 @@ expression returns [Expression ast]
          {$ast = new CharLiteral($start.getLine(), $start.getCharPositionInLine() + 1, LexerHelper.lexemeToChar($c.text)); }
     | id=ID
          {$ast = new Variable($start.getLine(), $start.getCharPositionInLine() + 1, $id.text); }
-    | e=expression '(' listExpressions ')' //invocacion
+    | v=ID '(' listExpressions ')' //invocacion
          {
          $ast = new Invocation($start.getLine(), $start.getCharPositionInLine() + 1,
-                             $e.ast, $listExpressions.ast);
+                             new Variable($start.getLine(), $start.getCharPositionInLine() + 1, $id.text),
+                              $listExpressions.ast);
          }
     | a=expression '[' index=expression ']' //array access
         {
@@ -264,11 +265,11 @@ statement returns [List<Statemment> ast = new ArrayList<>()]
             {
                 $ast.add(new Return($expression.ast, $start.getLine(), $start.getCharPositionInLine() + 1));
             }
-        | expression '(' listExpressions ')' //invocacion por statement
+        | id=ID '(' listExpressions ')' //invocacion por statement
             {
 
                 $ast.add(new Invocation($start.getLine(), $start.getCharPositionInLine() + 1,
-                    $expression.ast, $listExpressions.ast));
+                    new Variable($start.getLine(), $start.getCharPositionInLine() + 1, $id.text), $listExpressions.ast));
             }
     ;
 

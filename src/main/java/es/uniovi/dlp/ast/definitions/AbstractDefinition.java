@@ -24,7 +24,7 @@ public abstract class AbstractDefinition implements Definition {
 
     @Override
     public int getScope() {
-        return scope;
+        return this.scope;
     }
 
     @Override

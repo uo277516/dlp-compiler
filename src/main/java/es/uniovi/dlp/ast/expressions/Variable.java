@@ -11,7 +11,9 @@ public class Variable extends AbstractExpression {
         this.var=var;
     }
 
-
+    public String getVar() {
+        return var;
+    }
     @Override
     public <ReturnType, ParamType> ReturnType accept(AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
         return visitor.visit(this,param);

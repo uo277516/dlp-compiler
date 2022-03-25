@@ -4,7 +4,9 @@ import es.uniovi.dlp.ast.ASTNode;
 
 public interface Definition extends ASTNode {
 
+
     int getScope();
     void setScope(int scope);
+    String getId();
 
 }

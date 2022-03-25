@@ -17,6 +17,7 @@ public class VarDef extends AbstractDefinition {
         this.type=type;
     }
 
+    @Override
     public String getId() {
         return id;
     }
