@@ -130,6 +130,8 @@ expression returns [Expression ast]
          {$ast = new CharLiteral($start.getLine(), $start.getCharPositionInLine() + 1, LexerHelper.lexemeToChar($c.text)); }
     | id=ID
          {$ast = new Variable($start.getLine(), $start.getCharPositionInLine() + 1, $id.text); }
+    | '(' expression ')'
+          { $ast = $expression.ast; }
     | id=ID '(' listExpressions ')' //invocacion
          {
          $ast = new Invocation($start.getLine(), $start.getCharPositionInLine() + 1,
@@ -178,10 +180,7 @@ expression returns [Expression ast]
         $ast = new Logical($e1.ast, $op3.text, $e2.ast,
                      $start.getLine(), $start.getCharPositionInLine() + 1);
         }
-    | '(' expression ')'
-        {
-        $ast = $expression.ast;
-        }
+
     ;
 
 
