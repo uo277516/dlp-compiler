@@ -6,5 +6,6 @@ public interface ASTNode {
     int getLine();
     int getColumn();
 
+
     <ReturnType, ParamType> ReturnType accept(AbstractVisitor<ReturnType, ParamType> visitor, ParamType param);
 }
