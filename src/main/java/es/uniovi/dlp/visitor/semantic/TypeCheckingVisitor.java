@@ -1,6 +1,8 @@
 package es.uniovi.dlp.visitor.semantic;
 
 
+import es.uniovi.dlp.ast.expressions.Arithmetic;
+import es.uniovi.dlp.ast.expressions.*;
 import es.uniovi.dlp.ast.statements.Assigment;
 import es.uniovi.dlp.ast.statements.Read;
 import es.uniovi.dlp.ast.types.Type;
@@ -43,4 +45,37 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         return null;
     }
 
+
+
+    //comprobacion no sumar lo q no se pueda
+    @Override
+    public Type visit(Arithmetic arithmetic, Type param) {
+        super.visit(arithmetic, param);
+
+        Expression leftExpression = arithmetic.getLeft();
+        Expression rightExpression = arithmetic.getRight();
+
+        Type arithmeticType = leftExpression.getType().arithmetic(rightExpression.getType());
+
+        if (arithmeticType == null) {
+            Error e = new Error(arithmetic.getLine(), arithmetic.getColumn(), ErrorReason.INVALID_ARITHMETIC);
+            ErrorManager.getInstance().addError(e);
+        }
+
+        return null;
+
+    }
+
+    @Override
+    public Type visit(UnaryMinus unaryMinus, Type param) {
+        super.visit(unaryMinus, param);
+
+        //si el tipo del unary minus es distinto isArithmetic
+        if (!unaryMinus.getType().isArithmetic()) {
+            Error e = new Error(unaryMinus.getLine(), unaryMinus.getColumn(), ErrorReason.INVALID_ARITHMETIC);
+            ErrorManager.getInstance().addError(e);
+        }
+
+        return null;
+    }
 }

@@ -1,11 +1,24 @@
 package es.uniovi.dlp.ast.expressions;
 
 import es.uniovi.dlp.ast.definitions.AbstractDefinition;
+import es.uniovi.dlp.ast.types.Type;
 
 public abstract class AbstractExpression implements Expression {
     private int line;
     private int column;
     private boolean lvalue;
+
+    private Type type;
+
+    @Override
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
 
     @Override
     public int getLine() {

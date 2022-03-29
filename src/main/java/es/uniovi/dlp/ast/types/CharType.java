@@ -12,4 +12,11 @@ public class CharType extends AbstractType {
     public <ReturnType, ParamType> ReturnType accept(AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
         return visitor.visit(this,param);
     }
+
+    @Override
+    public Type arithmetic(Type type) {
+        if (type instanceof IntType)
+            return this;
+        return super.arithmetic(type);
+    }
 }

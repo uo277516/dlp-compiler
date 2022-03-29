@@ -43,4 +43,5 @@ public interface Visitor<ReturnType, ParamType> {
     ReturnType visit(RealType realType, ParamType param);
     ReturnType visit(VoidType voidType, ParamType param);
     ReturnType visit(StructType structType, ParamType param);
+    ReturnType visit(ErrorType errorType, ParamType param);
 }
