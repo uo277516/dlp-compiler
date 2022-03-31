@@ -35,7 +35,7 @@ public class TypeCheckingTest {
         runCompiler("examples/errors/types/invalid_arithmetic.xana");
         assertFoundErrors(Arrays.asList(
                 new Error(9, 10, ErrorReason.INVALID_ARITHMETIC),
-                new Error(11, 12, ErrorReason.INVALID_ARITHMETIC)
+                new Error(11, 10, ErrorReason.INVALID_ARITHMETIC)
         ));
     }
 

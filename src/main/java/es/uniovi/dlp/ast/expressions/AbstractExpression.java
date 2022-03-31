@@ -1,6 +1,5 @@
 package es.uniovi.dlp.ast.expressions;
 
-import es.uniovi.dlp.ast.definitions.AbstractDefinition;
 import es.uniovi.dlp.ast.types.Type;
 
 public abstract class AbstractExpression implements Expression {
@@ -15,6 +14,7 @@ public abstract class AbstractExpression implements Expression {
         return type;
     }
 
+    @Override
     public void setType(Type type) {
         this.type = type;
     }

@@ -16,8 +16,15 @@ public class RealType extends AbstractType{
 
     @Override
     public Type arithmetic(Type type) {
-        if (type instanceof IntType || type instanceof CharType)
+        if (type instanceof RealType || type instanceof CharType)
+            return type;
+        else if (type instanceof IntType)
             return this;
         return super.arithmetic(type);
+    }
+
+    @Override
+    public boolean isArithmetic() {
+        return true;
     }
 }

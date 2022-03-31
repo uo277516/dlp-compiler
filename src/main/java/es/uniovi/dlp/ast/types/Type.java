@@ -16,7 +16,7 @@ public interface Type extends ASTNode {
 
     //bool- promotcableTo(type to), islogical, isindexable, isarethmetic, allowdot
 
-    boolean promotableTo(Type to);
+    boolean promotableTo(Type to); //llamo derecha y paso izquierda
     boolean isLogical();
     boolean isIndexable();
     boolean isArithmetic();

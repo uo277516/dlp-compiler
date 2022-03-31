@@ -5,6 +5,9 @@ import es.uniovi.dlp.ast.expressions.Arithmetic;
 import es.uniovi.dlp.ast.expressions.*;
 import es.uniovi.dlp.ast.statements.Assigment;
 import es.uniovi.dlp.ast.statements.Read;
+import es.uniovi.dlp.ast.types.CharType;
+import es.uniovi.dlp.ast.types.ErrorType;
+import es.uniovi.dlp.ast.types.IntType;
 import es.uniovi.dlp.ast.types.Type;
 import es.uniovi.dlp.error.ErrorManager;
 import es.uniovi.dlp.error.ErrorReason;
@@ -46,36 +49,71 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
     }
 
 
+    //-----------
 
     //comprobacion no sumar lo q no se pueda
     @Override
-    public Type visit(Arithmetic arithmetic, Type param) {
-        super.visit(arithmetic, param);
+    public Type visit(Arithmetic a, Type param) {
+        a.setLValue(false);
+        a.getLeft().accept(this, param);
+        a.getRight().accept(this, param);
 
-        Expression leftExpression = arithmetic.getLeft();
-        Expression rightExpression = arithmetic.getRight();
+        a.setType(a.getLeft().getType().arithmetic(a.getRight().getType()));
 
-        Type arithmeticType = leftExpression.getType().arithmetic(rightExpression.getType());
-
-        if (arithmeticType == null) {
-            Error e = new Error(arithmetic.getLine(), arithmetic.getColumn(), ErrorReason.INVALID_ARITHMETIC);
+        if (a.getType() == null) {
+            a.setType(new ErrorType(a.getLine(), a.getColumn()));
+            Error e = new Error(a.getLine(), a.getColumn(), ErrorReason.INVALID_ARITHMETIC);
             ErrorManager.getInstance().addError(e);
         }
+
 
         return null;
 
     }
 
+
     @Override
     public Type visit(UnaryMinus unaryMinus, Type param) {
-        super.visit(unaryMinus, param);
+        unaryMinus.getExpression().accept(this, param);
+        unaryMinus.setLvalue(false);
 
-        //si el tipo del unary minus es distinto isArithmetic
         if (!unaryMinus.getType().isArithmetic()) {
+            unaryMinus.setType(new ErrorType(unaryMinus.getLine(), unaryMinus.getColumn()));
             Error e = new Error(unaryMinus.getLine(), unaryMinus.getColumn(), ErrorReason.INVALID_ARITHMETIC);
             ErrorManager.getInstance().addError(e);
         }
 
         return null;
     }
+
+
+
+
+    @Override
+    public Type visit(CharLiteral charLiteral, Type param) {
+        charLiteral.setLvalue(false);
+        charLiteral.setType(new CharType(charLiteral.getLine(), charLiteral.getColumn()));
+
+        return null;
+    }
+
+
+    @Override
+    public Type visit(IntLiteral intLiteral, Type param) {
+        intLiteral.setLvalue(false);
+        intLiteral.setType(new IntType(intLiteral.getLine(), intLiteral.getColumn()));
+
+        return null;
+    }
+
+
+    @Override
+    public Type visit(RealLiteral realLiteral, Type param) {
+        realLiteral.setLvalue(false);
+        realLiteral.setType(new IntType(realLiteral.getLine(), realLiteral.getColumn()));
+
+        return null;
+    }
+
+
 }
