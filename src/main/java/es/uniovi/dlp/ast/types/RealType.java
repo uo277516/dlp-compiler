@@ -16,9 +16,7 @@ public class RealType extends AbstractType{
 
     @Override
     public Type arithmetic(Type type) {
-        if (type instanceof RealType || type instanceof CharType)
-            return type;
-        else if (type instanceof IntType)
+        if (type instanceof RealType || type instanceof CharType || type instanceof  IntType)
             return this;
         return super.arithmetic(type);
     }
@@ -27,4 +25,29 @@ public class RealType extends AbstractType{
     public boolean isArithmetic() {
         return true;
     }
+
+
+    @Override
+    public Type comparison(Type t) {
+        if (t instanceof RealType || t instanceof IntType || t instanceof CharType)
+            return new IntType(super.getLine(), super.getColumn());
+
+        return null;
+    }
+
+    @Override
+    public boolean promotableTo(Type t) {
+        if (t instanceof RealType)
+            return true;
+        return super.promotableTo(t);
+    }
+
+
+    @Override
+    public Type cast(Type t) {
+        if (t instanceof RealType || t instanceof IntType || t instanceof CharType)
+            return t;
+        return null;
+    }
+
 }

@@ -3,8 +3,8 @@ def main() do
     letter :: char
 
     name[0] = '1'
-    name[0] = name['a'] # Error
-    letter = name[2.2] # Error
+    name[0] = name['a'] # Error invalid indexing expression
+    letter = name[2.2] # Error invalid indexing expression
 
-    puts letter[1] # Error
+    puts letter[1] # Error invalid indexing
 end

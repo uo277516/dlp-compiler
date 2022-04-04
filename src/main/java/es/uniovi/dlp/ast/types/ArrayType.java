@@ -26,4 +26,23 @@ public class ArrayType extends AbstractType {
     public <ReturnType, ParamType> ReturnType accept(AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
         return visitor.visit(this,param);
     }
+
+    @Override
+    public Type indexing(Type type) { //this es el vector y type es el indice
+       if (type instanceof IntType) {
+           return this;
+       }
+       return null;
+    }
+
+
+    @Override
+    public boolean isIndexable() {
+        return true;
+    }
+
+    @Override
+    public Type cast(Type from) { //this es el tipo de la expression y from tipo a castear
+        return null;
+    }
 }

@@ -23,7 +23,6 @@ public class StructType extends AbstractType{
     public void checkDuplicatedRecords(List<RecordField> defs) {
         HashSet<String> set = new HashSet<>();
         for (var def: defs) {
-            System.out.println(def.getId());
             if (!set.add(def.getId())) {
                 Error e = new Error(def.getLine(), def.getColumn(), ErrorReason.FIELD_ALREADY_DECLARED);
                 ErrorManager.getInstance().addError(e);
@@ -55,5 +54,10 @@ public class StructType extends AbstractType{
     @Override
     public int hashCode() {
         return Objects.hash(defs);
+    }
+
+    @Override
+    public Type cast(Type from) { //this es el tipo de la expression y from tipo a castear
+        return null;
     }
 }

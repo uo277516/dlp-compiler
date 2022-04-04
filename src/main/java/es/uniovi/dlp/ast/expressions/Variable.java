@@ -15,10 +15,11 @@ public class Variable extends AbstractExpression {
         this.definition = definition;
     }
 
-    public Variable (int line, int column, String var) {
+    public Variable (int line, int column, String var, Definition def) {
         super(line, column);
         super.setLvalue(true);
         this.var=var;
+        this.definition=def;
     }
 
     public String getVar() {

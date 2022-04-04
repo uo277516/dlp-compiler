@@ -15,8 +15,8 @@ public class TypeCheckingTest {
     void invalidIndexing() {
         runCompiler("examples/errors/types/invalid_indexing.xana");
         assertFoundErrors(Arrays.asList(
-                new Error(6, 20, ErrorReason.INVALID_INDEX_EXPRESSION),
-                new Error(7, 19, ErrorReason.INVALID_INDEX_EXPRESSION),
+                new Error(6, 15, ErrorReason.INVALID_INDEX_EXPRESSION),
+                new Error(7, 14, ErrorReason.INVALID_INDEX_EXPRESSION),
                 new Error(9, 10, ErrorReason.INVALID_INDEXING)
         ));
     }
@@ -34,7 +34,7 @@ public class TypeCheckingTest {
     void invalidArithmetic() {
         runCompiler("examples/errors/types/invalid_arithmetic.xana");
         assertFoundErrors(Arrays.asList(
-                new Error(9, 10, ErrorReason.INVALID_ARITHMETIC),
+                new Error(9, 9, ErrorReason.INVALID_ARITHMETIC),
                 new Error(11, 10, ErrorReason.INVALID_ARITHMETIC)
         ));
     }
@@ -84,8 +84,8 @@ public class TypeCheckingTest {
     void invalidReturnType() {
         runCompiler("examples/errors/types/invalid_return_type.xana");
         assertFoundErrors(Arrays.asList(
-            new Error(2, 10, ErrorReason.INVALID_RETURN_TYPE),
-            new Error(6, 12, ErrorReason.INVALID_RETURN_TYPE)
+            new Error(2, 3, ErrorReason.INVALID_RETURN_TYPE),
+            new Error(6, 5, ErrorReason.INVALID_RETURN_TYPE)
         ));
     }
 

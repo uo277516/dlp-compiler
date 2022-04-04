@@ -15,6 +15,10 @@ public class FunDef extends AbstractDefinition {
     private List<Statemment> body;
     private List<VarDef> localVars;
 
+    public FunDef(int line, int i) {
+        super(line,i);
+    }
+
 
     @Override
     public String getId() {
@@ -25,6 +29,7 @@ public class FunDef extends AbstractDefinition {
         this.id = id;
     }
 
+    @Override
     public Type getType() {
         return type;
     }

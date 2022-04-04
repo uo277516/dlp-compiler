@@ -12,8 +12,8 @@ def main() do
     id = name as int # Error
     id = person as int # Error
     id = id as int
-    id = person.age
-    id = person.age as int
+    #id = person.age
+    #id = person.age as int
     money = id as double
     money = letter
     money = id as char

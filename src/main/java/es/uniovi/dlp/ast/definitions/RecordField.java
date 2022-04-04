@@ -28,6 +28,7 @@ public class RecordField extends AbstractDefinition {
         this.id = id;
     }
 
+    @Override
     public Type getType() {
         return type;
     }

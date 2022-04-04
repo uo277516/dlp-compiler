@@ -17,6 +17,10 @@ public class VarDef extends AbstractDefinition {
         this.type=type;
     }
 
+    public VarDef(int line, int column) {
+        super(line,column);
+    }
+
     @Override
     public String getId() {
         return id;
@@ -26,6 +30,7 @@ public class VarDef extends AbstractDefinition {
         this.id = id;
     }
 
+    @Override
     public Type getType() {
         return type;
     }

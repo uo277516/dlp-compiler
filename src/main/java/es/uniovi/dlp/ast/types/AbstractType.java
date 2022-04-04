@@ -33,11 +33,17 @@ public abstract class AbstractType implements Type {
 
     @Override
     public Type logical(Type type) {
+        if (type instanceof  ErrorType) {
+            return type;
+        }
         return null;
     }
 
     @Override
     public Type indexing(Type type) {
+        if (type instanceof  ErrorType) {
+            return type;
+        }
         return null;
     }
 
@@ -48,11 +54,17 @@ public abstract class AbstractType implements Type {
 
     @Override
     public Type cast(Type from) {
+        if (from instanceof  ErrorType) {
+            return from;
+        }
         return null;
     }
 
     @Override
     public Type comparison(Type leftType) {
+        if (leftType instanceof  ErrorType) {
+            return leftType;
+        }
         return null;
     }
 

@@ -18,6 +18,11 @@ public class IntType extends AbstractType{
         return true;
     }
 
+    @Override
+    public boolean isLogical() {
+        return true;
+    }
+
     //en int, si es char o int return this, si es double doubletype.geetinstance sino return uper.arithmeti
     @Override
     public Type arithmetic(Type type) {
@@ -29,6 +34,37 @@ public class IntType extends AbstractType{
             return super.arithmetic(type);
     }
 
+
+    @Override
+    public Type comparison(Type t) {
+        if (t instanceof RealType || t instanceof IntType || t instanceof CharType)
+            return new IntType(t.getLine(), t.getColumn());
+
+        return null;
+    }
+
+    @Override
+    public Type logical(Type t) {
+        if (t.isLogical())
+            return new IntType(t.getLine(), t.getColumn());
+
+        return null;
+    }
+
+    @Override
+    public boolean promotableTo(Type t) {
+        if (t instanceof RealType || t instanceof IntType)
+            return true;
+        return false;
+    }
+
+
+    @Override
+    public Type cast(Type t) {
+        if (t instanceof RealType || t instanceof IntType || t instanceof CharType)
+            return t;
+        return null;
+    }
 
 
 

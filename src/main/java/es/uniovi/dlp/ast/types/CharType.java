@@ -14,14 +14,52 @@ public class CharType extends AbstractType {
     }
 
     @Override
-    public Type arithmetic(Type type) {
-        if (type instanceof IntType || type instanceof  RealType)
-            return type;
-        return super.arithmetic(type);
+    public boolean isLogical() {
+        return true;
+    }
+
+    @Override
+    public Type arithmetic(Type t) {
+        if(t instanceof RealType || t instanceof IntType)
+            return t;
+        else if(t instanceof CharType)
+            return new IntType(super.getLine(),super.getColumn());
+
+        return null;
     }
 
     @Override
     public boolean isArithmetic() {
         return true;
+    }
+
+    @Override
+    public Type comparison(Type t) {
+        if (t instanceof RealType || t instanceof IntType || t instanceof CharType)
+            return new IntType(super.getLine(),super.getColumn());
+
+        return null;
+    }
+
+    @Override
+    public Type logical(Type t) {
+        if(t.isLogical())
+            return new IntType(super.getLine(),super.getColumn());
+        return null;
+    }
+
+    @Override
+    public boolean promotableTo(Type t) {
+        if(t instanceof RealType || t instanceof IntType || t instanceof CharType)
+            return true;
+        return false;
+    }
+
+    @Override
+    public Type cast(Type t) {
+        if(t instanceof RealType || t instanceof IntType || t instanceof CharType) {
+            return t;
+        }
+        return null;
     }
 }
