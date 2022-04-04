@@ -37,6 +37,13 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
             Error e = new Error(assigment.getLine(), assigment.getColumn(), ErrorReason.LVALUE_REQUIRED);
             ErrorManager.getInstance().addError(e);
         }
+        /**
+        if (!assigment.getRight().getType().promotableTo(assigment.getLeft().getType())) {
+            assigment.getLeft().setType(new ErrorType(assigment.getLine(), assigment.getColumn()));
+            Error e = new Error(assigment.getLine(), assigment.getColumn(), ErrorReason.INCOMPATIBLE_TYPES);
+            ErrorManager.getInstance().addError(e);
+        }
+         */
         return null;
     }
 
@@ -112,7 +119,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
             ErrorManager.getInstance().addError(e);
         }
 
-
         return null;
     }
 
@@ -140,6 +146,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
     }
 
 
+
     @Override
     public Type visit(Return r, Type param) {
         r.getExpression().accept(this, param);
@@ -153,6 +160,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
 
 
     }
+
 
 
     @Override
@@ -202,42 +210,134 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
 
 
     @Override
-    public Type visit(Comparator comparator, Type param) {
-        return super.visit(comparator, param);
-    }
-
-    @Override
-    public Type visit(FileAccess fileAccess, Type param) {
-        return super.visit(fileAccess, param);
-    }
-
-    @Override
-    public Type visit(Invocation invocation, Type param) {
-        return super.visit(invocation, param);
-    }
-
-    @Override
-    public Type visit(Logical logical, Type param) {
-        return super.visit(logical, param);
-    }
-
-
-    @Override
-    public Type visit(UnaryNot unaryNot, Type param) {
-        return super.visit(unaryNot, param);
+    public Type visit(Logical l, Type param) {
+        l.getLeft().accept(this, param);
+        l.getRight().accept(this, param);
+        l.setLValue(false);
+        l.setType(l.getLeft().getType().logical(l.getRight().getType()));
+        if (l.getType() == null) {
+            l.setType(new ErrorType(l.getLine(), l.getColumn()));
+            Error e = new Error(l.getLine(), l.getColumn(), ErrorReason.INVALID_LOGICAL);
+            ErrorManager.getInstance().addError(e);
+        }
+        return null;
     }
 
 
 
     @Override
-    public Type visit(IfElse ifElse, Type param) {
-        return super.visit(ifElse, param);
+    public Type visit(Comparator c, Type param) {
+        c.getRight().accept(this, param);
+        c.getLeft().accept(this, param);
+        c.setLValue(false);
+
+
+        c.setType(c.getLeft().getType().comparison(c.getRight().getType()));
+
+        if (c.getType() == null) {
+            c.setType(new ErrorType(c.getLine(), c.getColumn()));
+            Error e = new Error(c.getLine(), c.getColumn(), ErrorReason.INVALID_COMPARISON);
+            ErrorManager.getInstance().addError(e);
+        }
+        return null;
     }
 
     @Override
-    public Type visit(While wh, Type param) {
-        return super.visit(wh, param);
+    public Type visit(FileAccess f, Type param) {
+        f.getField().accept(this, param);
+        f.setLValue(true);
+
+        f.setType(f.getField().getType().dot(f.getExpression()));
+
+        if (!f.getField().getType().allowDot())
+        {
+            f.setType(new ErrorType(f.getLine(), f.getColumn()));
+            Error e = new Error(f.getLine(), f.getColumn(), ErrorReason.INVALID_DOT);
+            ErrorManager.getInstance().addError(e);
+        }
+
+        if (f.getType() == null) {
+            f.setType(new ErrorType(f.getLine(), f.getColumn()));
+            Error e = new Error(f.getLine(), f.getColumn(), ErrorReason.NO_SUCH_FIELD);
+            ErrorManager.getInstance().addError(e);
+        }
+        return null;
     }
+
+    @Override
+    public Type visit(Invocation i, Type param) {
+        System.out.println(i.getLine()+"--> entra invocation");
+        i.getVariable().accept(this, param);
+        System.out.println(i.getVariable().getVar());
+        for (Expression e : i.getParams()) {
+            e.accept(this, param);
+        }
+
+        System.out.println(i.getVariable().getType());
+
+        i.setType(i.getVariable().getType());
+
+        return null;
+    }
+
+
+
+
+    @Override
+    public Type visit(UnaryNot u, Type param) {
+        u.getExpression().accept(this, param);
+        u.setLValue(false);
+
+        if (!u.getExpression().getType().isLogical()) {
+            u.setType(new ErrorType(u.getLine(), u.getColumn()));
+            Error e = new Error(u.getLine(), u.getColumn(), ErrorReason.NOT_LOGICAL);
+            ErrorManager.getInstance().addError(e);
+        }
+        else
+            u.setType(new IntType(u.getLine(), u.getColumn()));
+        return null;
+    }
+
+
+
+    @Override
+    public Type visit(IfElse i, Type param) {
+        i.getCondicion().accept(this, param);
+        if (!i.getCondicion().getType().isLogical()) {
+            i.getCondicion().setType(new ErrorType(i.getLine(), i.getColumn()));
+            Error e = new Error(i.getCondicion().getLine(), i.getCondicion().getColumn(), ErrorReason.NOT_LOGICAL);
+            ErrorManager.getInstance().addError(e);
+        }
+
+        for (Statemment s : i.getIfSts()) {
+            s.accept(this, param);
+        }
+
+        for (Statemment s : i.getElseSts()) {
+            s.accept(this, param);
+        }
+
+        return null;
+    }
+
+    @Override
+    public Type visit(While w, Type param) {
+        w.getCondicion().accept(this, param);
+
+        if (!w.getCondicion().getType().isLogical()) {
+            w.getCondicion().setType(new ErrorType(w.getLine(), w.getColumn()));
+            Error e = new Error(w.getCondicion().getLine(), w.getCondicion().getColumn(), ErrorReason.NOT_LOGICAL);
+            ErrorManager.getInstance().addError(e);
+        }
+
+        for (Statemment s : w.getSts()) {
+            s.accept(this, param);
+        }
+
+        return null;
+    }
+
+
 
     @Override
     public Type visit(Write write, Type param) {
@@ -274,10 +374,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         return super.visit(voidType, param);
     }
 
-    @Override
-    public Type visit(StructType structType, Type param) {
-        return super.visit(structType, param);
-    }
+
 
     @Override
     public Type visit(ErrorType errorType, Type param) {

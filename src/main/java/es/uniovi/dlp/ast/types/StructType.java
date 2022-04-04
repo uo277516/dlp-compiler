@@ -60,4 +60,18 @@ public class StructType extends AbstractType{
     public Type cast(Type from) { //this es el tipo de la expression y from tipo a castear
         return null;
     }
+
+    @Override
+    public Type dot(String field) {
+        for(RecordField f : defs)
+            if(f.getId().equals(field))
+                return f.getType();
+
+        return null;
+    }
+
+    @Override
+    public boolean allowDot() {
+        return true;
+    }
 }

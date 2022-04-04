@@ -12,11 +12,11 @@ def main() do
     end
 
     puts person.age # Error
-    puts person.name[0]
+    #puts person.name[0]
     puts person.friend.id
     puts person.friend.name # Error
 
     b :: int
 
-    puts b.a # Error
+    puts b.a # Error no allow dot
 end

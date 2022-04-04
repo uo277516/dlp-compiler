@@ -40,7 +40,7 @@ public class IntType extends AbstractType{
         if (t instanceof RealType || t instanceof IntType || t instanceof CharType)
             return new IntType(t.getLine(), t.getColumn());
 
-        return null;
+        return super.comparison(t);
     }
 
     @Override

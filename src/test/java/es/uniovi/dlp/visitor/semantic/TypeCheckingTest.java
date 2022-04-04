@@ -45,9 +45,9 @@ public class TypeCheckingTest {
         assertFoundErrors(Arrays.asList(
                 new Error(10, 8, ErrorReason.NOT_LOGICAL),
                 new Error(13, 11, ErrorReason.NOT_LOGICAL),
-                new Error(17, 18, ErrorReason.NOT_LOGICAL),
-                new Error(18, 19, ErrorReason.INVALID_LOGICAL),
-                new Error(19, 19, ErrorReason.INVALID_LOGICAL)
+                new Error(17, 17, ErrorReason.NOT_LOGICAL),
+                new Error(18, 17, ErrorReason.INVALID_LOGICAL),
+                new Error(19, 17, ErrorReason.INVALID_LOGICAL)
         ));
     }
 
@@ -55,8 +55,8 @@ public class TypeCheckingTest {
     void invalidComparison() {
         runCompiler("examples/errors/types/invalid_comparison.xana");
         assertFoundErrors(Arrays.asList(
-                new Error(12, 15, ErrorReason.INVALID_COMPARISON)
-        ));
+                new Error(12, 11, ErrorReason.INVALID_COMPARISON)
+                ));
     }
 
     @Test

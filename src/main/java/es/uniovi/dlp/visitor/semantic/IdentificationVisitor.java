@@ -24,10 +24,12 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type>  {
             ErrorManager.getInstance().addError(e);
         }
 
+
         symbolTable.set();  //pongo el scope a 1-> estoy en una funcion
 
 
         funDef.getType().accept(this, param);
+
 
         //ámbito de cada parámetro
         for (var parameter: ((FunType) funDef.getType()).getParams()) {
@@ -70,7 +72,6 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type>  {
 
     @Override
     public Type visit(Variable variable, Type param) {
-
         if (symbolTable.find(variable.getVar())==null) {
             Error e = new Error(variable.getLine(), variable.getColumn(), ErrorReason.VARIABLE_NOT_DECLARED);
             ErrorManager.getInstance().addError(e);

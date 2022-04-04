@@ -13,10 +13,7 @@ public class CharType extends AbstractType {
         return visitor.visit(this,param);
     }
 
-    @Override
-    public boolean isLogical() {
-        return true;
-    }
+
 
     @Override
     public Type arithmetic(Type t) {
@@ -38,7 +35,7 @@ public class CharType extends AbstractType {
         if (t instanceof RealType || t instanceof IntType || t instanceof CharType)
             return new IntType(super.getLine(),super.getColumn());
 
-        return null;
+        return super.comparison(t);
     }
 
     @Override

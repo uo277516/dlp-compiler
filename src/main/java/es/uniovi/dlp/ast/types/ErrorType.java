@@ -12,4 +12,10 @@ public class ErrorType extends AbstractType {
     public <ReturnType, ParamType> ReturnType accept(AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
         return visitor.visit(this,param);
     }
+
+    @Override
+    public boolean isLogical() {
+        System.out.println("entra islogical del errortypr");
+        return true;
+    }
 }

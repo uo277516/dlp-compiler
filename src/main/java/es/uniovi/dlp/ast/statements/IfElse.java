@@ -13,7 +13,6 @@ public class IfElse extends AbstractStatemment {
     public IfElse(Expression condicion, List<Statemment> ifSts, List<Statemment> elseSts, int line, int column) {
         super(line, column);
         this.condicion = condicion;
-
         this.ifSts = ifSts;
 
         this.elseSts = elseSts;
@@ -21,7 +20,7 @@ public class IfElse extends AbstractStatemment {
 
 
     public Expression getCondicion() {
-        return condicion;
+        return this.condicion;
     }
 
     public List<Statemment> getIfSts() {

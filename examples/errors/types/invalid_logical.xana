@@ -7,14 +7,14 @@ def main() do
         puts 't', 'r', 'u', 'e', '\n'
     end
 
-    if 'a' do # Error
+    if 'a' do # Error the expression is not logical
     end
 
-    while 1.2 do # Error
+    while 1.2 do # Error the expression is not logical
     end
 
     condition :: int
-    condition = !10.2 # Error
-    condition = 1 && (2.2) # Error
-    condition = 1 || (2.2) # Error
+    condition = !10.2 # Error the expression is not logical
+    condition = 1 && (2.2) # Error logical not valid
+    condition = 1 || (2.2) # Error logical not valid
 end

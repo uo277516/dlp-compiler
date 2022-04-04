@@ -32,7 +32,7 @@ public class RealType extends AbstractType{
         if (t instanceof RealType || t instanceof IntType || t instanceof CharType)
             return new IntType(super.getLine(), super.getColumn());
 
-        return null;
+        return super.comparison(t);
     }
 
     @Override

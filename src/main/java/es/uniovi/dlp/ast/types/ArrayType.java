@@ -30,7 +30,7 @@ public class ArrayType extends AbstractType {
     @Override
     public Type indexing(Type type) { //this es el vector y type es el indice
        if (type instanceof IntType) {
-           return this;
+           return new IntType(super.getLine(), super.getColumn());
        }
        return null;
     }
@@ -45,4 +45,6 @@ public class ArrayType extends AbstractType {
     public Type cast(Type from) { //this es el tipo de la expression y from tipo a castear
         return null;
     }
+
+
 }
