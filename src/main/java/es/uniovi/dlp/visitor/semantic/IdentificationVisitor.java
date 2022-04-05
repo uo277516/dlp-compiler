@@ -89,6 +89,8 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type>  {
         if (symbolTable.find(invocation.getVariable().getVar())==null) {
             Error e = new Error(invocation.getLine(), invocation.getColumn(), ErrorReason.FUNCTION_NOT_DECLARED);
             ErrorManager.getInstance().addError(e);
+        } else {
+            invocation.getVariable().setDefinition(symbolTable.find(invocation.getVariable().getVar()));
         }
 
         return null;

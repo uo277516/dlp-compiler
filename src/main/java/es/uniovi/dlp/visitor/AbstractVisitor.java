@@ -21,9 +21,9 @@ public abstract class AbstractVisitor<ReturnType, ParamType> implements Visitor<
 
     @Override
     public ReturnType visit(FunDef fundef, ParamType param) {
-        fundef.getBody().forEach(statement -> statement.accept(this, param));
-        fundef.getLocalVars().forEach(local -> local.accept(this, param));
         fundef.getType().accept(this, param);
+        fundef.getLocalVars().forEach(local -> local.accept(this, param));
+        fundef.getBody().forEach(statement -> statement.accept(this, param));
         return null;
     }
 

@@ -42,6 +42,11 @@ public class ArrayType extends AbstractType {
     }
 
     @Override
+    public int getNumberOfBytes() {
+        return this.type.getNumberOfBytes()*size;
+    }
+
+    @Override
     public Type cast(Type from) { //this es el tipo de la expression y from tipo a castear
         return null;
     }

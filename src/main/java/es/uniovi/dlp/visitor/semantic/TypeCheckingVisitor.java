@@ -146,12 +146,32 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
     }
 
 
+    @Override
+    public Type visit(FunType f, Type param) {
+        f.getReturnType().accept(this, param);
+        for (var v : f.getParams())
+            v.accept(this, param);
+
+        System.out.println(f.getLine()+"entra " + f.getReturnType());
+        return f.getReturnType();
+    }
+
+
 
     @Override
     public Type visit(Return r, Type param) {
         r.getExpression().accept(this, param);
+        r.getExpression().getType().accept(this,param);
 
-        if (!r.getExpression().getType().promotableTo(param)) {
+        System.out.println(r.getLine()+"expresion del retorno"+r.getExpression());
+        System.out.println(r.getLine()+"tipo del retorno de la exp"+r.getExpression().getType());
+
+
+        Type tipoFuncionRet = ((FunType) param).getReturnType();
+
+        System.out.println("tipo de la funcion es " + tipoFuncionRet);
+
+        if (!r.getExpression().getType().promotableTo(tipoFuncionRet)) {
             r.getExpression().setType(new ErrorType(r.getLine(), r.getColumn()));
             Error e = new Error(r.getLine(), r.getColumn(), ErrorReason.INVALID_RETURN_TYPE);
             ErrorManager.getInstance().addError(e);
@@ -266,16 +286,26 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
 
     @Override
     public Type visit(Invocation i, Type param) {
-        System.out.println(i.getLine()+"--> entra invocation");
         i.getVariable().accept(this, param);
-        System.out.println(i.getVariable().getVar());
+        List<Type> types = new ArrayList<>();  //arraylist con los tipos de los parametros de la invocacion
+
         for (Expression e : i.getParams()) {
             e.accept(this, param);
+            types.add(e.getType());
         }
 
-        System.out.println(i.getVariable().getType());
-
         i.setType(i.getVariable().getType());
+
+        System.out.println(i.getLine()+"tipo de la invocacion"+i.getType());
+        if (!(i.getType() instanceof FunType)) {
+            i.setType(new ErrorType(i.getLine(), i.getColumn()));
+            Error e = new Error(i.getLine(), i.getColumn(), ErrorReason.INVALID_INVOCATION);
+            ErrorManager.getInstance().addError(e);
+        } else {
+
+        }
+
+        System.out.println("---------param"+param);
 
         return null;
     }
@@ -354,10 +384,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         return super.visit(charType, param);
     }
 
-    @Override
-    public Type visit(FunType funType, Type param) {
-        return super.visit(funType, param);
-    }
 
     @Override
     public Type visit(IntType intType, Type param) {
@@ -384,7 +410,10 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
 
     @Override
     public Type visit(FunDef fundef, Type param) {
-        return super.visit(fundef, param);
+        fundef.getType().accept(this, param);
+        fundef.getLocalVars().forEach(local -> local.accept(this, param));
+        fundef.getBody().forEach(statement -> statement.accept(this, fundef.getType()));
+        return null;
     }
 
     @Override

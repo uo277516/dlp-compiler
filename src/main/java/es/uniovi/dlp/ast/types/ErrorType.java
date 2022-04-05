@@ -18,4 +18,9 @@ public class ErrorType extends AbstractType {
         System.out.println("entra islogical del errortypr");
         return true;
     }
+
+    @Override
+    public int getNumberOfBytes() {
+        return 0;
+    }
 }

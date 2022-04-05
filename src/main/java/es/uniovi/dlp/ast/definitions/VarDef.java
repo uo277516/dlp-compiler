@@ -9,6 +9,17 @@ public class VarDef extends AbstractDefinition {
     private Type type;
 
 
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
+    private int offset;
+
+
     public VarDef ( int line, int column ,
                     String id, Type type)
     {

@@ -1,6 +1,5 @@
 package es.uniovi.dlp.ast.types;
 
-import com.sun.jdi.DoubleType;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
 public class RealType extends AbstractType{
@@ -24,6 +23,11 @@ public class RealType extends AbstractType{
     @Override
     public boolean isArithmetic() {
         return true;
+    }
+
+    @Override
+    public int getNumberOfBytes() {
+        return 4;
     }
 
 

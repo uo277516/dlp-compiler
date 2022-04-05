@@ -23,4 +23,7 @@ public interface Type extends ASTNode {
     boolean allowDot();
 
     //comparison.settyoe leftype.vompstidon(righttype) esto en el typecheckingviitor
+
+    //Para el OffsetVisitor
+    int getNumberOfBytes();
 }

@@ -10,6 +10,16 @@ public class RecordField extends AbstractDefinition {
     private String id;
     private Type type;
 
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
+    private int offset;
+
 
     public RecordField ( int line, int column ,
                     String id, Type type)

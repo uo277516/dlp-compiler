@@ -74,4 +74,13 @@ public class StructType extends AbstractType{
     public boolean allowDot() {
         return true;
     }
+
+    @Override
+    public int getNumberOfBytes() {
+        int bytes= 0;
+        for(RecordField r : defs)
+            bytes += r.getType().getNumberOfBytes();
+
+        return bytes;
+    }
 }

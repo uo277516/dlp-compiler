@@ -36,4 +36,13 @@ public class FunType extends AbstractType{
     public <ReturnType, ParamType> ReturnType accept(AbstractVisitor<ReturnType, ParamType> visitor, ParamType param) {
         return visitor.visit(this,param);
     }
+
+    @Override
+    public int getNumberOfBytes() {
+        int bytes = 0;
+        for(VarDef v : params)
+            bytes += v.getType().getNumberOfBytes();
+
+        return bytes;
+    }
 }

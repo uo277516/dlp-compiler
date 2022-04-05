@@ -31,6 +31,11 @@ public class CharType extends AbstractType {
     }
 
     @Override
+    public int getNumberOfBytes() {
+        return 1;
+    }
+
+    @Override
     public Type comparison(Type t) {
         if (t instanceof RealType || t instanceof IntType || t instanceof CharType)
             return new IntType(super.getLine(),super.getColumn());
