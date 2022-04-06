@@ -45,4 +45,18 @@ public class FunType extends AbstractType{
 
         return bytes;
     }
+
+    @Override
+    public boolean isLogical() {
+        if (this.returnType instanceof IntType) return true;
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "FunType{" +
+                "params=" + params +
+                ", returnType=" + returnType +
+                '}';
+    }
 }

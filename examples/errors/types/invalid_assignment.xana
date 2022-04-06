@@ -3,7 +3,7 @@ def main() do
     letter :: char
     real :: double
 
-    id = 1
+    id = -1
     real = 2
     real = id
     id = 10.2 # Error

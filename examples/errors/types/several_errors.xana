@@ -6,12 +6,12 @@ array :: [10 :: int]
 date :: defstruct do
     day :: int
     month :: int
-    day :: double # Error
+    day :: double # Error, lo coje
 end
 
 def f(a :: int) :: int do
-    a :: double # Error
-    return 34.5 # Error
+    a :: double # Error, lo coje
+    return 34.5 # Error pero no lo coje
 end
 
 def g(b :: int, b :: double) :: void do # Error
@@ -42,7 +42,7 @@ def main() do
 
     f() # Error
     f(3.2) # Error
-    integer = g(f(1), 1.0) # Error
+    integer = g(1, 1.0) # Error
 
     integer[0] = 0 # Error
     array[3] = 3.4 # Error

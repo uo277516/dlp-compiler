@@ -5,6 +5,7 @@ import es.uniovi.dlp.ast.definitions.FunDef;
 import es.uniovi.dlp.ast.definitions.VarDef;
 import es.uniovi.dlp.ast.expressions.Invocation;
 import es.uniovi.dlp.ast.expressions.Variable;
+import es.uniovi.dlp.ast.types.ErrorType;
 import es.uniovi.dlp.ast.types.FunType;
 import es.uniovi.dlp.ast.types.Type;
 import es.uniovi.dlp.error.Error;
@@ -31,10 +32,14 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type>  {
         funDef.getType().accept(this, param);
 
 
+        //para cada parámetro
         //ámbito de cada parámetro
         for (var parameter: ((FunType) funDef.getType()).getParams()) {
             parameter.setScope(1);
-            symbolTable.insert(parameter);
+            if (!symbolTable.insert(parameter)) {
+                Error e = new Error(parameter.getLine(), parameter.getColumn(), ErrorReason.VARIABLE_ALREADY_DECLARED);
+                ErrorManager.getInstance().addError(e);
+            }
         }
 
         //pongo el ambito de cada definicion de la funcion y la añado
@@ -72,7 +77,10 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type>  {
 
     @Override
     public Type visit(Variable variable, Type param) {
+        System.out.println(variable.getLine()+"entra x aqui");
         if (symbolTable.find(variable.getVar())==null) {
+            System.out.println("y por aqui");
+            variable.setType(new ErrorType(variable.getLine(), variable.getColumn()));
             Error e = new Error(variable.getLine(), variable.getColumn(), ErrorReason.VARIABLE_NOT_DECLARED);
             ErrorManager.getInstance().addError(e);
         } else {

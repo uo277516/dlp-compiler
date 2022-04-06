@@ -33,17 +33,21 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         //recorro hijos y tengo q mirar q la parte de la isquierda tengan lvalue
         //y si no tienen el error
         super.visit(assigment, param);
+        System.out.println(assigment.getLine()+"despues la asignacion");
+
         if (!assigment.getLeft().getLValue()) {
             Error e = new Error(assigment.getLine(), assigment.getColumn(), ErrorReason.LVALUE_REQUIRED);
             ErrorManager.getInstance().addError(e);
         }
-        /**
+
+        System.out.println(assigment.getLine()+"..."+assigment.getLeft().getType()+"---"+assigment.getRight().getType());
+
         if (!assigment.getRight().getType().promotableTo(assigment.getLeft().getType())) {
             assigment.getLeft().setType(new ErrorType(assigment.getLine(), assigment.getColumn()));
             Error e = new Error(assigment.getLine(), assigment.getColumn(), ErrorReason.INCOMPATIBLE_TYPES);
             ErrorManager.getInstance().addError(e);
         }
-         */
+
         return null;
     }
 
@@ -129,6 +133,10 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         unaryMinus.getExpression().accept(this, param);
         unaryMinus.setLvalue(false);
 
+        System.out.println(unaryMinus.getLine()+"entra unaryminus");
+
+        unaryMinus.setType(unaryMinus.getExpression().getType());
+
         if (!unaryMinus.getExpression().getType().isArithmetic()) {
             unaryMinus.setType(new ErrorType(unaryMinus.getLine(), unaryMinus.getColumn()));
             Error e = new Error(unaryMinus.getLine(), unaryMinus.getColumn(), ErrorReason.INVALID_ARITHMETIC);
@@ -169,9 +177,13 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
 
         Type tipoFuncionRet = ((FunType) param).getReturnType();
 
-        System.out.println("tipo de la funcion es " + tipoFuncionRet);
+        System.out.println(r.getLine()+"tipo de la funcion es " + tipoFuncionRet);
 
-        if (!r.getExpression().getType().promotableTo(tipoFuncionRet)) {
+        System.out.println(r.getLine()+"--clase expresion ret"+r.getExpression().getType().getClass());
+        System.out.println(r.getLine()+"--clase tipo ret"+tipoFuncionRet.getClass());
+        System.out.println(r.getExpression().getType().getClass().equals(tipoFuncionRet.getClass()));
+
+        if (!r.getExpression().getType().getClass().equals(tipoFuncionRet.getClass())) {
             r.getExpression().setType(new ErrorType(r.getLine(), r.getColumn()));
             Error e = new Error(r.getLine(), r.getColumn(), ErrorReason.INVALID_RETURN_TYPE);
             ErrorManager.getInstance().addError(e);
@@ -190,6 +202,8 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
 
     @Override
     public Type visit(ArrayAccess arrayAccess, Type param) {
+
+        System.out.println(arrayAccess.getLine()+"primero arrayacess");
         arrayAccess.getArray().accept(this, param); //left
         arrayAccess.getIndex().accept(this, param); //right
         arrayAccess.setLValue(true);
@@ -296,16 +310,28 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
 
         i.setType(i.getVariable().getType());
 
-        System.out.println(i.getLine()+"tipo de la invocacion"+i.getType());
         if (!(i.getType() instanceof FunType)) {
             i.setType(new ErrorType(i.getLine(), i.getColumn()));
             Error e = new Error(i.getLine(), i.getColumn(), ErrorReason.INVALID_INVOCATION);
             ErrorManager.getInstance().addError(e);
         } else {
+            List<VarDef> params = ((FunType) i.getType()).getParams(); //parametros de la funcion
 
+            if (params.size()!=types.size()) {
+                i.setType(new ErrorType(i.getLine(), i.getColumn()));
+                Error e = new Error(i.getLine(), i.getColumn(), ErrorReason.INVALID_ARGS);
+                ErrorManager.getInstance().addError(e);
+            }  else {
+                for (int j=0; j<types.size(); j++) {
+                    if (!types.get(j).promotableTo(params.get(j).getType())) {
+                        i.setType(new ErrorType(i.getLine(), i.getColumn()));
+                        Error e = new Error(i.getLine(), i.getColumn(), ErrorReason.INVALID_ARGS);
+                        ErrorManager.getInstance().addError(e);
+                    }
+                }
+            }
         }
 
-        System.out.println("---------param"+param);
 
         return null;
     }
