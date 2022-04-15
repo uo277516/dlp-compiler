@@ -66,6 +66,7 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type>  {
 
     @Override
     public Type visit(VarDef obj, Type param) {
+        System.out.println("visit del vardef en identification");
         if(!symbolTable.insert(obj)) {
             Error e = new Error(obj.getLine(), obj.getColumn(), ErrorReason.VARIABLE_ALREADY_DECLARED);
             ErrorManager.getInstance().addError(e);
@@ -80,7 +81,7 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type>  {
         System.out.println(variable.getLine()+"entra x aqui");
         if (symbolTable.find(variable.getVar())==null) {
             System.out.println("y por aqui");
-            variable.setType(new ErrorType(variable.getLine(), variable.getColumn()));
+            variable.getDefinition().setType(new ErrorType(variable.getLine(), variable.getColumn()));
             Error e = new Error(variable.getLine(), variable.getColumn(), ErrorReason.VARIABLE_NOT_DECLARED);
             ErrorManager.getInstance().addError(e);
         } else {

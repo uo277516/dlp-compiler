@@ -6,6 +6,7 @@ import es.uniovi.dlp.ast.types.Type;
 public interface Definition extends ASTNode {
 
     Type getType();
+    void setType(Type type);
     int getScope();
     void setScope(int scope);
     String getId();

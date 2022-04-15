@@ -58,10 +58,11 @@ public class IntType extends AbstractType{
 
     @Override
     public boolean promotableTo(Type t) {
-        System.out.println("ññññññññññññññññ entra en el int");
-        if (t instanceof RealType || t instanceof IntType ||
-            t instanceof ErrorType)
+        System.out.println("ññññññññññññññññ entra en el int" + t);
+        if (t instanceof RealType || t instanceof IntType || t instanceof ErrorType) {
+            System.out.println("entra true");
             return true;
+        }
         return false;
     }
 
