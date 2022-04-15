@@ -56,7 +56,10 @@ public class IntType extends AbstractType{
         return null;
     }
 
-
+    @Override
+    public boolean isIndexable() {
+        return true;
+    }
 
     @Override
     public boolean promotableTo(Type t) {

@@ -31,9 +31,12 @@ public class ArrayType extends AbstractType {
     @Override
     public Type indexing(Type type) { //this es el vector y type es el indice
        if (type instanceof IntType) {
-           return new IntType(super.getLine(), super.getColumn());
+           return this.getType();
+       } else if (type instanceof CharType || type instanceof RealType) {
+           return new ErrorType(this.getLine(), this.getColumn());
        }
-       return null;
+       System.out.println("no ye aqui");
+       return super.indexing(type);
     }
 
 

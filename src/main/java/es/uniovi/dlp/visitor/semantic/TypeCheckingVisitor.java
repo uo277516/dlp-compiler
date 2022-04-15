@@ -203,22 +203,34 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         arrayAccess.getIndex().accept(this, param); //right
         arrayAccess.setLValue(true);
 
+        Type indexType = arrayAccess.getArray().getType();
+        Type arrayType = arrayAccess.getIndex().getType();
 
-        System.out.println(arrayAccess.getIndex().getType());
-        System.out.println(arrayAccess.getArray().getType());
-        arrayAccess.setType(arrayAccess.getIndex().getType().indexing(arrayAccess.getArray().getType()));
+        System.out.println("indice"+indexType);
+        System.out.println("array"+arrayType);
+        System.out.println(arrayType.indexing(indexType));
+        arrayAccess.setType(arrayType.indexing(indexType));
+        System.out.println("^^^^"+arrayAccess.getType());
 
-        System.out.println(arrayAccess.getLine()+"tipo del array access "+arrayAccess.getType());
+        Type t = null;
 
-        if (!arrayAccess.getIndex().getType().isIndexable()) {
-            arrayAccess.setType(new ErrorType(arrayAccess.getLine(), arrayAccess.getColumn()));
-            Error e = new Error(arrayAccess.getLine(), arrayAccess.getColumn(), ErrorReason.INVALID_INDEXING);
-            ErrorManager.getInstance().addError(e);
+        if (arrayAccess.getType()!=null) {
+            t = new ArrayType(0,0,null,0);
         }
-        else if (arrayAccess.getType() == null) {
-            arrayAccess.setType(new ErrorType(arrayAccess.getLine(), arrayAccess.getColumn()));
-            Error e = new Error(arrayAccess.getLine(), arrayAccess.getColumn(), ErrorReason.INVALID_INDEX_EXPRESSION);
-            ErrorManager.getInstance().addError(e);
+
+        System.out.println("++++"+arrayAccess.getIndex().getType());
+
+
+        if (t!=null) {
+            if (!t.isIndexable()) {
+                arrayAccess.setType(new ErrorType(arrayAccess.getLine(), arrayAccess.getColumn()));
+                Error e = new Error(arrayAccess.getLine(), arrayAccess.getColumn(), ErrorReason.INVALID_INDEXING);
+                ErrorManager.getInstance().addError(e);
+            } else if (arrayAccess.getType() == null) {
+                arrayAccess.setType(new ErrorType(arrayAccess.getLine(), arrayAccess.getColumn()));
+                Error e = new Error(arrayAccess.getLine(), arrayAccess.getColumn(), ErrorReason.INVALID_INDEX_EXPRESSION);
+                ErrorManager.getInstance().addError(e);
+            }
         }
 
         return null;
