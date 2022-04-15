@@ -187,6 +187,7 @@ public abstract class AbstractVisitor<ReturnType, ParamType> implements Visitor<
 
     @Override
     public ReturnType visit(FunType funType, ParamType param) {
+        //funType.getReturnType().accept(this,param)
         return null;
     }
 

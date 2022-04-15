@@ -40,6 +40,14 @@ public class RealType extends AbstractType{
     }
 
     @Override
+    public Type indexing(Type type) {
+        if (type instanceof IntType) {
+            return this;
+        }
+        return null;
+    }
+
+    @Override
     public boolean promotableTo(Type t) {
         if (t instanceof RealType)
             return true;

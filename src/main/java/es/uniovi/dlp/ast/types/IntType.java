@@ -56,6 +56,8 @@ public class IntType extends AbstractType{
         return null;
     }
 
+
+
     @Override
     public boolean promotableTo(Type t) {
         System.out.println("ññññññññññññññññ entra en el int" + t);

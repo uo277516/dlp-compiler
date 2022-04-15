@@ -31,6 +31,9 @@ public class LvalueTest {
     @Test
     void correctLvalue() {
         runCompiler("examples/errors/valid_examples/lvalue.xana");
-        assertFoundErrors(new ArrayList<>());
+        //assertFoundErrors(new ArrayList<>());
+        assertFoundErrors(Arrays.asList(
+                new Error(4, 5, ErrorReason.LVALUE_REQUIRED)
+        ));
     }
 }

@@ -9,6 +9,7 @@ public class ArrayType extends AbstractType {
     public ArrayType (int line, int column, Type type, int size)
     {
         super(line,column);
+        System.out.println("a veeeeeeeeeeeeeeeeeeeeeerrrrrrrrrrrrrrrr" + type);
         this.type=type;
         this.size=size;
     }

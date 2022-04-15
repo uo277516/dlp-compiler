@@ -149,7 +149,9 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
 
     @Override
     public Type visit(Variable variable, Type param) {
+        //variable.accept(this,param);
         variable.setLvalue(true);
+        System.out.println("uuuuuuuuuuu"+variable.getDefinition());
         System.out.println("tipo de la variable"+variable.getDefinition().getType());
         variable.setType(variable.getDefinition().getType());
         return null;
@@ -306,11 +308,13 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
 
         i.setType(i.getVariable().getType());
 
-        if (!(i.getType() instanceof FunType)) {
+        System.out.println("a ver q tipo essss " + i.getType());
+
+        if (!(i.getType() instanceof FunType) && i.getType() != null) {
             i.setType(new ErrorType(i.getLine(), i.getColumn()));
             Error e = new Error(i.getLine(), i.getColumn(), ErrorReason.INVALID_INVOCATION);
             ErrorManager.getInstance().addError(e);
-        } else {
+        } else if (i.getType()!=null){
             List<VarDef> params = ((FunType) i.getType()).getParams(); //parametros de la funcion
 
             if (params.size()!=types.size()) {
