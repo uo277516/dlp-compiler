@@ -24,7 +24,6 @@ public class OffsetVisitor extends AbstractVisitor<Type, Type> {
                 offset += def.getType().getNumberOfBytes();
             }
         }
-        System.out.println("entra program");
         return null;
     }
 
@@ -38,7 +37,6 @@ public class OffsetVisitor extends AbstractVisitor<Type, Type> {
             offset-=def.getType().getNumberOfBytes();
             def.setOffset(offset);
         }
-        System.out.println("entra fundef");
         return null;
     }
 

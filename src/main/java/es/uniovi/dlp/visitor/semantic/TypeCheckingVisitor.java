@@ -39,11 +39,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
             ErrorManager.getInstance().addError(e);
         }
 
-        System.out.println(assigment.getLine()+"---------"+assigment.getLeft().getType());
-        System.out.println(assigment.getLine()+"---------"+assigment.getRight().getType());
-
-
-        System.out.println("````" + assigment.getRight().getType().promotableTo(assigment.getLeft().getType()));
         if (!assigment.getRight().getType().promotableTo(assigment.getLeft().getType())) {
             assigment.getLeft().setType(new ErrorType(assigment.getLine(), assigment.getColumn()));
             Error e = new Error(assigment.getLine(), assigment.getColumn(), ErrorReason.INCOMPATIBLE_TYPES);
@@ -149,7 +144,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
 
     @Override
     public Type visit(Variable variable, Type param) {
-        //variable.accept(this,param);
         variable.setLvalue(true);
         if (variable.getDefinition()!=null)
             variable.setType(variable.getDefinition().getType());
@@ -173,10 +167,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         r.getExpression().accept(this, param);
         r.getExpression().getType().accept(this,param);
 
-
-
         Type tipoFuncionRet = ((FunType) param).getReturnType();
-
 
         if (!r.getExpression().getType().getClass().equals(tipoFuncionRet.getClass())) {
             r.getExpression().setType(new ErrorType(r.getLine(), r.getColumn()));
@@ -205,12 +196,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         Type indexType = arrayAccess.getArray().getType();
         Type arrayType = arrayAccess.getIndex().getType();
 
-        System.out.println("indice"+indexType);
-        System.out.println("array"+arrayType);
-        System.out.println(arrayType.indexing(indexType));
         arrayAccess.setType(arrayType.indexing(indexType));
-        System.out.println("^^^^"+arrayAccess.getType());
-
 
             if (!arrayType.isIndexable()) {
                 arrayAccess.setType(new ErrorType(arrayAccess.getLine(), arrayAccess.getColumn()));
@@ -310,7 +296,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
 
         i.setType(i.getVariable().getType());
 
-        System.out.println("a ver q tipo essss " + i.getType());
 
         if (!(i.getType() instanceof FunType) && i.getType() != null) {
             i.setType(new ErrorType(i.getLine(), i.getColumn()));

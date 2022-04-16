@@ -15,13 +15,11 @@ public class ErrorType extends AbstractType {
 
     @Override
     public boolean promotableTo(Type to) {
-        System.out.println("ññññññññññññññ en este test deberia");
         return true;
     }
 
     @Override
     public boolean isLogical() {
-        System.out.println("entra islogical del errortypr");
         return true;
     }
 
