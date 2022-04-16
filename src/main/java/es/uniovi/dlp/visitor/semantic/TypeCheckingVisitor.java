@@ -212,17 +212,8 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         arrayAccess.setType(arrayType.indexing(indexType));
         System.out.println("^^^^"+arrayAccess.getType());
 
-        Type t = null;
 
-        if (arrayAccess.getType()!=null) {
-            t = new ArrayType(0,0,null,0);
-        }
-
-        System.out.println("++++"+arrayAccess.getIndex().getType());
-
-
-        if (t!=null) {
-            if (!t.isIndexable()) {
+            if (!arrayType.isIndexable()) {
                 arrayAccess.setType(new ErrorType(arrayAccess.getLine(), arrayAccess.getColumn()));
                 Error e = new Error(arrayAccess.getLine(), arrayAccess.getColumn(), ErrorReason.INVALID_INDEXING);
                 ErrorManager.getInstance().addError(e);
@@ -231,7 +222,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
                 Error e = new Error(arrayAccess.getLine(), arrayAccess.getColumn(), ErrorReason.INVALID_INDEX_EXPRESSION);
                 ErrorManager.getInstance().addError(e);
             }
-        }
+
 
         return null;
     }

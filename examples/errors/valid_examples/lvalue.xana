@@ -10,7 +10,7 @@ def main() do
     i = 0
     j = -i * a - 2
 
-    v[1] = a as double
+    v[v[j] as int] = a as double
 
     puts 'f', '(', 'i', ')', '=', f(i)
 end

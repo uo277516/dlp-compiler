@@ -58,7 +58,7 @@ public class IntType extends AbstractType{
 
     @Override
     public boolean isIndexable() {
-        return true;
+        return false;
     }
 
     @Override

@@ -13,7 +13,6 @@ public class ArrayAccess extends AbstractExpression{
         super.setLvalue(true);
         this.index=index;
         this.array=array;
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"+array);
 
     }
 

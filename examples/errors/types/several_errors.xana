@@ -44,7 +44,7 @@ def main() do
     f(3.2) # Error
     integer = g(1, 1.0) # Error
 
-    integer[0] = 0 # Error
+    integer[0] = 0 # Error, no se puede indexar un int
     array[3] = 3.4 # Error
     array[1][2] = 'a' # Error
 end
