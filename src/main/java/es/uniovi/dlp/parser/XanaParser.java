@@ -690,8 +690,7 @@ public class XanaParser extends Parser {
 				{
 				setState(106);
 				((ExpressionContext)_localctx).id = match(ID);
-				((ExpressionContext)_localctx).ast =  new Variable( _localctx.start.getLine(), _localctx.start.getCharPositionInLine() + 1, (((ExpressionContext)_localctx).id!=null?((ExpressionContext)_localctx).id.getText():null),
-				            new VarDef(_localctx.start.getLine(), _localctx.start.getCharPositionInLine() + 1) ); 
+				((ExpressionContext)_localctx).ast =  new Variable(_localctx.start.getLine(), _localctx.start.getCharPositionInLine() + 1, (((ExpressionContext)_localctx).id!=null?((ExpressionContext)_localctx).id.getText():null)); 
 				}
 				break;
 			case 5:
@@ -717,8 +716,7 @@ public class XanaParser extends Parser {
 				match(T__2);
 
 				         ((ExpressionContext)_localctx).ast =  new Invocation(_localctx.start.getLine(), _localctx.start.getCharPositionInLine() + 1,
-				                             new Variable(_localctx.start.getLine(), _localctx.start.getCharPositionInLine() + 1, (((ExpressionContext)_localctx).id!=null?((ExpressionContext)_localctx).id.getText():null),
-				                                new FunDef(_localctx.start.getLine(), _localctx.start.getCharPositionInLine() + 1) ),
+				                             new Variable(_localctx.start.getLine(), _localctx.start.getCharPositionInLine() + 1, (((ExpressionContext)_localctx).id!=null?((ExpressionContext)_localctx).id.getText():null)),
 				                              ((ExpressionContext)_localctx).listExpressions.ast);
 				         
 				}
@@ -1270,8 +1268,7 @@ public class XanaParser extends Parser {
 
 
 				                _localctx.ast.add(new Invocation(_localctx.start.getLine(), _localctx.start.getCharPositionInLine() + 1,
-				                    new Variable(_localctx.start.getLine(), _localctx.start.getCharPositionInLine() + 1, (((StatementContext)_localctx).id!=null?((StatementContext)_localctx).id.getText():null),
-				                        new FunDef(_localctx.start.getLine(), _localctx.start.getCharPositionInLine() + 1)), ((StatementContext)_localctx).listExpressions.ast));
+				                    new Variable(_localctx.start.getLine(), _localctx.start.getCharPositionInLine() + 1, (((StatementContext)_localctx).id!=null?((StatementContext)_localctx).id.getText():null)), ((StatementContext)_localctx).listExpressions.ast));
 				            
 				}
 				break;

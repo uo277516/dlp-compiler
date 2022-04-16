@@ -151,9 +151,8 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
     public Type visit(Variable variable, Type param) {
         //variable.accept(this,param);
         variable.setLvalue(true);
-        System.out.println("uuuuuuuuuuu"+variable.getDefinition());
-        System.out.println("tipo de la variable"+variable.getDefinition().getType());
-        variable.setType(variable.getDefinition().getType());
+        if (variable.getDefinition()!=null)
+            variable.setType(variable.getDefinition().getType());
         return null;
     }
 
