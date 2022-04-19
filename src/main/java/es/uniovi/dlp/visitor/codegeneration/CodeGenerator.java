@@ -1,10 +1,12 @@
 package es.uniovi.dlp.visitor.codegeneration;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import es.uniovi.dlp.ast.*;
+
+import es.uniovi.dlp.ast.types.CharType;
+import es.uniovi.dlp.ast.types.RealType;
+import es.uniovi.dlp.ast.types.Type;
 
 public class CodeGenerator {
 
@@ -31,8 +33,15 @@ public class CodeGenerator {
         }
     }
 
+    private String getSuffix(Type type) {
+        if (type instanceof CharType) return "b";
+        else if (type instanceof RealType) return "f";
+        else return "i";
+    }
+
+
     /**
-     * SOURCE AND COMMENTS
+     * SOURCE, COMMENT and LINE
      */
 
     private void source(String fileIn)  {
@@ -43,8 +52,13 @@ public class CodeGenerator {
         writeAndFlush("'" + comment);
     }
 
+    private void line(int number) {
+        writeAndFlush("#line\t" + number);
+    }
+
+
     /**
-     *  PUSH
+     * PUSH
      */
 
     public void pushi (int constant)  {
@@ -70,36 +84,65 @@ public class CodeGenerator {
 
 
     /**
-     * LOAD Y STORE
+     * LOAD and STORE
      */
 
-
-    public void load(char sufijo) {   //loadb, loadi, loadf
-        writeAndFlush("\tload" + sufijo + "\t");
+    public void load(Type type) {   //loadb, loadi, loadf
+        writeAndFlush("\tload" + getSuffix(type) + "\t");
     }
 
-    public void store(char sufijo) {   //storeb, store, storef
-        writeAndFlush("\tstore" + sufijo + "\t");
+    public void store(Type type) {   //storeb, store, storef
+        writeAndFlush("\tstore" + getSuffix(type) + "\t");
+    }
+
+
+    /**
+     * ADD, SUB, MUL, DIV and MOD
+     */
+
+    public void add(Type type) { //addi, addf
+        writeAndFlush("\tadd" + getSuffix(type) + "\t");
+    }
+
+    public void sub(Type type) { //subi, subf
+        writeAndFlush("\tsub" + getSuffix(type) + "\t");
+    }
+
+    public void mul(Type type) { //muli, mulf
+        writeAndFlush("\tmul" + getSuffix(type) + "\t");
+    }
+
+    public void div(Type type) { //divi, divf
+        writeAndFlush("\tdiv" + getSuffix(type) + "\t");
+    }
+
+    public void mod(Type type) { //modi, modf
+        writeAndFlush("\tmod" + getSuffix(type) + "\t");
     }
 
     /**
-     * add[i], addf  Suma
-     * sub[i], subf  Resta
-     * mul[i], mulf  Multiplicación
-     * div[i], divf  División
-     * mod[i], modf  Resto (modulus)
+     * OUT and IN
      */
 
-    public void add(char sufijo) { //addi, addf
-        writeAndFlush("\tadd" + sufijo + "\t");
+    public void out(Type type) { //outb, outi, outf
+        writeAndFlush("\tout" + getSuffix(type) + "\t");
     }
 
-    public void sub(char sufijo) { //subi, subf
-        writeAndFlush("\tsub" + sufijo + "\t");
+    public void in(Type type) { //inb, ini, inf
+        writeAndFlush("\tout" + getSuffix(type) + "\t");
     }
 
-    public void mul(char sufijo) { //muli, mulf
-        writeAndFlush("\tmul" + sufijo + "\t");
+
+    /**
+     * POP and DUP
+     */
+
+    public void pop(Type type) { //popb, popi, popf
+        writeAndFlush("\tpop" + getSuffix(type) + "\t");
+    }
+
+    public void dup(Type type) { //dupb, dupi, dupf
+        writeAndFlush("\tdup" + getSuffix(type) + "\t");
     }
 
 
