@@ -11,14 +11,23 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 public class Compiler {
     private final String filename;
+    private OutputStreamWriter out;
     private Program program;
     private boolean reportErrors = true;
+    private boolean showDebug = true;
 
     public Compiler(String filename) {
+        this.filename = filename;
+    }
+
+    public Compiler(String filename, OutputStreamWriter out) {
+        this.out=out;
         this.filename = filename;
     }
 
@@ -27,11 +36,27 @@ public class Compiler {
         program = parse(filename);
         assignScope();
         assignType();
-        assignOffset();
+
         checkErrors();
+        if (ErrorManager.getInstance().hasErrors()) return;
+
+        assignOffset();
+        //generateTargetCode();
+    }
+
+    /**
+    private void generateTargetCode() {
+        File file = new File(filename);
+        ExecuteCGVisitor executeCGVisitor = new (file.getname, out, showDebug);
+        ExecuteCGVisitor.visit(program,null);
     }
 
 
+
+    private void assignDefaultOutput() {
+        this.out = new FileWriter(filename + ".mp");
+    }
+     */
 
     private void checkErrors() {
         if (!reportErrors) return;
@@ -74,6 +99,14 @@ public class Compiler {
 
     public void setReportErrors(boolean reportErrors) {
         this.reportErrors = reportErrors;
+    }
+
+    public boolean isShowDebug() {
+        return showDebug;
+    }
+
+    public void setShowDebug(boolean showDebug) {
+        this.showDebug = showDebug;
     }
 }
 
