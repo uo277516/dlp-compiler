@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 import es.uniovi.dlp.ast.types.CharType;
+import es.uniovi.dlp.ast.types.IntType;
 import es.uniovi.dlp.ast.types.RealType;
 import es.uniovi.dlp.ast.types.Type;
 
@@ -44,15 +45,15 @@ public class CodeGenerator {
      * SOURCE, COMMENT and LINE
      */
 
-    private void source(String fileIn)  {
+    public void source(String fileIn)  {
         writeAndFlush("#source \"" + fileIn +"\"");
     }
 
-    private void comment(String comment) {
+    public void comment(String comment) {
         writeAndFlush("'" + comment);
     }
 
-    private void line(int number) {
+    public void line(int number) {
         writeAndFlush("#line\t" + number);
     }
 
@@ -98,6 +99,7 @@ public class CodeGenerator {
 
     /**
      * ADD, SUB, MUL, DIV and MOD
+     * type can't be char
      */
 
     public void add(Type type) { //addi, addf
@@ -144,6 +146,116 @@ public class CodeGenerator {
     public void dup(Type type) { //dupb, dupi, dupf
         writeAndFlush("\tdup" + getSuffix(type) + "\t");
     }
+
+
+    /**
+     * COMPARISON
+     * type can't be char
+     */
+
+    public void gt(Type type) { //greater than
+        writeAndFlush("\tgt" + getSuffix(type) + "\t");
+    }
+
+    public void lt(Type type) { //less than
+        writeAndFlush("\tlt" + getSuffix(type) + "\t");
+    }
+
+    public void ge(Type type) { //greater equal than
+        writeAndFlush("\tge" + getSuffix(type) + "\t");
+    }
+
+    public void le(Type type) { //less equal than
+        writeAndFlush("\tle" + getSuffix(type) + "\t");
+    }
+
+    public void eq(Type type) { //equal
+        writeAndFlush("\teq" + getSuffix(type) + "\t");
+    }
+
+    public void ne(Type type) { //distinct
+        writeAndFlush("\tne" + getSuffix(type) + "\t");
+    }
+
+    /**
+     * LOGICAL
+     */
+
+    public void and() {
+        writeAndFlush("\tand" + "\t");
+    }
+
+    public void or() {
+        writeAndFlush("\tor" + "\t");
+    }
+
+    public void not() {
+        writeAndFlush("\tnot" + "\t");
+    }
+
+
+    /**
+     * CONVERSIONS
+     */
+
+    public void b2i(Type type) {
+        writeAndFlush("\tb2i" + "\t");
+    }
+
+    public void i2f(Type type) {
+        writeAndFlush("\ti2f" + "\t");
+    }
+
+    public void f2i(Type type) {
+        writeAndFlush("\tf2i" + "\t");
+    }
+
+    public void i2b(Type type) {
+        writeAndFlush("\ti2b" + "\t");
+    }
+
+
+    /**
+     * JUMPS AND LABELS
+     */
+
+    public void label(String id) {
+        writeAndFlush("\t" + id + ":\t");
+    }
+
+    public void jmp(String label) {
+        writeAndFlush("\tjmp\t" + label + "\t");
+    }
+
+    public void jz(String label) {
+        writeAndFlush("\tjz\t" + label + "\t");
+    }
+
+    public void jnz(String label) {
+        writeAndFlush("\tjnz\t" + label + "\t");
+    }
+
+    /**
+     * FUNCTIONS
+     */
+
+    public void call(String id) {
+        writeAndFlush("\tcall\t" + id + "\t");
+    }
+
+    public void enter(int constant) {
+        writeAndFlush("\tenter\t" + constant + "\t");
+    }
+
+    public void ret(int return_bytes, int locals_bytes, int args_bytes) {
+        writeAndFlush("\tret\t" + return_bytes + ", " + locals_bytes + ", " + args_bytes + "\t");
+    }
+
+    public void halt() {
+        writeAndFlush("\thalt" + "\t");
+    }
+
+
 
 
 
