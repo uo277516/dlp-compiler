@@ -198,7 +198,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
     @Override
     public Type visit(UnaryMinus unaryMinus, Type param) {
         codeGenerator.push(unaryMinus.getExpression().getType(), 0);
-        unaryMinus.accept(this, param);
+        unaryMinus.getExpression().accept(this, param);
         codeGenerator.sub(unaryMinus.getExpression().getType());
 
         return null;

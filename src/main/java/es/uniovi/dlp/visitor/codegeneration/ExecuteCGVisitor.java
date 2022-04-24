@@ -92,7 +92,6 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
             bytesLocales+=vardef.getType().getNumberOfBytes();
         }
         codeGenerator.enter(bytesEnter);
-        codeGenerator.newLine();
 
         for (var s: fundef.getBody()) {
             s.accept(this, param);
@@ -124,11 +123,11 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
      */
     @Override
     public Type visit(Assigment assigment, Type param) {
+        codeGenerator.newLine();
         codeGenerator.line(assigment.getLine());
         assigment.getLeft().accept(addressCGVisitor, param);
         assigment.getRight().accept(valueCGVisitor, param);
         codeGenerator.store(assigment.getLeft().getType());
-        codeGenerator.newLine();
         return null;
     }
 
@@ -141,7 +140,8 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
      */
     @Override
     public Type visit(Write write, Type param) {
-        codeGenerator.line(write.getLine());
+        codeGenerator.newLine();
+        codeGenerator.commentT("Write");
         write.getExpression().accept(valueCGVisitor, param);
         codeGenerator.out(write.getExpression().getType());
 
