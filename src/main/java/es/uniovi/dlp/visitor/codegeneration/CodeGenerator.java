@@ -27,7 +27,7 @@ public class CodeGenerator {
 
     public void writeAndFlush(String text) {
         try {
-            out.write(text);
+            out.write(text+"\n");
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -40,44 +40,53 @@ public class CodeGenerator {
         else return "i";
     }
 
+    public String getTypeString(Type type) {
+        if (type instanceof CharType) return "char";
+        else if (type instanceof RealType) return "double";
+        else return "int";
+    }
+
 
     /**
      * SOURCE, COMMENT and LINE
      */
 
     public void source(String fileIn)  {
-        writeAndFlush("#source \"" + fileIn +"\"");
+        writeAndFlush("#source \"" + fileIn +"\"" + "\n");
     }
 
     public void comment(String comment) {
-        writeAndFlush("'" + comment);
+        writeAndFlush("' " + comment);
     }
+
+    public void commentT(String comment) {
+        writeAndFlush("\t' " + comment);
+    }
+
 
     public void line(int number) {
         writeAndFlush("#line\t" + number);
     }
+
+    public void newLine() { writeAndFlush("");}
 
 
     /**
      * PUSH
      */
 
-    public void pushi (int constant)  {
-        writeAndFlush("\tpushi\t" + constant);
+    public void push(Type type, int cons) {
+        writeAndFlush("\tpush" + getSuffix(type) + "\t" + cons);
     }
 
-
-    public void pushf (double constant) {
-        writeAndFlush("\tpushf\t" + constant);
+    public void push(Type type, double cons) {
+        writeAndFlush("\tpush" + getSuffix(type) + "\t" + cons);
     }
 
-    public void pushb (char constant)  {
-        writeAndFlush("\tpushf\t" + Integer.valueOf(String.valueOf(constant)) );
+    public void pusha(int addr) {
+        writeAndFlush("\tpusha\t" + addr);
     }
 
-    public void pusha (int address)  {
-        writeAndFlush("\tpusha\t" + address );
-    }
 
     public void pushaBP ()  {
         writeAndFlush("\tpush\tbp");
@@ -131,7 +140,7 @@ public class CodeGenerator {
     }
 
     public void in(Type type) { //inb, ini, inf
-        writeAndFlush("\tout" + getSuffix(type) + "\t");
+        writeAndFlush("\tin" + getSuffix(type) + "\t");
     }
 
 
@@ -198,19 +207,19 @@ public class CodeGenerator {
      * CONVERSIONS
      */
 
-    public void b2i(Type type) {
+    public void b2i() {
         writeAndFlush("\tb2i" + "\t");
     }
 
-    public void i2f(Type type) {
+    public void i2f() {
         writeAndFlush("\ti2f" + "\t");
     }
 
-    public void f2i(Type type) {
+    public void f2i() {
         writeAndFlush("\tf2i" + "\t");
     }
 
-    public void i2b(Type type) {
+    public void i2b() {
         writeAndFlush("\ti2b" + "\t");
     }
 
@@ -220,7 +229,7 @@ public class CodeGenerator {
      */
 
     public void label(String id) {
-        writeAndFlush("\t" + id + ":\t");
+        writeAndFlush(id + ":\t");
     }
 
     public void jmp(String label) {
@@ -240,7 +249,7 @@ public class CodeGenerator {
      */
 
     public void call(String id) {
-        writeAndFlush("\tcall\t" + id + "\t");
+        writeAndFlush("call " + id + "\t");
     }
 
     public void enter(int constant) {
@@ -252,7 +261,91 @@ public class CodeGenerator {
     }
 
     public void halt() {
-        writeAndFlush("\thalt" + "\t");
+        writeAndFlush("halt" + "\t");
+    }
+
+
+    /**
+     *
+     */
+    public void main() {
+        call("main");
+        halt();
+    }
+
+    public void convert(Type of, Type a) {
+        if (of.equals(a)) // if(of.equivalent(a))
+            return;
+        if (of instanceof CharType) {
+            b2i();
+            if (a instanceof RealType)
+                i2f();
+        }
+        if (of instanceof IntType) {
+            if (a instanceof RealType)
+                i2f();
+            else if (a instanceof CharType)
+                i2b();
+        }
+        if (of instanceof RealType) {
+            f2i();
+            if (a instanceof CharType)
+                i2b();
+        }
+    }
+
+    public void arithmetic(String operator, Type type) {
+        switch (operator) {
+            case "+":
+                add(type);
+                break;
+            case "-":
+                sub(type);
+                break;
+            case "*":
+                mul(type);
+                break;
+            case "/":
+                div(type);
+                break;
+            case "%":
+                mod(type);
+                break;
+        }
+    }
+
+    public void logic(String operator) {
+        switch (operator) {
+            case "&&":
+                and();
+                break;
+            case "||":
+                or();
+                break;
+        }
+    }
+
+    public void comparison(String operator, Type type) {
+        switch (operator) {
+            case ">":
+                gt(type);
+                break;
+            case ">=":
+                ge(type);
+                break;
+            case "<":
+                lt(type);
+                break;
+            case "<=":
+                le(type);
+                break;
+            case "!=":
+                ne(type);
+                break;
+            case "==":
+                eq(type);
+                break;
+        }
     }
 
 

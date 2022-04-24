@@ -4,6 +4,8 @@ import es.uniovi.dlp.ast.Program;
 import es.uniovi.dlp.error.ErrorManager;
 import es.uniovi.dlp.parser.XanaLexer;
 import es.uniovi.dlp.parser.XanaParser;
+import es.uniovi.dlp.visitor.codegeneration.CodeGenerator;
+import es.uniovi.dlp.visitor.codegeneration.ExecuteCGVisitor;
 import es.uniovi.dlp.visitor.codegeneration.OffsetVisitor;
 import es.uniovi.dlp.visitor.semantic.IdentificationVisitor;
 import es.uniovi.dlp.visitor.semantic.TypeCheckingVisitor;
@@ -41,18 +43,20 @@ public class Compiler {
         if (ErrorManager.getInstance().hasErrors()) return;
 
         assignOffset();
-        //generateTargetCode();
+
+        //CodeGenerator
+        generateTargetCode();
     }
+
+
+    private void generateTargetCode() {
+        CodeGenerator cg = new CodeGenerator("prueba.xana.mp", filename);
+        ExecuteCGVisitor executeCGVisitor = new ExecuteCGVisitor(cg);
+        executeCGVisitor.visit(program,null);
+    }
+
 
     /**
-    private void generateTargetCode() {
-        File file = new File(filename);
-        ExecuteCGVisitor executeCGVisitor = new (file.getname, out, showDebug);
-        ExecuteCGVisitor.visit(program,null);
-    }
-
-
-
     private void assignDefaultOutput() {
         this.out = new FileWriter(filename + ".mp");
     }

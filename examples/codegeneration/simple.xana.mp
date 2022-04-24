@@ -1,4 +1,3 @@
-
 #source	"simple.xana"
 
 	' c :: char (offset 0)
