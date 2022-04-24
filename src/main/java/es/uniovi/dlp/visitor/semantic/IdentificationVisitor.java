@@ -1,6 +1,5 @@
 package es.uniovi.dlp.visitor.semantic;
 
-import es.uniovi.dlp.ast.Program;
 import es.uniovi.dlp.ast.definitions.FunDef;
 import es.uniovi.dlp.ast.definitions.VarDef;
 import es.uniovi.dlp.ast.expressions.Invocation;
@@ -45,7 +44,7 @@ public class IdentificationVisitor extends AbstractVisitor<Type, Type>  {
         //pongo el ambito de cada definicion de la funcion y la añado
         for (var definition: funDef.getLocalVars()) {
             definition.setScope(1);
-            if (symbolTable.find(definition.getId()) == null) {
+            if (symbolTable.findInCurrentScope(definition.getId()) == null) {
                 symbolTable.insert(definition);
             } else {
                 if (symbolTable.find(definition.getId()).getScope() == definition.getScope()) {

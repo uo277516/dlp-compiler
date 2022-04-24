@@ -108,7 +108,7 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
     @Override
     public Type visit(VarDef def, Type param) {
         codeGenerator.commentT( def.getId() + " :: " + codeGenerator.getTypeString(def.getType()) +
-                " (offset "+ ((VarDef) def).getOffset() + ")");
+                " (offset "+ def.getOffset() + ")");
 
         return null;
     }

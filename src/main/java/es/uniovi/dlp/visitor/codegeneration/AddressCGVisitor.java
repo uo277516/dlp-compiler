@@ -70,9 +70,9 @@ public class AddressCGVisitor extends AbstractVisitor<Type, Type> {
     @Override
     public Type visit(Variable variable, Type param) {
         VarDef vardef = (VarDef) variable.getDefinition();
+        System.out.println(vardef.getId() + "- " + vardef.getLine());
         if (vardef.getScope()==0) {
             codeGenerator.pusha(vardef.getOffset());
-            System.out.println(vardef.getId()+ " - " + vardef.getLine());
         } else {
             codeGenerator.pushaBP();
             codeGenerator.push(new IntType(variable.getLine(), variable.getColumn()), vardef.getOffset());
