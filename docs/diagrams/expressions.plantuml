@@ -26,7 +26,7 @@ class RealLiteral {
     value: double
 }
 
-class charLiteral {
+class CharLiteral {
     value: char
 }
 
@@ -52,7 +52,7 @@ class ArrayAccess {
 
 
 
-class FileAccess {
+class FieldAccess {
     field: String
     expression: Expression
 }
@@ -100,7 +100,7 @@ class Comparator {
 
 Invocation o-- "0..n" AbstractExpression
 ArrayAccess o-- "2" AbstractExpression
-FileAccess o-- "1" AbstractExpression
+FieldAccess o-- "1" AbstractExpression
 Cast o-- "1" AbstractExpression
 UnaryMinus o-- "1" AbstractExpression
 UnaryNot o-- "1" AbstractExpression
@@ -115,13 +115,12 @@ AbstractExpression <|-- Invocation
 
 AbstractExpression <|-- IntLiteral
 AbstractExpression <|-- RealLiteral
-AbstractExpression <|-- charLiteral
+AbstractExpression <|-- CharLiteral
 AbstractExpression <|-- Variable
 AbstractExpression <|-- Cast
 AbstractExpression <|-- UnaryMinus
 AbstractExpression <|-- UnaryNot
 
-AbstractExpression <|-- FileAccess
 AbstractExpression <|-- Arithmetic
 AbstractExpression <|-- Logical
 
@@ -129,6 +128,7 @@ AbstractExpression <|-- Comparator
 
 AbstractExpression <|-- ArrayAccess
 AbstractExpression <|-- ArithmeticMultiply
+AbstractExpression <|-- FieldAccess
 
 
 @enduml

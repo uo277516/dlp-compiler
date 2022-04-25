@@ -31,7 +31,7 @@ class IntType
 class RealType
 class CharType
 class VoidType
-class FuncType {
+class FunType {
     params:List<VarDef>
     returnType: Type
 }
@@ -40,7 +40,7 @@ Type <|-- AbstractType
 
 AbstractType <|-- ArrayType
 AbstractType <|-- StructType
-AbstractType <|-- FuncType
+AbstractType <|-- FunType
 
 AbstractType <|-- IntType
 AbstractType <|-- RealType

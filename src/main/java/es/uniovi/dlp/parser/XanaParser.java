@@ -6,20 +6,13 @@ import es.uniovi.dlp.ast.expressions.*;
 import es.uniovi.dlp.ast.definitions.*;
 import es.uniovi.dlp.ast.statements.*;
 import es.uniovi.dlp.ast.types.*;
-import es.uniovi.dlp.ast.AbstractASTNode;
-import es.uniovi.dlp.ast.ASTNode;
 import es.uniovi.dlp.ast.Program;
-import es.uniovi.dlp.error.Error;
-import es.uniovi.dlp.error.ErrorReason;
-import es.uniovi.dlp.error.ErrorManager;
 
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
 import java.util.List;
-import java.util.Iterator;
 import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
@@ -897,7 +890,7 @@ public class XanaParser extends Parser {
 						setState(157);
 						((ExpressionContext)_localctx).id = match(ID);
 
-						                  ((ExpressionContext)_localctx).ast =  new FileAccess(((ExpressionContext)_localctx).e1.ast, (((ExpressionContext)_localctx).id!=null?((ExpressionContext)_localctx).id.getText():null), _localctx.start.getLine(), _localctx.start.getCharPositionInLine() + 1);
+						                  ((ExpressionContext)_localctx).ast =  new FieldAccess(((ExpressionContext)_localctx).e1.ast, (((ExpressionContext)_localctx).id!=null?((ExpressionContext)_localctx).id.getText():null), _localctx.start.getLine(), _localctx.start.getCharPositionInLine() + 1);
 						                  
 						}
 						break;

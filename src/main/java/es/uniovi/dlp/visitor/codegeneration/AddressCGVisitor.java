@@ -2,7 +2,7 @@ package es.uniovi.dlp.visitor.codegeneration;
 
 import es.uniovi.dlp.ast.definitions.VarDef;
 import es.uniovi.dlp.ast.expressions.ArrayAccess;
-import es.uniovi.dlp.ast.expressions.FileAccess;
+import es.uniovi.dlp.ast.expressions.FieldAccess;
 import es.uniovi.dlp.ast.expressions.Variable;
 import es.uniovi.dlp.ast.types.IntType;
 import es.uniovi.dlp.ast.types.StructType;
@@ -47,7 +47,7 @@ public class AddressCGVisitor extends AbstractVisitor<Type, Type> {
      * 	<add>
      */
     @Override
-    public Type visit(FileAccess fileAccess, Type param) {
+    public Type visit(FieldAccess fileAccess, Type param) {
         fileAccess.getField().accept(this,param);
         StructType struct = (StructType) fileAccess.getField().getType();
         for(var fd : struct.getDefs())

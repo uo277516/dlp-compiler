@@ -1,9 +1,8 @@
 package es.uniovi.dlp.ast.expressions;
 
-import es.uniovi.dlp.ast.expressions.Expression;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
-public class FileAccess extends AbstractExpression{
+public class FieldAccess extends AbstractExpression{
 
     private Expression field;
     private String expression;
@@ -18,7 +17,7 @@ public class FileAccess extends AbstractExpression{
 
 
 
-    public FileAccess(Expression field, String expression, int line, int column) {
+    public FieldAccess(Expression field, String expression, int line, int column) {
         super(line, column);
         super.setLvalue(true);
         this.field = field;

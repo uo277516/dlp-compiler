@@ -13,6 +13,11 @@ class AbstractDefinition {
     column: int
 }
 
+class RecordField {
+    id: String
+    type: Type
+}
+
 
 interface Statement
 interface Definition
@@ -57,8 +62,12 @@ ASTNode <|-- Definition
 
 AbstractDefinition <|-- VarDef
 AbstractDefinition <|-- FunDef
+AbstractDefinition <|-- RecordField
+
 FunDef o-- "0..n" VarDef
 VarDef o-- "1" Type
+RecordField o-- "1" Type
+
 
 
 

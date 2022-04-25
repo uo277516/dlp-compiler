@@ -139,7 +139,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
      *
      */
     @Override
-    public Type visit(FileAccess fileAccess, Type param) {
+    public Type visit(FieldAccess fileAccess, Type param) {
         fileAccess.getField().accept(addressCGVisitor, param);
         codeGenerator.load(fileAccess.getType());
 

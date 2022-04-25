@@ -263,7 +263,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
     }
 
     @Override
-    public Type visit(FileAccess f, Type param) {
+    public Type visit(FieldAccess f, Type param) {
         f.getField().accept(this, param);
         f.setLValue(true);
 

@@ -94,7 +94,7 @@ public abstract class AbstractVisitor<ReturnType, ParamType> implements Visitor<
     }
 
     @Override
-    public ReturnType visit(FileAccess fileAccess, ParamType param) {
+    public ReturnType visit(FieldAccess fileAccess, ParamType param) {
         fileAccess.getField().accept(this,param);
         return null;
     }

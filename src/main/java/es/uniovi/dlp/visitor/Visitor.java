@@ -20,7 +20,7 @@ public interface Visitor<ReturnType, ParamType> {
     ReturnType visit(Cast cast, ParamType param);
     ReturnType visit(CharLiteral charLiteral, ParamType param);
     ReturnType visit(Comparator comparator, ParamType param);
-    ReturnType visit(FileAccess fileAccess, ParamType param);
+    ReturnType visit(FieldAccess fileAccess, ParamType param);
     ReturnType visit(IntLiteral intLiteral, ParamType param);
     ReturnType visit(Invocation invocation, ParamType param);
     ReturnType visit(Logical logical, ParamType param);
