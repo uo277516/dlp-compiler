@@ -1,192 +1,112 @@
-#source "examples/codegeneration/simple.xana"
+#source "examples/errors/valid_examples/lvalue.xana"
 
-	' c :: char (offset 0)
-	' a :: int (offset 1)
-	' r :: double (offset 3)
 
 ' Invocation to the main function
 call main	
 halt	
 
 
+#line	1
+
+f:	
+	' Parameters
+	' e :: int (offset 4)
+	' Local variables
+	enter	0	
 #line	5
 
 main:	
 	' Parameters
 	' Local variables
-	' a :: int (offset -2)
-	' i :: int (offset -4)
-	enter	4	
+	' i :: int (offset -2)
+	' a :: int (offset -4)
+	' j :: int (offset -6)
+	' v :: int (offset -46)
+	enter	46	
 
-#line	8
-	pusha	0
-	pushb	97
-	storeb	
+#line	9
+	push	bp
+	pushi	-4
+	addi	
+	pushi	0
+	storei	
 
-	' Write
-	pusha	0
-	loadb	
-	outb	
-
-	' Write
-	pushb	10
-	outb	
+#line	10
+	push	bp
+	pushi	-2
+	addi	
+	pushi	0
+	storei	
 
 #line	11
 	push	bp
+	pushi	-6
+	addi	
+	pushi	0
+	push	bp
 	pushi	-2
 	addi	
-	pushi	1
-	storei	
-
-#line	12
+	loadi	
+	subi	
 	push	bp
 	pushi	-4
 	addi	
-	pushb	48
-	b2i	
-	pushi	3
+	loadi	
 	muli	
+	pushi	2
+	subi	
 	storei	
 
-	' Write
+#line	13
 	push	bp
-	pushi	-2
+	pushi	-6
+	addi	
+	push	bp
+	pushi	-46
 	addi	
 	loadi	
-	outi	
-
-	' Write
-	pushb	32
-	outb	
-
-	' Write
+	pushi	4
+	muli	
+	addi	
+	push	bp
+	pushi	-46
+	addi	
+	loadi	
+	pushi	4
+	muli	
+	addi	
 	push	bp
 	pushi	-4
 	addi	
 	loadi	
-	outi	
-
-	' Write
-	pushb	10
-	outb	
-
-	' Read
-	pusha	3
-	inf	
+	i2f	
 	storef	
 
 	' Write
-	pushi	2
-	i2f	
-	pusha	3
-	loadf	
-	mulf	
-	outf	
-
-	' Write
-	pushb	10
+	pushb	102
 	outb	
 
 	' Write
-	pushi	3
-	i2f	
-	pushf	4.5
-	subf	
-	outf	
-
-	' Write
-	pushb	32
+	pushb	40
 	outb	
 
 	' Write
-	pushb	48
-	b2i	
-	i2f	
-	pushf	48.0
-	divf	
-	outf	
-
-	' Write
-	pushb	32
+	pushb	105
 	outb	
 
 	' Write
-	pushb	48
-	pushb	49
-	modi	
-	outi	
-
-	' Write
-	pushb	32
+	pushb	41
 	outb	
 
 	' Write
-	pushb	48
-	pushb	49
+	pushb	61
+	outb	
+
+	' Write
+	push	bp
+	pushi	-2
 	addi	
+	loadi	
+call f	
 	outi	
-
-	' Write
-	pushb	10
-	outb	
-
-	' Write
-	pushi	1
-	pushi	2
-	lti	
-	outi	
-
-	' Write
-	pushb	32
-	outb	
-
-	' Write
-	pushi	4
-	pushi	3
-	gei	
-	outi	
-
-	' Write
-	pushb	32
-	outb	
-
-	' Write
-	pushi	5
-	pushi	5
-	eqi	
-	outi	
-
-	' Write
-	pushb	32
-	outb	
-
-	' Write
-	pushi	1
-	pushi	2
-	and	
-	outi	
-
-	' Write
-	pushb	32
-	outb	
-
-	' Write
-	pushi	0
-	pushi	3
-	or	
-	outi	
-
-	' Write
-	pushb	32
-	outb	
-
-	' Write
-	pushi	0
-	not	
-	outi	
-
-	' Write
-	pushb	10
-	outb	
-	ret	0, 4, 0	
+	ret	0, 46, 0	

@@ -145,7 +145,7 @@ expression returns [Expression ast]
         }
     | e1=expression '.' id=ID //funcion access
         {
-        $ast = new FileAccess($e1.ast, $id.text, $start.getLine(), $start.getCharPositionInLine() + 1);
+        $ast = new FieldAccess($e1.ast, $id.text, $start.getLine(), $start.getCharPositionInLine() + 1);
         }
     | e=expression 'as' s=simple_type //cast
         {
