@@ -71,6 +71,11 @@ main:
 	pushb	10
 	outb	
 
+	' Read
+	pusha	3
+	inf	
+	storef	
+
 	' Write
 	pushi	2
 	i2f	
@@ -184,3 +189,4 @@ main:
 	' Write
 	pushb	10
 	outb	
+	ret	0, 4, 0	

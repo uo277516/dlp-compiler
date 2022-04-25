@@ -4,8 +4,8 @@ import es.uniovi.dlp.ast.Program;
 import es.uniovi.dlp.ast.definitions.Definition;
 import es.uniovi.dlp.ast.definitions.FunDef;
 import es.uniovi.dlp.ast.definitions.VarDef;
-import es.uniovi.dlp.ast.expressions.Variable;
 import es.uniovi.dlp.ast.statements.Assigment;
+import es.uniovi.dlp.ast.statements.Read;
 import es.uniovi.dlp.ast.statements.Write;
 import es.uniovi.dlp.ast.types.FunType;
 import es.uniovi.dlp.ast.types.Type;
@@ -96,8 +96,10 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
         for (var s: fundef.getBody()) {
             s.accept(this, param);
         }
-        if(fundef.getType() instanceof VoidType)
+        FunType typeReturn = (FunType) fundef.getType();
+        if(typeReturn.getReturnType() instanceof VoidType) {
             codeGenerator.ret(0, bytesLocales, bytesParams);
+        }
 
 
         return null;
@@ -133,10 +135,8 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
 
     /**
      *execute [[ Write : statement -> expression ]]() =
-     * 	address[[expression]]()
+     * 	value[[expression]]()
      * 	<out>expression.type.suffix()
-     * 	<store>expression.type.suffix()
-     *
      */
     @Override
     public Type visit(Write write, Type param) {
@@ -147,4 +147,24 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
 
         return null;
     }
+
+    /**
+     *execute [[ Read : statement -> expression ]]() =
+     * 	address[[expression]]()
+     * 	<in>expression.type.suffix()
+     * 	<store>expression.type.suffix()
+     */
+    @Override
+    public Type visit(Read read, Type param) {
+        codeGenerator.newLine();
+        codeGenerator.commentT("Read");
+        read.getExpression().accept(addressCGVisitor, param);
+        codeGenerator.in(read.getExpression().getType());
+        codeGenerator.store(read.getExpression().getType());
+        return null;
+    }
+
+
+
+
 }
