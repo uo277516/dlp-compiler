@@ -14,15 +14,9 @@ public class CodeGenerator {
     private OutputStreamWriter out;
     private int lastLine=0;
 
-    public CodeGenerator(OutputStreamWriter out, String fileOut, String fileIn) {
+    public CodeGenerator(OutputStreamWriter out,  String fileIn) {
         this.out=out;
-        FileOutputStream file;
-        try {
-            file = new FileOutputStream(fileOut);
             source(fileIn);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 

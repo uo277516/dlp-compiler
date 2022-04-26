@@ -61,7 +61,7 @@ public class Compiler {
 
     private void generateTargetCode() {
         File file = new File(filename);
-        CodeGenerator cg = new CodeGenerator(out, file.getName()+ ".mp", file.getName());
+        CodeGenerator cg = new CodeGenerator(out, file.getName());
         ExecuteCGVisitor executeCGVisitor = new ExecuteCGVisitor(cg);
         executeCGVisitor.visit(program,null);
     }
