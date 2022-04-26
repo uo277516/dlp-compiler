@@ -4,9 +4,7 @@ import es.uniovi.dlp.ast.Program;
 import es.uniovi.dlp.ast.definitions.Definition;
 import es.uniovi.dlp.ast.definitions.FunDef;
 import es.uniovi.dlp.ast.definitions.VarDef;
-import es.uniovi.dlp.ast.statements.Assigment;
-import es.uniovi.dlp.ast.statements.Read;
-import es.uniovi.dlp.ast.statements.Write;
+import es.uniovi.dlp.ast.statements.*;
 import es.uniovi.dlp.ast.types.FunType;
 import es.uniovi.dlp.ast.types.Type;
 import es.uniovi.dlp.ast.types.VoidType;
@@ -166,7 +164,32 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
 
     //if y while
 
+    //lastlabelid en codegeneratir y allocatelabels almaceno en ella cuanos (int) lastLabwlId+=howMany tipo void retorno
+    // y return del atributi
+    //etiqueta jmp condicionif 0 salta else. caso no es 0 (1) no hace jmp y al final del if jmpincondicional
+    //al final de tod
+    //estos dos pasos siguientes local
+    //1. lastid (0 x ej)
+    //allocate(2). el primero en en else (lastlabelid) y al final de tod lastlab+1
+    //en el primer jmp a lastod y el siguiente jmp a +1
+    /**
+     *execute [[ IfElse : statement -> expression statement* statement* ]]() =
+     *
+     *
+     */
+    @Override
+    public Type visit(IfElse ifElse, Type param) {
+        return super.visit(ifElse, param);
+    }
 
 
-
+    /**
+     *execute [[ While : statement -> expression statement* ]]() =
+     *
+     *
+     */
+    @Override
+    public Type visit(While wh, Type param) {
+        return super.visit(wh, param);
+    }
 }
