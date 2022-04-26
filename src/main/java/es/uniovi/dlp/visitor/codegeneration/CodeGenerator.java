@@ -14,11 +14,24 @@ public class CodeGenerator {
     private OutputStreamWriter out;
     private int lastLine=0;
 
+
+    private int lastLabelId=0;
+
     public CodeGenerator(OutputStreamWriter out,  String fileIn) {
         this.out=out;
-            source(fileIn);
+        source(fileIn);
 
     }
+
+    public int getLastLabelId() {
+        return lastLabelId;
+    }
+
+    public void allocateLabels(int howMany) {
+        lastLabelId+=howMany;
+    }
+
+
 
     public void writeAndFlush(String text) {
         try {
@@ -230,15 +243,15 @@ public class CodeGenerator {
     }
 
     public void jmp(String label) {
-        writeAndFlush("\tjmp\t" + label + "\t");
+        writeAndFlush("\tjmp  " + label + "\t");
     }
 
     public void jz(String label) {
-        writeAndFlush("\tjz\t" + label + "\t");
+        writeAndFlush("\tjz  " + label + "\t");
     }
 
     public void jnz(String label) {
-        writeAndFlush("\tjnz\t" + label + "\t");
+        writeAndFlush("\tjnz  " + label + "\t");
     }
 
     /**
@@ -254,7 +267,7 @@ public class CodeGenerator {
     }
 
     public void ret(int return_bytes, int locals_bytes, int args_bytes) {
-        writeAndFlush("\tret\t" + return_bytes + ", " + locals_bytes + ", " + args_bytes + "\t");
+        writeAndFlush("\tret " + return_bytes + ", " + locals_bytes + ", " + args_bytes + "\t");
     }
 
     public void halt() {

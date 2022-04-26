@@ -164,8 +164,7 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
 
     //if y while
 
-    //lastlabelid en codegeneratir y allocatelabels almaceno en ella cuanos (int) lastLabwlId+=howMany tipo void retorno
-    // y return del atributi
+
     //etiqueta jmp condicionif 0 salta else. caso no es 0 (1) no hace jmp y al final del if jmpincondicional
     //al final de tod
     //estos dos pasos siguientes local
@@ -173,23 +172,78 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
     //allocate(2). el primero en en else (lastlabelid) y al final de tod lastlab+1
     //en el primer jmp a lastod y el siguiente jmp a +1
     /**
-     *execute [[ IfElse : statement -> expression statement* statement* ]]() =
-     *
+     *execute [[ IfElse : statement -> expression statementIf* statementElse* ]]() =
+     * int numLabel = codeGenerator.getLabel();
+     * 	value[[expression]]
+     * 	<jz> "else"+numLabel
+     * 	for(Statement stm : statementIf*)
+     * 		execute[[stm]]
+     * 	<jmp> "end"+numLabel
+     * 	<label>"else"+numLabel
+     * 	for(Statement stm : statementElse*)
+     *		execute[[stm]]
+     * 	<label>"end"+numLabel
      *
      */
     @Override
     public Type visit(IfElse ifElse, Type param) {
-        return super.visit(ifElse, param);
+        int lastLabelId = codeGenerator.getLastLabelId();
+        codeGenerator.allocateLabels(2);
+
+        codeGenerator.commentT("If statement");
+        ifElse.getCondicion().accept(valueCGVisitor, param);
+
+        codeGenerator.jz("label"+lastLabelId);
+        codeGenerator.commentT("Body of the if branch");
+        for( Statemment s: ifElse.getIfSts()) {
+            codeGenerator.line(s.getLine());
+            s.accept(this, param);
+        };
+
+        codeGenerator.jmp("label"+(lastLabelId+1));
+        codeGenerator.label("label"+lastLabelId);
+
+        codeGenerator.commentT("Body of the else branch");
+        for (Statemment s: ifElse.getElseSts()) {
+            codeGenerator.line(s.getLine());
+            s.accept(this, param);
+        }
+
+        codeGenerator.label("label"+(lastLabelId+1));
+        return null;
     }
 
 
     /**
-     *execute [[ While : statement -> expression statement* ]]() =
-     *
+     *execute [[While : statement -> expression statement*]]() =
+     * 	int labelNumber = cg.getLabel();
+     * 	<label> "while" + labelNumber <:>
+     * 	value[[expression]]()
+     * 	<jz> "endWhile" + labelNumber
+     * 	for(Statement statement : statement*)
+     * 		execute[[statement]]()
+     * 	<jmp> "while" + labelNumber
+     * 	<label> "endWhile" + labelNumber <:>
      *
      */
     @Override
     public Type visit(While wh, Type param) {
-        return super.visit(wh, param);
+        int lastLabelId = codeGenerator.getLastLabelId();
+        codeGenerator.allocateLabels(2);
+
+        codeGenerator.commentT("While statement");
+        codeGenerator.label("label"+lastLabelId);
+        wh.getCondicion().accept(valueCGVisitor, param);
+
+        codeGenerator.jz("label"+(lastLabelId+1));
+        codeGenerator.commentT("Body of the while statement");
+        for( Statemment s: wh.getSts()) {
+            codeGenerator.line(s.getLine());
+            s.accept(this, param);
+        }
+        codeGenerator.jmp("label"+lastLabelId);
+        codeGenerator.label("label"+(lastLabelId+1));
+
+        return null;
     }
 }
