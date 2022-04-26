@@ -12,12 +12,13 @@ import es.uniovi.dlp.ast.types.Type;
 public class CodeGenerator {
 
     private OutputStreamWriter out;
+    private int lastLine=0;
 
-    public CodeGenerator(String fileOut, String fileIn) {
+    public CodeGenerator(OutputStreamWriter out, String fileOut, String fileIn) {
+        this.out=out;
         FileOutputStream file;
         try {
             file = new FileOutputStream(fileOut);
-            out = new OutputStreamWriter(file);
             source(fileIn);
         } catch (IOException e) {
             e.printStackTrace();
@@ -65,7 +66,9 @@ public class CodeGenerator {
 
 
     public void line(int number) {
-        writeAndFlush("#line\t" + number);
+        if (number==lastLine) return;
+        lastLine=number;
+        writeAndFlush("\n#line\t" + number);
     }
 
     public void newLine() { writeAndFlush("");}

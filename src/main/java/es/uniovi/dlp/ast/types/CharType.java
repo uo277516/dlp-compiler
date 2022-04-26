@@ -53,8 +53,10 @@ public class CharType extends AbstractType {
     @Override
     public boolean promotableTo(Type t) {
         if(t instanceof RealType || t instanceof IntType || t instanceof CharType
-        || t instanceof ErrorType)
+        || t instanceof ErrorType) {
+            System.out.println("entra");
             return true;
+        }
         return false;
     }
 

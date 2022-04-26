@@ -1,6 +1,8 @@
 package es.uniovi.dlp.visitor.codegeneration;
 
 import es.uniovi.dlp.ast.expressions.*;
+import es.uniovi.dlp.ast.types.CharType;
+import es.uniovi.dlp.ast.types.IntType;
 import es.uniovi.dlp.ast.types.Type;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
@@ -32,7 +34,13 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
     @Override
     public Type visit(Arithmetic arithmetic, Type param) {
         arithmetic.getLeft().accept(this, param);
+        if (arithmetic.getLeft().getType() instanceof CharType) {
+            codeGenerator.convert(arithmetic.getLeft().getType(), new IntType(arithmetic.getLine(), arithmetic.getColumn()));
+        }
         arithmetic.getRight().accept(this, param);
+        if (arithmetic.getRight().getType() instanceof CharType) {
+            codeGenerator.convert(arithmetic.getRight().getType(), new IntType(arithmetic.getLine(), arithmetic.getColumn()));
+        }
         codeGenerator.arithmetic(arithmetic.getOperator(), arithmetic.getType());
 
         return null;
@@ -40,7 +48,13 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
     @Override
     public Type visit(ArithmeticMultiply arithmetic, Type param) {
         arithmetic.getLeft().accept(this, param);
+        if (arithmetic.getLeft().getType() instanceof CharType) {
+            codeGenerator.convert(arithmetic.getLeft().getType(), new IntType(arithmetic.getLine(), arithmetic.getColumn()));
+        }
         arithmetic.getRight().accept(this, param);
+        if (arithmetic.getRight().getType() instanceof CharType) {
+            codeGenerator.convert(arithmetic.getRight().getType(), new IntType(arithmetic.getLine(), arithmetic.getColumn()));
+        }
         codeGenerator.arithmetic(arithmetic.getOperator(), arithmetic.getType());
 
         return null;
@@ -233,4 +247,6 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
 
         return null;
     }
+
+    //indexing(arrayaccess) y fieldacess
 }

@@ -13,6 +13,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -26,6 +27,15 @@ public class Compiler {
 
     public Compiler(String filename) {
         this.filename = filename;
+        assignDefaultOut();
+    }
+
+    private void assignDefaultOut() {
+        try {
+            this.out = new FileWriter(filename+".mp");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public Compiler(String filename, OutputStreamWriter out) {
@@ -50,17 +60,12 @@ public class Compiler {
 
 
     private void generateTargetCode() {
-        CodeGenerator cg = new CodeGenerator("prueba.xana.mp", filename);
+        File file = new File(filename);
+        CodeGenerator cg = new CodeGenerator(out, file.getName()+ ".mp", file.getName());
         ExecuteCGVisitor executeCGVisitor = new ExecuteCGVisitor(cg);
         executeCGVisitor.visit(program,null);
     }
 
-
-    /**
-    private void assignDefaultOutput() {
-        this.out = new FileWriter(filename + ".mp");
-    }
-     */
 
     private void checkErrors() {
         if (!reportErrors) return;

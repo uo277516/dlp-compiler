@@ -51,7 +51,6 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
         codeGenerator.call("main");
         codeGenerator.halt();
         codeGenerator.newLine();
-        codeGenerator.newLine();
 
         //Cuarto las funciones
         for(Definition def : program.getDefinitions())
@@ -94,6 +93,7 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
         codeGenerator.enter(bytesEnter);
 
         for (var s: fundef.getBody()) {
+            codeGenerator.line(s.getLine());
             s.accept(this, param);
         }
         FunType typeReturn = (FunType) fundef.getType();
@@ -125,8 +125,8 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
      */
     @Override
     public Type visit(Assigment assigment, Type param) {
-        codeGenerator.newLine();
-        codeGenerator.line(assigment.getLine());
+        //codeGenerator.newLine();
+        //codeGenerator.line(assigment.getLine());
         assigment.getLeft().accept(addressCGVisitor, param);
         assigment.getRight().accept(valueCGVisitor, param);
         codeGenerator.store(assigment.getLeft().getType());
@@ -140,7 +140,7 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
      */
     @Override
     public Type visit(Write write, Type param) {
-        codeGenerator.newLine();
+        //codeGenerator.newLine();
         codeGenerator.commentT("Write");
         write.getExpression().accept(valueCGVisitor, param);
         codeGenerator.out(write.getExpression().getType());
@@ -156,13 +156,15 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
      */
     @Override
     public Type visit(Read read, Type param) {
-        codeGenerator.newLine();
+        //codeGenerator.newLine();
         codeGenerator.commentT("Read");
         read.getExpression().accept(addressCGVisitor, param);
         codeGenerator.in(read.getExpression().getType());
         codeGenerator.store(read.getExpression().getType());
         return null;
     }
+
+    //if y while
 
 
 
