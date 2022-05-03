@@ -6,11 +6,10 @@ import es.uniovi.dlp.ast.definitions.FunDef;
 import es.uniovi.dlp.ast.definitions.VarDef;
 import es.uniovi.dlp.ast.statements.*;
 import es.uniovi.dlp.ast.types.FunType;
-import es.uniovi.dlp.ast.types.Type;
 import es.uniovi.dlp.ast.types.VoidType;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
-public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
+public class ExecuteCGVisitor extends AbstractVisitor<VoidType, Definition> {
 
     private CodeGenerator codeGenerator;
     private AddressCGVisitor addressCGVisitor;
@@ -37,9 +36,9 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
      *
      */
     @Override
-    public Type visit(Program program, Type param) {
+    public VoidType visit(Program program, Definition param) {
         //Primero las vardefs
-        for(Definition def : program.getDefinitions())
+        for(var def : program.getDefinitions())
             if(def instanceof VarDef) {
                 def.accept(this, param);
             }
@@ -51,7 +50,7 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
         codeGenerator.newLine();
 
         //Cuarto las funciones
-        for(Definition def : program.getDefinitions())
+        for(var def : program.getDefinitions())
             if(def instanceof FunDef)
                 def.accept(this, param);
         return null;
@@ -67,9 +66,10 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
      * 	if(funcType.getType() instanceof Void)
      * 		<ret>0, funcDef.getTotalBytesLocales(), funcDef.getTotalBytesParams()
      *
+     * @return
      */
     @Override
-    public Type visit(FunDef fundef, Type param) {
+    public VoidType visit(FunDef fundef, Definition param) {
         FunType type = (FunType) fundef.getType();
         int bytesLocales = 0;
         int bytesParams = 0;
@@ -92,7 +92,7 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
 
         for (var s: fundef.getBody()) {
             codeGenerator.line(s.getLine());
-            s.accept(this, param);
+            s.accept(this, fundef);
         }
         FunType typeReturn = (FunType) fundef.getType();
         if(typeReturn.getReturnType() instanceof VoidType) {
@@ -106,7 +106,7 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
 
 
     @Override
-    public Type visit(VarDef def, Type param) {
+    public VoidType visit(VarDef def, Definition param) {
         codeGenerator.commentT( def.getId() + " :: " + codeGenerator.getTypeString(def.getType()) +
                 " (offset "+ def.getOffset() + ")");
 
@@ -122,11 +122,11 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
      *
      */
     @Override
-    public Type visit(Assigment assigment, Type param) {
+    public VoidType visit(Assigment assigment, Definition param) {
         //codeGenerator.newLine();
         //codeGenerator.line(assigment.getLine());
-        assigment.getLeft().accept(addressCGVisitor, param);
-        assigment.getRight().accept(valueCGVisitor, param);
+        assigment.getLeft().accept(addressCGVisitor, null);
+        assigment.getRight().accept(valueCGVisitor, null);
         codeGenerator.store(assigment.getLeft().getType());
         return null;
     }
@@ -137,10 +137,10 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
      * 	<out>expression.type.suffix()
      */
     @Override
-    public Type visit(Write write, Type param) {
+    public VoidType visit(Write write, Definition param) {
         //codeGenerator.newLine();
         codeGenerator.commentT("Write");
-        write.getExpression().accept(valueCGVisitor, param);
+        write.getExpression().accept(valueCGVisitor, null);
         codeGenerator.out(write.getExpression().getType());
 
         return null;
@@ -153,24 +153,18 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
      * 	<store>expression.type.suffix()
      */
     @Override
-    public Type visit(Read read, Type param) {
+    public VoidType visit(Read read, Definition param) {
         //codeGenerator.newLine();
         codeGenerator.commentT("Read");
-        read.getExpression().accept(addressCGVisitor, param);
+        read.getExpression().accept(addressCGVisitor, null);
         codeGenerator.in(read.getExpression().getType());
         codeGenerator.store(read.getExpression().getType());
         return null;
     }
 
-    //if y while
 
+    //If y While
 
-    //etiqueta jmp condicionif 0 salta else. caso no es 0 (1) no hace jmp y al final del if jmpincondicional
-    //al final de tod
-    //estos dos pasos siguientes local
-    //1. lastid (0 x ej)
-    //allocate(2). el primero en en else (lastlabelid) y al final de tod lastlab+1
-    //en el primer jmp a lastod y el siguiente jmp a +1
     /**
      *execute [[ IfElse : statement -> expression statementIf* statementElse* ]]() =
      * int numLabel = codeGenerator.getLabel();
@@ -186,12 +180,12 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
      *
      */
     @Override
-    public Type visit(IfElse ifElse, Type param) {
+    public VoidType visit(IfElse ifElse, Definition param) {
         int lastLabelId = codeGenerator.getLastLabelId();
         codeGenerator.allocateLabels(2);
 
         codeGenerator.commentT("If statement");
-        ifElse.getCondicion().accept(valueCGVisitor, param);
+        ifElse.getCondicion().accept(valueCGVisitor, null);
 
         codeGenerator.jz("label"+lastLabelId);
         codeGenerator.commentT("Body of the if branch");
@@ -227,13 +221,13 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
      *
      */
     @Override
-    public Type visit(While wh, Type param) {
+    public VoidType visit(While wh, Definition param) {
         int lastLabelId = codeGenerator.getLastLabelId();
         codeGenerator.allocateLabels(2);
 
         codeGenerator.commentT("While statement");
         codeGenerator.label("label"+lastLabelId);
-        wh.getCondicion().accept(valueCGVisitor, param);
+        wh.getCondicion().accept(valueCGVisitor, null);
 
         codeGenerator.jz("label"+(lastLabelId+1));
         codeGenerator.commentT("Body of the while statement");
@@ -246,4 +240,26 @@ public class ExecuteCGVisitor extends AbstractVisitor<Type, Type> {
 
         return null;
     }
+
+    //Return
+
+    /**
+     *execute[[Return : statement -> expression]](funcDefinition) =
+     * 	value[[expression]]()
+     * 	<ret> expression.type.numberOfBytes() <, >
+     * 		funcDefinition.sumaBytesLocales <, >
+     * 		funcDefinition.sumaBytesParams
+     *
+     * @return
+     */
+    @Override
+    public VoidType visit(Return re, Definition param) {
+        re.getExpression().accept(valueCGVisitor, null);
+        FunDef f = (FunDef) param;
+        codeGenerator.ret(f.getType().getNumberOfBytes(), f.getBytesLocales(), f.getBytesParams());
+
+        return null;
+    }
+
+
 }

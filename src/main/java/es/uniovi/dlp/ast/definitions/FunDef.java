@@ -77,4 +77,21 @@ public class FunDef extends AbstractDefinition {
                 ", localVars=" + localVars +
                 '}';
     }
+
+    public int getBytesLocales() {
+        int bytesLocales=0;
+        for(var vardef: getLocalVars()) {
+            bytesLocales+=vardef.getType().getNumberOfBytes();
+        }
+        return bytesLocales;
+    }
+
+    public int getBytesParams() {
+        FunType type = (FunType) getType();
+        int bytesParams=0;
+        for (var p: type.getParams()) {
+            bytesParams+=p.getType().getNumberOfBytes();
+        }
+        return bytesParams;
+    }
 }

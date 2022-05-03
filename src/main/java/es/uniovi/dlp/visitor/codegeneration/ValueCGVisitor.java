@@ -170,6 +170,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
      */
     @Override
     public Type visit(Invocation invocation, Type param) {
+        //mirar si es statement o expresion
         for (var e: invocation.getParams()) {
             e.accept(this, param);
         }

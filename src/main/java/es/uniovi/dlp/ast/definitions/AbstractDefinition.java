@@ -31,4 +31,6 @@ public abstract class AbstractDefinition implements Definition {
     public void setScope(int scope) {
         this.scope=scope;
     }
+
+
 }
