@@ -5,7 +5,7 @@ import es.uniovi.dlp.visitor.AbstractVisitor;
 public class FieldAccess extends AbstractExpression{
 
     private Expression field;
-    private String expression;
+    private String expression;  //el nombre del struct
 
     public Expression getField() {
         return field;

@@ -154,7 +154,10 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
      */
     @Override
     public Type visit(FieldAccess fileAccess, Type param) {
-        fileAccess.getField().accept(addressCGVisitor, param);
+
+
+        System.out.println(fileAccess.getField());
+        fileAccess.getField().accept(addressCGVisitor, param); //a lo que accedo, es la expresion -> algo.field
         codeGenerator.load(fileAccess.getType());
 
         return null;
@@ -170,11 +173,10 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
      */
     @Override
     public Type visit(Invocation invocation, Type param) {
-        //mirar si es statement o expresion
         for (var e: invocation.getParams()) {
             e.accept(this, param);
         }
-        codeGenerator.call(invocation.getVariable().getVar());
+        codeGenerator.call("\t"+invocation.getVariable().getVar());
 
         return null;
     }
@@ -249,5 +251,5 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
         return null;
     }
 
-    //indexing(arrayaccess) y fieldacess
+
 }

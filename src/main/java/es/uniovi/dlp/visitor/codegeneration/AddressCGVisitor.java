@@ -48,6 +48,11 @@ public class AddressCGVisitor extends AbstractVisitor<Type, Type> {
      */
     @Override
     public Type visit(FieldAccess fileAccess, Type param) {
+        //acepto la expresion
+        //si el tipo de ña expression es recortipe con getfield con un array de recordfields
+        //offset del getfield ().offset
+        //        push deñ pffswet
+
         fileAccess.getField().accept(this,param);
         StructType struct = (StructType) fileAccess.getField().getType();
         for(var fd : struct.getDefs())
@@ -69,8 +74,11 @@ public class AddressCGVisitor extends AbstractVisitor<Type, Type> {
      */
     @Override
     public Type visit(Variable variable, Type param) {
+        //-pair
         VarDef vardef = (VarDef) variable.getDefinition();
-        if (vardef.getScope()==0) {
+        System.out.println(variable.getLine()+"--"+variable.getVar()+"--"+vardef.getScope());
+
+        if (vardef.getScope()==0) { //en struct global entra x aqui
             codeGenerator.pusha(vardef.getOffset());
         } else {
             codeGenerator.pushaBP();
