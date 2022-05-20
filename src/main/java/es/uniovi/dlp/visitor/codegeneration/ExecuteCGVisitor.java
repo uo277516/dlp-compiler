@@ -127,6 +127,9 @@ public class ExecuteCGVisitor extends AbstractVisitor<VoidType, Definition> {
         //codeGenerator.line(assigment.getLine());
         assigment.getLeft().accept(addressCGVisitor, null);
         assigment.getRight().accept(valueCGVisitor, null);
+        if (assigment.getLeft().getType() != assigment.getRight().getType()) {
+            codeGenerator.convert(assigment.getRight().getType(), assigment.getLeft().getType());
+        }
         codeGenerator.store(assigment.getLeft().getType());
         return null;
     }
@@ -140,7 +143,6 @@ public class ExecuteCGVisitor extends AbstractVisitor<VoidType, Definition> {
     public VoidType visit(Write write, Definition param) {
         //codeGenerator.newLine();
         codeGenerator.commentT("Write");
-        System.out.println(write.getExpression());
         write.getExpression().accept(valueCGVisitor, null);
         codeGenerator.out(write.getExpression().getType());
 

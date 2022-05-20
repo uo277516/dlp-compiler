@@ -3,6 +3,7 @@ package es.uniovi.dlp.visitor.codegeneration;
 import es.uniovi.dlp.ast.expressions.*;
 import es.uniovi.dlp.ast.types.CharType;
 import es.uniovi.dlp.ast.types.IntType;
+import es.uniovi.dlp.ast.types.RealType;
 import es.uniovi.dlp.ast.types.Type;
 import es.uniovi.dlp.visitor.AbstractVisitor;
 
@@ -41,6 +42,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
         if (arithmetic.getRight().getType() instanceof CharType) {
             codeGenerator.convert(arithmetic.getRight().getType(), new IntType(arithmetic.getLine(), arithmetic.getColumn()));
         }
+
         codeGenerator.arithmetic(arithmetic.getOperator(), arithmetic.getType());
 
         return null;
@@ -51,10 +53,11 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
         if (arithmetic.getLeft().getType() instanceof CharType) {
             codeGenerator.convert(arithmetic.getLeft().getType(), new IntType(arithmetic.getLine(), arithmetic.getColumn()));
         }
-        arithmetic.getRight().accept(this, param);
+        arithmetic.getRight().accept(this, param );
         if (arithmetic.getRight().getType() instanceof CharType) {
             codeGenerator.convert(arithmetic.getRight().getType(), new IntType(arithmetic.getLine(), arithmetic.getColumn()));
         }
+
         codeGenerator.arithmetic(arithmetic.getOperator(), arithmetic.getType());
 
         return null;
