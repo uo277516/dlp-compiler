@@ -3,11 +3,17 @@ package es.uniovi.dlp.visitor.codegeneration;
 import es.uniovi.dlp.ast.Program;
 import es.uniovi.dlp.ast.definitions.Definition;
 import es.uniovi.dlp.ast.definitions.FunDef;
+import es.uniovi.dlp.ast.definitions.RecordField;
 import es.uniovi.dlp.ast.definitions.VarDef;
 import es.uniovi.dlp.ast.statements.*;
+import es.uniovi.dlp.ast.types.ArrayType;
 import es.uniovi.dlp.ast.types.FunType;
+import es.uniovi.dlp.ast.types.StructType;
 import es.uniovi.dlp.ast.types.VoidType;
 import es.uniovi.dlp.visitor.AbstractVisitor;
+
+import java.sql.Struct;
+import java.util.List;
 
 public class ExecuteCGVisitor extends AbstractVisitor<VoidType, Definition> {
 
@@ -107,8 +113,9 @@ public class ExecuteCGVisitor extends AbstractVisitor<VoidType, Definition> {
 
     @Override
     public VoidType visit(VarDef def, Definition param) {
+
         codeGenerator.commentT( def.getId() + " :: " + codeGenerator.getTypeString(def.getType()) +
-                " (offset "+ def.getOffset() + ")");
+                    " (offset "+ def.getOffset() + ")");
 
         return null;
     }

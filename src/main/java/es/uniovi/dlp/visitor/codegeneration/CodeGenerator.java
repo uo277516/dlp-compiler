@@ -3,11 +3,12 @@ package es.uniovi.dlp.visitor.codegeneration;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.List;
 
-import es.uniovi.dlp.ast.types.CharType;
-import es.uniovi.dlp.ast.types.IntType;
-import es.uniovi.dlp.ast.types.RealType;
-import es.uniovi.dlp.ast.types.Type;
+import es.uniovi.dlp.ast.definitions.Definition;
+import es.uniovi.dlp.ast.definitions.RecordField;
+import es.uniovi.dlp.ast.definitions.VarDef;
+import es.uniovi.dlp.ast.types.*;
 
 public class CodeGenerator {
 
@@ -51,8 +52,33 @@ public class CodeGenerator {
     public String getTypeString(Type type) {
         if (type instanceof CharType) return "char";
         else if (type instanceof RealType) return "double";
+        else if (type instanceof StructType) {
+            String s = "";
+            s+="record (";
+            List<RecordField> defs =  ((StructType) type).getDefs();
+            int i = 0;
+            for (var df: defs) {
+                i++;
+
+                if (i==defs.size()) {
+                    s+="(" + df.getId() +" x "+getTypeString(df.getType()) + ")";
+                } else {
+                    s+="(" + df.getId() +" x "+getTypeString(df.getType()) + ") x ";
+                }
+            }
+            s+=")";
+            return s;
+        } else if (type instanceof ArrayType) {
+            String s = "[";
+            ArrayType array = (ArrayType) type;
+            s+=array.getSize() + " :: " + getTypeString(array.getType());
+            s+="]";
+            return s;
+        }
         else return "int";
     }
+
+
 
 
     /**
