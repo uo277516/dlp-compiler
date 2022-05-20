@@ -1,5 +1,6 @@
 package es.uniovi.dlp.visitor.codegeneration;
 
+import es.uniovi.dlp.ast.definitions.RecordField;
 import es.uniovi.dlp.ast.definitions.VarDef;
 import es.uniovi.dlp.ast.expressions.ArrayAccess;
 import es.uniovi.dlp.ast.expressions.FieldAccess;
@@ -55,10 +56,10 @@ public class AddressCGVisitor extends AbstractVisitor<Type, Type> {
 
         fileAccess.getField().accept(this,param);
         StructType struct = (StructType) fileAccess.getField().getType();
-        for(var fd : struct.getDefs())
-            if(fd.getId().equals(fileAccess.getExpression()))
-                codeGenerator.push(new IntType(fileAccess.getLine(), fileAccess.getColumn()), fd.getOffset());
-        codeGenerator.add(new IntType(fileAccess.getLine(), fileAccess.getColumn()));
+        RecordField rf = struct.getRecordField(fileAccess.getExpression());
+        codeGenerator.push(new IntType(rf.getLine(), rf.getColumn()), rf.getOffset());
+        codeGenerator.add(new IntType(rf.getLine(), rf.getColumn()));
+
         return null;
     }
 
@@ -76,7 +77,6 @@ public class AddressCGVisitor extends AbstractVisitor<Type, Type> {
     public Type visit(Variable variable, Type param) {
         //-pair
         VarDef vardef = (VarDef) variable.getDefinition();
-        System.out.println(variable.getLine()+"--"+variable.getVar()+"--"+vardef.getScope());
 
         if (vardef.getScope()==0) { //en struct global entra x aqui
             codeGenerator.pusha(vardef.getOffset());

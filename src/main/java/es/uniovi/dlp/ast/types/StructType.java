@@ -83,4 +83,14 @@ public class StructType extends AbstractType{
 
         return bytes;
     }
+
+    public RecordField getRecordField(String name) {
+        for (var def: defs) {
+            if (def.getId().equals(name)) {
+                return def;
+            }
+        }
+        return null;
+    }
+
 }

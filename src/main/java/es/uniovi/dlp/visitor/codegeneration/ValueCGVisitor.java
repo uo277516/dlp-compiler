@@ -155,9 +155,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
     @Override
     public Type visit(FieldAccess fileAccess, Type param) {
 
-
-        System.out.println(fileAccess.getField());
-        fileAccess.getField().accept(addressCGVisitor, param); //a lo que accedo, es la expresion -> algo.field
+        fileAccess.accept(addressCGVisitor, param); //a lo que accedo, es la expresion -> algo.field
         codeGenerator.load(fileAccess.getType());
 
         return null;
