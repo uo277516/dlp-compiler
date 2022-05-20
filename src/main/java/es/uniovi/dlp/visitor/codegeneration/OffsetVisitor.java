@@ -49,7 +49,6 @@ public class OffsetVisitor extends AbstractVisitor<Type, Type> {
             r.setOffset(offset);
             offset += r.getType().getNumberOfBytes();
         }
-        System.out.println("entra structype");
         return null;
     }
 
@@ -65,7 +64,6 @@ public class OffsetVisitor extends AbstractVisitor<Type, Type> {
             parameter.setOffset(offset);
             offset+=parameter.getType().getNumberOfBytes();
         }
-        System.out.println("entra funtype");
         return null;
     }
 
