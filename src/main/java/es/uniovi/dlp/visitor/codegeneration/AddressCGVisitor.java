@@ -31,8 +31,8 @@ public class AddressCGVisitor extends AbstractVisitor<Type, Type> {
      */
     @Override
     public Type visit(ArrayAccess arrayAccess, Type param) {
-        arrayAccess.getArray().accept(this, param);
-        arrayAccess.getIndex().accept(valueCGVisitor, param);
+        arrayAccess.getIndex().accept(this, param);
+        arrayAccess.getArray().accept(valueCGVisitor, param);
         codeGenerator.push(new IntType(arrayAccess.getLine(), arrayAccess.getColumn()), arrayAccess.getType().getNumberOfBytes());
         codeGenerator.mul(new IntType(arrayAccess.getLine(), arrayAccess.getColumn()));
         codeGenerator.add(new IntType(arrayAccess.getLine(), arrayAccess.getColumn()));

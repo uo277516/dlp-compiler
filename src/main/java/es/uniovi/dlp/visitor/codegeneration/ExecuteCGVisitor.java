@@ -140,6 +140,7 @@ public class ExecuteCGVisitor extends AbstractVisitor<VoidType, Definition> {
     public VoidType visit(Write write, Definition param) {
         //codeGenerator.newLine();
         codeGenerator.commentT("Write");
+        System.out.println(write.getExpression());
         write.getExpression().accept(valueCGVisitor, null);
         codeGenerator.out(write.getExpression().getType());
 

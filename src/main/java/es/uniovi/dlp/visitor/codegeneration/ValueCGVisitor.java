@@ -69,7 +69,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
      */
     @Override
     public Type visit(ArrayAccess arrayAccess, Type param) {
-        arrayAccess.getArray().accept(addressCGVisitor, param);
+        arrayAccess.accept(addressCGVisitor, param);
         codeGenerator.load(arrayAccess.getType());
 
         return null;
