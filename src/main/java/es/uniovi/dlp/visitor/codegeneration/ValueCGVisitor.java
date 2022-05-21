@@ -177,7 +177,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
         for (var e: invocation.getParams()) {
             e.accept(this, param);
         }
-        codeGenerator.call("\t"+invocation.getVariable().getVar());
+        codeGenerator.callT("\t"+invocation.getVariable().getVar());
 
         return null;
     }

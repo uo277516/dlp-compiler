@@ -3,6 +3,7 @@ package es.uniovi.dlp.visitor.codegeneration;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 
 import es.uniovi.dlp.ast.definitions.Definition;
@@ -54,7 +55,7 @@ public class CodeGenerator {
         else if (type instanceof RealType) return "double";
         else if (type instanceof StructType) {
             String s = "";
-            s+="record (";
+            s+="record(";
             List<RecordField> defs =  ((StructType) type).getDefs();
             int i = 0;
             for (var df: defs) {
@@ -86,7 +87,7 @@ public class CodeGenerator {
      */
 
     public void source(String fileIn)  {
-        writeAndFlush("#source \"" + fileIn +"\"" + "\n");
+        writeAndFlush("\n#source \"" + fileIn +"\"" + "\n");
     }
 
     public void comment(String comment) {
@@ -288,6 +289,10 @@ public class CodeGenerator {
         writeAndFlush("call " + id + "\t");
     }
 
+    public void callT(String id) {
+        writeAndFlush("\tcall\t" + id + "\t");
+    }
+
     public void enter(int constant) {
         writeAndFlush("\tenter\t" + constant + "\t");
     }
@@ -310,23 +315,27 @@ public class CodeGenerator {
     }
 
     public void convert(Type of, Type a) {
-        if (of.equals(a)) // if(of.equivalent(a))
-            return;
         if (of instanceof CharType) {
-            b2i();
-            if (a instanceof RealType)
+            if (a instanceof RealType) {
+                b2i();
                 i2f();
+            }
+            if (a instanceof IntType)
+                b2i();
         }
         if (of instanceof IntType) {
             if (a instanceof RealType)
                 i2f();
-            else if (a instanceof CharType)
+            if (a instanceof CharType)
                 i2b();
         }
         if (of instanceof RealType) {
-            f2i();
-            if (a instanceof CharType)
+            if (a instanceof IntType)
+                f2i();
+            if (a instanceof CharType) {
+                f2i();
                 i2b();
+            }
         }
     }
 

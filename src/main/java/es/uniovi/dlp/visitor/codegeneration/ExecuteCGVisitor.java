@@ -5,6 +5,8 @@ import es.uniovi.dlp.ast.definitions.Definition;
 import es.uniovi.dlp.ast.definitions.FunDef;
 import es.uniovi.dlp.ast.definitions.RecordField;
 import es.uniovi.dlp.ast.definitions.VarDef;
+import es.uniovi.dlp.ast.expressions.Expression;
+import es.uniovi.dlp.ast.expressions.Invocation;
 import es.uniovi.dlp.ast.statements.*;
 import es.uniovi.dlp.ast.types.ArrayType;
 import es.uniovi.dlp.ast.types.FunType;
@@ -44,10 +46,11 @@ public class ExecuteCGVisitor extends AbstractVisitor<VoidType, Definition> {
     @Override
     public VoidType visit(Program program, Definition param) {
         //Primero las vardefs
-        for(var def : program.getDefinitions())
-            if(def instanceof VarDef) {
+        for(var def : program.getDefinitions()) {
+            if (def instanceof VarDef) {
                 def.accept(this, param);
             }
+        }
         codeGenerator.newLine();
         //Segundo, el main
         codeGenerator.comment("Invocation to the main function");
@@ -130,13 +133,9 @@ public class ExecuteCGVisitor extends AbstractVisitor<VoidType, Definition> {
      */
     @Override
     public VoidType visit(Assigment assigment, Definition param) {
-        //codeGenerator.newLine();
-        //codeGenerator.line(assigment.getLine());
         assigment.getLeft().accept(addressCGVisitor, null);
         assigment.getRight().accept(valueCGVisitor, null);
-        if (assigment.getLeft().getType() != assigment.getRight().getType()) {
-            codeGenerator.convert(assigment.getRight().getType(), assigment.getLeft().getType());
-        }
+        codeGenerator.convert(assigment.getRight().getType(), assigment.getLeft().getType());
         codeGenerator.store(assigment.getLeft().getType());
         return null;
     }
@@ -151,6 +150,7 @@ public class ExecuteCGVisitor extends AbstractVisitor<VoidType, Definition> {
         //codeGenerator.newLine();
         codeGenerator.commentT("Write");
         write.getExpression().accept(valueCGVisitor, null);
+        //System.out.println(write.getExpression().getType());
         codeGenerator.out(write.getExpression().getType());
 
         return null;
@@ -264,10 +264,28 @@ public class ExecuteCGVisitor extends AbstractVisitor<VoidType, Definition> {
      */
     @Override
     public VoidType visit(Return re, Definition param) {
+        codeGenerator.commentT("Return");
         re.getExpression().accept(valueCGVisitor, null);
         FunDef f = (FunDef) param;
-        codeGenerator.ret(f.getType().getNumberOfBytes(), f.getBytesLocales(), f.getBytesParams());
+        FunType funtype = (FunType) f.getType();
+        codeGenerator.ret(funtype.getReturnType().getNumberOfBytes(), f.getBytesLocales(), f.getBytesParams());
 
+        return null;
+    }
+
+    /**
+     *execute [[Invocation : statement -> expression expression*]]() =
+     * 	value[[(Expression)statement]]()
+     * 	if(((Expression)statement).type instanceof Void == false)
+     * 		<pop> ((Expression)statement).type.suffix
+     *
+     */
+    @Override
+    public VoidType visit(Invocation invocation, Definition param) {
+        invocation.accept(valueCGVisitor, null);
+        FunType f = (FunType) invocation.getType();
+        if(f.getReturnType() instanceof VoidType == false)
+            codeGenerator.pop(invocation.getType());
         return null;
     }
 
