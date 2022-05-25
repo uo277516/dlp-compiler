@@ -30,8 +30,10 @@ public class ArrayType extends AbstractType {
         return visitor.visit(this,param);
     }
 
+
+    //Es si puede ser accedido por algo. Solo por int
     @Override
-    public Type indexing(Type type) { //this es el vector y type es el indice
+    public Type indexing(Type type) { //this es el vector y type es el indice.
        if (type instanceof IntType) {
            return this.getType();
        }

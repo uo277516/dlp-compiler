@@ -22,14 +22,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
      *value [[ Arithmetic : expression -> expression expression ]]() =
      * 	value[[expression1]]
      * 	value[[expression2]]
-     * 	if(obj.getOperator.equals("+"))
-     * 		<add>arithmetic.getType().suffix()
-     * 	if(obj.getOperator.equals("-"))
-     * 		<sub>arithmetic.getType().suffix()
-     * 	if(obj.getOperator.equals("*"))
-     * 		<mul>arithmetic.getType().suffix()
-     * 	if(obj.getOperator.equals("/"))
-     * 		<div>arithmetic.getType().suffix()
+     * 	codeGenerator.arithmetic(obj.getOperator, obj.getType
      *
      */
     @Override
@@ -47,6 +40,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
 
         return null;
     }
+
     @Override
     public Type visit(ArithmeticMultiply arithmetic, Type param) {
         arithmetic.getLeft().accept(this, param);
@@ -67,7 +61,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
     /**
      *value [[ ArrayAccess : expression -> position array ]]() =
      * 	address[[ArrayAccess]]
-     *	<load>arrayAccess.getType().suffix();
+     *	<load>arrayAccess.getType()
      *
      */
     @Override
@@ -81,9 +75,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
     /**
      *value [[ Cast : expression -> castType expression ]]() =
      * 	value[[expression]]
-     * 	cast.getType().suffix()<2i>
-     * 	if(castType instanceof Integer == false)
-     * 		<i2>castType.suffix()
+     * 	codeGenerator.convert(obj.getType, obj.getTypeToCast)
      *
      */
     @Override
@@ -97,7 +89,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
 
     /**
      *value [[ CharLiteral : expression -> ]]() =
-     * 	<push>charLiteral.getType().suffix() charLiteral.getValue()
+     * 	<push>charLiteral.getType(), charLiteral.getValue()
      *
      */
     @Override
@@ -125,18 +117,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
      *value [[ Comparison : expression -> expression expression ]]() =
      * 	value[[expression1]]
      * 	value[[expression2]]
-     * 	if(comparison.getOperator().equals(">"))
-     * 		<gt>arithmetic.getType().suffix()
-     * 	if(comparison.getOperator().equals(">="))
-     * 		<ge>arithmetic.getType().suffix()
-     * 	if(comparison.getOperator().equals("<"))
-     * 		<lt>arithmetic.getType().suffix()
-     * 	if(comparison.getOperator().equals("<="))
-     * 		<le>arithmetic.getType().suffix()
-     * 	if(comparison.getOperator().equals("=="))
-     * 		<eq>arithmetic.getType().suffix()
-     * 	if(comparison.getOperator().equals("!="))
-     * 		<ne>arithmetic.getType().suffix()
+     * 	codeGenerator.comparison(comparator.getOperator, comparator.getType)
      *
      */
     @Override
@@ -152,7 +133,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
     /**
      *value [[ FieldAccess : expression -> expression ]]() =
      * 	address[[FieldAccess]]
-     * 	<load>fieldAccess.getType().suffix()
+     * 	<load>fieldAccess.getType()
      *
      */
     @Override
@@ -166,10 +147,9 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
 
 
     /**
-     *value[[Invocation : expression1 -> expression2 expression*]]() =
-     * 	for(Expression arg : expression)
-     * 		value[[arg]]()
-     * 	<call> expression2.name
+     *value[[Invocation : expression1 -> variable expression*]]() =
+     * 	value[[expression*]]
+     * 	<call> variable.name
      *
      */
     @Override
@@ -187,10 +167,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
      *value [[ Logical : expression -> expression expression ]]() =
      * 	value[[expression1]]
      * 	value[[expression2]]
-     * 	if(logical.getOperator().equals("&&"))
-     * 		<and>
-     * 	if(logical.getOperator().equals("||"))
-     * 		<or>
+     * 	codeGenerator.logic(expression.getOperator())
      *
      */
     @Override
@@ -205,12 +182,9 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
 
     /**
      *value [[ UnaryMinus : expression -> expression ]]() =
-     * 	if(expression.getType().suffix().equals("i"))
-     * 		<push>Integer.getInstance().suffix() 0
-     * 	else
-     * 		<push>Real.getInstance().suffix() 0
+     * 	<push>expression.type, 0
      *	value[[expression]]
-     * 	<sub>expression.getType().suffix()
+     * 	<sub>expression.type
      *
      */
     @Override

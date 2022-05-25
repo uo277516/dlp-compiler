@@ -101,7 +101,6 @@ funMain returns [FunDef ast]
     ;
 
 
-//funBody: (varDef|statement)*;
 
 //parámetros de la lista
 parameterList returns [List<VarDef> ast = new ArrayList<>()]

@@ -16,7 +16,7 @@ public class CharType extends AbstractType {
 
 
     @Override
-    public Type arithmetic(Type t) {
+    public Type arithmetic(Type t) {   //Si se ouede sumar, restar, etc
         if(t instanceof RealType || t instanceof IntType)
             return t;
         else if(t instanceof CharType)
@@ -54,7 +54,6 @@ public class CharType extends AbstractType {
     public boolean promotableTo(Type t) {
         if(t instanceof RealType || t instanceof IntType || t instanceof CharType
         || t instanceof ErrorType) {
-            System.out.println("entra");
             return true;
         }
         return false;

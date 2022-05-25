@@ -67,15 +67,16 @@ public class ExecuteCGVisitor extends AbstractVisitor<VoidType, Definition> {
 
 
     /**
-     *execute [[ FuncDefinition : definition -> statement* varDefinition* ]]() =
+     *execute [[ FuncDefinition : definition -> varDefinition* statement* ]]() =
      * 	<label>funcDefinition.getName()
-     * 	for(VarDefinition vd : varDefinition*)
-     * 		<enter>vd.getType().numberOfBytes()
+     * 	for(VarDefinition param : obj.getType().getParams)
+     * 	    execute[[definition]]
+     * 	execute[[varDefinition*]]
+     * 	<enter>vd.getType().numberOfBytes()
      * 	execute[[statement*]]
      * 	if(funcType.getType() instanceof Void)
      * 		<ret>0, funcDef.getTotalBytesLocales(), funcDef.getTotalBytesParams()
      *
-     * @return
      */
     @Override
     public VoidType visit(FunDef fundef, Definition param) {
@@ -85,7 +86,7 @@ public class ExecuteCGVisitor extends AbstractVisitor<VoidType, Definition> {
         int bytesEnter = 0;
         codeGenerator.line(fundef.getLine());
         codeGenerator.newLine();
-        codeGenerator.label(fundef.getId());
+        codeGenerator.label(fundef.getId()); //<--
         codeGenerator.commentT("Parameters");
         for (var p: type.getParams()) {
             p.accept(this, param);
@@ -125,7 +126,7 @@ public class ExecuteCGVisitor extends AbstractVisitor<VoidType, Definition> {
 
 
     /**
-     *execute [[ Assignment : statement -> expression expression ]]() =
+     *execute [[ Assignment : statement -> expression1:expression expression2:expression ]]() =
      * 	address[[expression1]]
      * 	value[[expression2]]
      * 	<store>expression1.type.suffix()
@@ -143,7 +144,7 @@ public class ExecuteCGVisitor extends AbstractVisitor<VoidType, Definition> {
     /**
      *execute [[ Write : statement -> expression ]]() =
      * 	value[[expression]]()
-     * 	<out>expression.type.suffix()
+     * 	<out>expression.type
      */
     @Override
     public VoidType visit(Write write, Definition param) {
@@ -159,8 +160,8 @@ public class ExecuteCGVisitor extends AbstractVisitor<VoidType, Definition> {
     /**
      *execute [[ Read : statement -> expression ]]() =
      * 	address[[expression]]()
-     * 	<in>expression.type.suffix()
-     * 	<store>expression.type.suffix()
+     * 	<in>expression.type
+     * 	<store>expression.type
      */
     @Override
     public VoidType visit(Read read, Definition param) {
@@ -177,16 +178,16 @@ public class ExecuteCGVisitor extends AbstractVisitor<VoidType, Definition> {
 
     /**
      *execute [[ IfElse : statement -> expression statementIf* statementElse* ]]() =
-     * int numLabel = codeGenerator.getLabel();
+     *  int lastLabelId = codeGenerator.getLastLabelId();
      * 	value[[expression]]
-     * 	<jz> "else"+numLabel
+     * 	<jz> "label"+lastLabelId
      * 	for(Statement stm : statementIf*)
      * 		execute[[stm]]
-     * 	<jmp> "end"+numLabel
-     * 	<label>"else"+numLabel
+     * 	<jmp>  "label"+lastLabelId+1
+     * 	<label>"label"+lastLabelId
      * 	for(Statement stm : statementElse*)
      *		execute[[stm]]
-     * 	<label>"end"+numLabel
+     * 	<label>"label"+lastLabelId+1
      *
      */
     @Override
@@ -220,14 +221,14 @@ public class ExecuteCGVisitor extends AbstractVisitor<VoidType, Definition> {
 
     /**
      *execute [[While : statement -> expression statement*]]() =
-     * 	int labelNumber = cg.getLabel();
-     * 	<label> "while" + labelNumber <:>
-     * 	value[[expression]]()
-     * 	<jz> "endWhile" + labelNumber
+     * 	int lastLabelId = cg.getLastLabelId();
+     * 	<label> "label" + labelNumber
+     * 	value[[expression]]
+     * 	<jz> "label" + labelNumber+1
      * 	for(Statement statement : statement*)
      * 		execute[[statement]]()
-     * 	<jmp> "while" + labelNumber
-     * 	<label> "endWhile" + labelNumber <:>
+     * 	<jmp> "label" + labelNumber
+     * 	<label> "label" + labelNumber+1
      *
      */
     @Override
@@ -255,12 +256,11 @@ public class ExecuteCGVisitor extends AbstractVisitor<VoidType, Definition> {
 
     /**
      *execute[[Return : statement -> expression]](funcDefinition) =
-     * 	value[[expression]]()
-     * 	<ret> expression.type.numberOfBytes() <, >
-     * 		funcDefinition.sumaBytesLocales <, >
-     * 		funcDefinition.sumaBytesParams
+     * 	value[[expression]]
+     * 	<ret> expression.type.getNumberOfBytes() <, >
+     * 		funcDefinition.getBytesLocales() <, >
+     * 		funcDefinition.getBytesParams()
      *
-     * @return
      */
     @Override
     public VoidType visit(Return re, Definition param) {
@@ -275,9 +275,9 @@ public class ExecuteCGVisitor extends AbstractVisitor<VoidType, Definition> {
 
     /**
      *execute [[Invocation : statement -> expression expression*]]() =
-     * 	value[[(Expression)statement]]()
-     * 	if(((Expression)statement).type instanceof Void == false)
-     * 		<pop> ((Expression)statement).type.suffix
+     * 	value[[statement]]
+     * 	if(statement.type instanceof Void == false)
+     * 		<pop> statement.type.suffix
      *
      */
     @Override

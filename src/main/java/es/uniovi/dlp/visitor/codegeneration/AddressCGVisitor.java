@@ -22,17 +22,17 @@ public class AddressCGVisitor extends AbstractVisitor<Type, Type> {
 
 
     /**
-     *address[[ ArrayAccess : expression -> position array ]]() =
+     *address[[ ArrayAccess : expression -> index array ]]() =
      * 	address[[array]]
-     *	value[[position]]
-     * 	<push> obj.getType().numberOfBytes()
-     * 	<mul>
-     * 	<add>
+     *	value[[index]]
+     * 	<push> IntType, obj.getType().numberOfBytes()
+     * 	<mul> IntType
+     * 	<add> IntType
      */
     @Override
     public Type visit(ArrayAccess arrayAccess, Type param) {
         arrayAccess.getIndex().accept(this, param);
-        arrayAccess.getArray().accept(valueCGVisitor, param);
+        arrayAccess.getArray().accept(valueCGVisitor, param); //los tengo cambiados, array es el index y index es el array
         codeGenerator.push(new IntType(arrayAccess.getLine(), arrayAccess.getColumn()), arrayAccess.getType().getNumberOfBytes());
         codeGenerator.mul(new IntType(arrayAccess.getLine(), arrayAccess.getColumn()));
         codeGenerator.add(new IntType(arrayAccess.getLine(), arrayAccess.getColumn()));
@@ -44,8 +44,8 @@ public class AddressCGVisitor extends AbstractVisitor<Type, Type> {
     /**
      *address[[ FieldAccess : expression -> expression field ]]() =
      * 	address[[expression]]
-     * 	<push>field.offset
-     * 	<add>
+     * 	<push> IntType, field.offset
+     * 	<add> IntType
      */
     @Override
     public Type visit(FieldAccess fileAccess, Type param) {
@@ -65,13 +65,13 @@ public class AddressCGVisitor extends AbstractVisitor<Type, Type> {
 
 
     /**
-     *address[[ Variable : expression -> ID ]]() =
+     *address[[ Variable : expression -> string ]]() =
      * 	if(expression.def.scope == 0)
      * 		<pusha> expression.def.offset
      * 	else
-     * 		<push bp>
-     * 		<push> expression.def.offset
-     * 		<add>
+     * 		<pusha bp>
+     * 		<push> IntType, expression.def.offset
+     * 		<add> IntType
      */
     @Override
     public Type visit(Variable variable, Type param) {
