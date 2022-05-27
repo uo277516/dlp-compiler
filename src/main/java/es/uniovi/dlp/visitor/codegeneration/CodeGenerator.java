@@ -76,6 +76,9 @@ public class CodeGenerator {
             s+="]";
             return s;
         }
+        else if (type instanceof BooleanType) {
+            return "boolean";
+        }
         else return "int";
     }
 

@@ -105,6 +105,13 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         return null;
     }
 
+    @Override
+    public Type visit(BooleanLiteral booleanLiteral, Type param) {
+        booleanLiteral.setLvalue(false);
+        booleanLiteral.setType(new BooleanType(booleanLiteral.getLine(), booleanLiteral.getColumn()));
+        return null;
+    }
+
 
     @Override
     public Type visit(ArithmeticMultiply a, Type param) {
@@ -234,6 +241,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         l.getLeft().accept(this, param);
         l.getRight().accept(this, param);
         l.setLValue(false);
+
         l.setType(l.getLeft().getType().logical(l.getRight().getType()));
         if (l.getType() == null) {
             l.setType(new ErrorType(l.getLine(), l.getColumn()));
@@ -331,13 +339,14 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         u.getExpression().accept(this, param);
         u.setLValue(false);
 
-        if (!u.getExpression().getType().isLogical()) {
+
+        if (!(u.getExpression().getType() instanceof BooleanType)) {
             u.setType(new ErrorType(u.getLine(), u.getColumn()));
             Error e = new Error(u.getLine(), u.getColumn(), ErrorReason.NOT_LOGICAL);
             ErrorManager.getInstance().addError(e);
         }
         else
-            u.setType(new IntType(u.getLine(), u.getColumn()));
+            u.setType(new BooleanType(u.getLine(), u.getColumn()));
         return null;
     }
 
@@ -346,7 +355,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
     @Override
     public Type visit(IfElse i, Type param) {
         i.getCondicion().accept(this, param);
-        if (!i.getCondicion().getType().isLogical()) {
+        if (!(i.getCondicion().getType() instanceof BooleanType)) {
             i.getCondicion().setType(new ErrorType(i.getLine(), i.getColumn()));
             Error e = new Error(i.getCondicion().getLine(), i.getCondicion().getColumn(), ErrorReason.NOT_LOGICAL);
             ErrorManager.getInstance().addError(e);
@@ -367,7 +376,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
     public Type visit(While w, Type param) {
         w.getCondicion().accept(this, param);
 
-        if (!w.getCondicion().getType().isLogical()) {
+        if (!(w.getCondicion().getType() instanceof BooleanType)) {
             w.getCondicion().setType(new ErrorType(w.getLine(), w.getColumn()));
             Error e = new Error(w.getCondicion().getLine(), w.getCondicion().getColumn(), ErrorReason.NOT_LOGICAL);
             ErrorManager.getInstance().addError(e);
@@ -413,6 +422,10 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Type> {
         return super.visit(voidType, param);
     }
 
+    @Override
+    public Type visit(BooleanType booleanType, Type param) {
+        return super.visit(booleanType, param);
+    }
 
 
     @Override

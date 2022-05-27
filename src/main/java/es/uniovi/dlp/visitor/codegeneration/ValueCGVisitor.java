@@ -112,6 +112,20 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
         return null;
     }
 
+    /**
+     *value [[ BooleanLiteral : expression -> ]]() =
+     * 	<push>booleanLiteral.getType(), booleanLiteral.getValue()
+     *
+     */
+    @Override
+    public Type visit(BooleanLiteral booleanLiteral, Type param) {
+        if (booleanLiteral.getValue().equals("true"))
+            codeGenerator.push(booleanLiteral.getType(), 1);
+        if (booleanLiteral.getValue().equals("false"))
+            codeGenerator.push(booleanLiteral.getType(), 0);
+        return null;
+    }
+
 
     /**
      *value [[ Comparison : expression -> expression expression ]]() =
@@ -124,7 +138,7 @@ public class ValueCGVisitor extends AbstractVisitor<Type, Type> {
     public Type visit(Comparator comparator, Type param) {
         comparator.getLeft().accept(this, param);
         comparator.getRight().accept(this, param);
-        codeGenerator.comparison(comparator.getOperator(), comparator.getType());
+        codeGenerator.comparison(comparator.getOperator(), comparator.getRight().getType());
 
         return null;
     }

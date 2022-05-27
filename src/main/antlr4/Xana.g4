@@ -127,6 +127,8 @@ expression returns [Expression ast]
          {$ast = new RealLiteral($start.getLine(), $start.getCharPositionInLine() + 1, LexerHelper.lexemeToReal($r.text)); }
     | c=CHAR_CONSTANT
          {$ast = new CharLiteral($start.getLine(), $start.getCharPositionInLine() + 1, LexerHelper.lexemeToChar($c.text)); }
+    | b=BOOLEAN_CONSTANT
+         {$ast = new BooleanLiteral($start.getLine(), $start.getCharPositionInLine() + 1, $b.text); }
     | id=ID
          {$ast = new Variable($start.getLine(), $start.getCharPositionInLine() + 1, $id.text); }
     | '(' expression ')'
@@ -294,6 +296,7 @@ simple_type returns [Type ast]
     : 'int'    { $ast = new IntType($start.getLine(), $start.getCharPositionInLine() + 1); }
     | 'double' { $ast = new RealType($start.getLine(), $start.getCharPositionInLine() + 1); }
     | 'char'   { $ast = new CharType($start.getLine(), $start.getCharPositionInLine() + 1); }
+    | 'boolean' { $ast = new BooleanType($start.getLine(), $start.getCharPositionInLine() + 1); }
     ;
 
 
@@ -336,6 +339,9 @@ recordFields returns [List<RecordField> ast = new ArrayList<>()]
 BASURA : [ \t\r\n]+ -> skip;
 
 INT_CONSTANT: '0'|[1-9]DIGIT*
+            ;
+
+BOOLEAN_CONSTANT: 'true' | 'false'
             ;
 
 ID: (LETTER|'_')(ID_BODY)*

@@ -84,6 +84,11 @@ public abstract class AbstractVisitor<ReturnType, ParamType> implements Visitor<
     public ReturnType visit(RealLiteral realLiteral, ParamType param) {
         return null;
     }
+    @Override
+    public ReturnType visit(BooleanLiteral booleanLiteral, ParamType param) {
+        return null;
+    }
+
 
 
     @Override
@@ -213,6 +218,11 @@ public abstract class AbstractVisitor<ReturnType, ParamType> implements Visitor<
 
     @Override
     public ReturnType visit(ErrorType errorType, ParamType param) {
+        return null;
+    }
+
+    @Override
+    public ReturnType visit(BooleanType booleanType, ParamType param) {
         return null;
     }
 }

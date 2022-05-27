@@ -39,19 +39,22 @@ public class IntType extends AbstractType{
             return super.arithmetic(type);
     }
 
+    //Cambio examen, la comparacion devuelve booleano
 
     @Override
     public Type comparison(Type t) {
-        if (t instanceof RealType || t instanceof IntType || t instanceof CharType)
-            return new IntType(t.getLine(), t.getColumn());
+        if (t instanceof RealType || t instanceof IntType || t instanceof CharType) {
+            //return new IntType(t.getLine(), t.getColumn());
+            return new BooleanType(t.getLine(), t.getColumn());
+        }
 
         return super.comparison(t);
     }
 
     @Override
     public Type logical(Type t) {
-        if (t.isLogical())
-            return new IntType(t.getLine(), t.getColumn());
+        //if (t.isLogical())
+          //  return new IntType(t.getLine(), t.getColumn());
 
         return null;
     }

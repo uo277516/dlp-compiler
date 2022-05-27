@@ -38,15 +38,15 @@ public class CharType extends AbstractType {
     @Override
     public Type comparison(Type t) {
         if (t instanceof RealType || t instanceof IntType || t instanceof CharType)
-            return new IntType(super.getLine(),super.getColumn());
+            return new BooleanType(super.getLine(),super.getColumn());
 
         return super.comparison(t);
     }
 
     @Override
     public Type logical(Type t) {
-        if(t.isLogical())
-            return new IntType(super.getLine(),super.getColumn());
+        //if(t.isLogical())
+          //  return new IntType(super.getLine(),super.getColumn());
         return null;
     }
 

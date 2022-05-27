@@ -44,4 +44,9 @@ public interface Visitor<ReturnType, ParamType> {
     ReturnType visit(VoidType voidType, ParamType param);
     ReturnType visit(StructType structType, ParamType param);
     ReturnType visit(ErrorType errorType, ParamType param);
+
+
+    ReturnType visit(BooleanLiteral booleanLiteral, ParamType param);
+
+    ReturnType visit(BooleanType booleanType, ParamType param);
 }

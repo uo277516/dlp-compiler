@@ -1,0 +1,25 @@
+
+def g(a ::  boolean) :: boolean do
+    return 3
+end
+
+def main() do
+    b1 :: boolean
+    a :: int
+
+    g(3)
+    a = g(true)
+    a = true
+    b1 = 1
+    b1 = 1 && true
+    b1 = !a
+    b1 = 3 > b1
+    a = 3 > 2
+    b1 = true > false
+    while 1 do
+        puts 1
+    end
+    if 0 do
+        puts 0
+    end
+end
